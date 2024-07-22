@@ -1,0 +1,26 @@
+{
+	"name": "vuecomponents",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --port 8000",
+		"build": "vue-tsc -b && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@types/color": "^3.0.6",
+		"color": "^4.2.3",
+		"element-plus": "^2.7.7",
+		"vue": "^3.4.31"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.0.5",
+		"sass": "^1.77.8",
+		"typescript": "^5.2.2",
+		"unplugin-auto-import": "^0.18.0",
+		"unplugin-vue-components": "^0.27.3",
+		"vite": "^5.3.4",
+		"vue-tsc": "^2.0.24"
+	}
+}
