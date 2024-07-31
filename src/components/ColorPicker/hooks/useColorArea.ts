@@ -141,7 +141,7 @@ export function useColorArea() {
 	 * 计算横向x，即颜色值（第二大的r/g/b值）在canvas中距离目标颜色的横向距离
 	 *  求x?
 	 *  已知：
-	 *  gap = 255 - x // gap为x距离目标颜色附近的距离
+	 *  gap = 255 - x // gap为255 减去 在顶部距离目标颜色x处的颜色值
 	 *  scale = y / 255 // y为第三大的r/g/b值
 	 *  ∵
 	 *  gap * scale + x = target
