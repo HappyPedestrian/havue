@@ -138,9 +138,7 @@ export function useColorArea() {
 
 	/**
 	 * 目标颜色：['#FF0000', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#FF00FF', '#FF0000']
-	 * 计算颜色值x（第二大的r/g/b值），即在canvas中距离目标颜色的横向距离
-	 * @param y
-	 * @param target
+	 * 计算横向x，即颜色值（第二大的r/g/b值）在canvas中距离目标颜色的横向距离
 	 *  求x?
 	 *  已知：
 	 *  gap = 255 - x // gap为x距离目标颜色附近的距离
@@ -149,18 +147,21 @@ export function useColorArea() {
 	 *  gap * scale + x = target
 	 *  ∴
 	 *  x = (255 * target - 255 * y) / (255 - y)
+	 * @param y
+	 * @param target
+	 * @returns number
 	 */
-	function getSecondColorDistance(y: number, target: number) {
+	function getSecondColorDistance(y: number, target: number): number {
 		return y === 255 ? 255 : (255 * target - 255 * y) / (255 - y)
 	}
 
 	/**
-	 * 根据坐标获取在canvas中的颜色
+	 * 根据canvas父级元素区域坐标获取在canvas中的颜色
 	 * @param x
 	 * @param y
 	 * @param width 坐标系宽度
 	 * @param height 坐标系高度
-	 * // 绘制的canvas颜色有偏差，存在透明度（rgba），不为纯的rgb， 不使用imagedata，手动计算
+	 * // 绘制的canvas颜色有偏差，且存在透明度（rgba），不为纯的rgb， 不使用imagedata，手动计算
 	 */
 	function getColorByCoordinate(x: number, y: number, width: number, height: number): ColorConstruct {
 		if (!colorAreaCanvas.value) {
@@ -174,6 +175,12 @@ export function useColorArea() {
 		return color
 	}
 
+	/**
+	 * 根据在canvas中的坐标，计算该位置的颜色值
+	 * @param { number } x
+	 * @param { number } y
+	 * @returns number
+	 */
 	function getBaseColorFromCoodinage(x: number, y: number) {
 		/** r值 */
 		let r = 0
@@ -230,6 +237,13 @@ export function useColorArea() {
 		return Color.rgb(r, g, b)
 	}
 
+	/**
+	 * 数值是否在区间内
+	 * @param { number } num
+	 * @param { number } begin
+	 * @param { number } end
+	 * @returns boolean
+	 */
 	function numberInGap(num: number, begin: number, end: number) {
 		return num >= begin && num <= end
 	}

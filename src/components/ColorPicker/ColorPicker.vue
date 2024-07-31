@@ -23,7 +23,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import Color from 'color'
 import { useColorArea } from './hooks/useColorArea'
 import { useMouseEvent } from './hooks/useMouseEvent'
-import { getLightColorAndDepth, hexToColor, getOriginHexByLightAndScale, colorToHex } from './utils/color'
+import { getLightColorAndDepth, hexToColor, getOriginHexByLightAndDepth, colorToHex } from './utils/color'
 import ColorForm from './children/ColorForm/ColorForm.vue'
 import PresetColors from './children/PresetColors/PresetColors.vue'
 
@@ -49,12 +49,13 @@ const colorDepth = ref(100)
 /** 根据 lightColor 以及 colorDepth 计算出的实际显示16进制颜色值*/
 const originHexColor = computed(() => {
 	if (lightColor.value) {
-		const hex = getOriginHexByLightAndScale(lightColor.value, colorDepth.value)
+		const hex = getOriginHexByLightAndDepth(lightColor.value, colorDepth.value)
 		return hex
 	}
 	return DEFAULT_COLOR
 })
 
+// 颜色区域坐标更改，计算新的颜色值
 watch(
 	() => circlePickerCoordinate,
 	(coordianate) => {
@@ -71,6 +72,7 @@ watch(
 	}
 )
 
+// 当前颜色圆形图标位置样式
 const cilcleStyle = computed(() => {
 	if (!color.value) {
 		return {
@@ -86,6 +88,7 @@ const cilcleStyle = computed(() => {
 	}
 })
 
+// 颜色明暗度slider背景颜色
 const sliderBackStyle = computed(() => {
 	const lightHex = colorToHex(lightColor.value)
 	return {
@@ -94,6 +97,7 @@ const sliderBackStyle = computed(() => {
 	}
 })
 
+// 颜色值更改，触发更新
 watch(
 	() => originHexColor.value,
 	(value, oldValue) => {
@@ -104,6 +108,7 @@ watch(
 	}
 )
 
+// 手动输入颜色或选择预制颜色时，计算新的颜色区域坐标
 function handleColorChange(hex: string) {
 	const color = hexToColor(hex)
 	const { color: lightRgb, value: depth } = getLightColorAndDepth(color)
