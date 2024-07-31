@@ -79,19 +79,27 @@ const emits = defineEmits<{
 	(name: 'change', value: string): void
 }>()
 
+/** 16进制颜色 */
 const hexColor = ref<string>(Color(props.modelValue || DEFAULT_COLOR).hex())
 
+/** rgb颜色 */
 const formInputRGB = reactive<RgbColorType>(
 	Color(hexColor.value || DEFAULT_COLOR)
 		.rgb()
 		.object() as RgbColorType
 )
+
+/** hsv颜色 */
 const formInputHSV = reactive<HsvColorType>(
 	Color(hexColor.value || DEFAULT_COLOR)
 		.hsv()
 		.object() as HsvColorType
 )
 
+/**
+ * 格式化16进制颜色输入
+ * @param {string} value
+ */
 function hexFormater(value: string) {
 	return `#${value
 		.replace(/[^0-9A-F]/gi, '')
@@ -99,6 +107,7 @@ function hexFormater(value: string) {
 		.toUpperCase()}`
 }
 
+// 外部颜色更改，更新内部颜色值
 watch(
 	() => props.modelValue,
 	(value) => {
@@ -122,6 +131,9 @@ watch(
 	}
 )
 
+/**
+ * 16进制颜色更改，触发change事件
+ */
 function handleHexColorChange() {
 	let value = hexColor.value || ''
 	const len = value.replace(/[^0-9A-F]/gi, '').length
@@ -132,14 +144,18 @@ function handleHexColorChange() {
 	}
 }
 
+/**
+ * rgb颜色更改，触发change事件
+ */
 function handleRgbColorChange() {
-	console.log('rgb change', formInputRGB)
 	const { r, g, b } = formInputRGB
 	emits('change', Color.rgb(r, g, b).hex().toString())
 }
 
+/**
+ * hsv颜色更改，触发change事件
+ */
 function handleHsvColorChange() {
-	console.log('hsv change', formInputHSV)
 	const { h, s, v } = formInputHSV
 	emits('change', Color.hsv(h, s, v).hex().toString())
 }

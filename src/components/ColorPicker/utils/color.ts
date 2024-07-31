@@ -1,6 +1,18 @@
 import type ColorConstruct from 'color'
 import Color from 'color'
 
+export type RgbColorType = {
+	r: number
+	g: number
+	b: number
+}
+
+export type HsvColorType = {
+	h: number
+	s: number
+	v: number
+}
+
 export function hexToColor(hex: string): ColorConstruct {
 	const colorIns = Color(hex)
 	return colorIns
