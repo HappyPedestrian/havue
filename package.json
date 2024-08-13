@@ -12,6 +12,8 @@
 		"@types/color": "^3.0.6",
 		"color": "^4.2.3",
 		"element-plus": "^2.7.7",
+		"mp4box": "^0.5.2",
+		"pixi.js": "^8.3.2",
 		"vue": "^3.4.31"
 	},
 	"devDependencies": {
