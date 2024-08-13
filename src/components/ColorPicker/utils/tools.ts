@@ -1,8 +1,7 @@
-export function throttle(fn: Function, time: number = 200) {
+export function throttle<T extends (...args: any[]) => any>(fn: T, time: number = 200) {
 	let timer: number | null = null
-	return function (this: any) {
+	return function (this: any, ...args: Parameters<T>) {
 		const ctx = this
-		const args = [...arguments]
 
 		if (timer) {
 			return
