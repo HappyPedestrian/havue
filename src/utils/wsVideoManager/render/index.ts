@@ -30,7 +30,7 @@ export class Render {
 	private _lastSourceBufferedEndList: Array<number> = []
 	/** 用于MediaSource的mimeType */
 	private _mimeType: string = ''
-	public readonly _options: RenderConstructorOptionType
+	private _options: RenderConstructorOptionType
 
 	private _videoOriginWidth: number = 0
 	private _videoOriginHeight: number = 0
@@ -42,21 +42,12 @@ export class Render {
 	constructor(options: Partial<RenderConstructorOptionType> = {}) {
 		this._options = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
 		this._mp4box.onReady = this._onMp4boxReady.bind(this)
-
-		// const drawTest = () => {
-		// 	let canvas = document.getElementById('testCanvasId')
-		// 	const ctx = canvas.getContext('2d')
-		// 	ctx.drawImage(this._videoEl, 0, 0, canvas.width, canvas.height)
-		// 	requestAnimationFrame(drawTest)
-		// }
-		// drawTest()
 	}
 
 	/**
 	 * 更新video元素宽高
 	 */
 	_updateVideoRect() {
-		console.log('_updateVideoRect', this._maxCanvasWidth, this._maxCanvasHeight, this._videoOriginWidth, this._videoOriginHeight)
 		const minWidth = this._maxCanvasWidth ? Math.min(this._videoOriginWidth, this._maxCanvasWidth) : this._videoOriginWidth
 		const minHeight = this._maxCanvasHeight ? Math.min(this._videoOriginHeight, this._maxCanvasHeight) : this._videoOriginHeight
 

@@ -40,7 +40,7 @@ export class WsVideoManager {
 	 * @param url
 	 * @returns
 	 */
-	public addSocket(url: string) {
+	private addSocket(url: string) {
 		if (this.isSocketExist(url)) {
 			return
 		}
@@ -150,7 +150,6 @@ export class WsVideoManager {
 		let maxCanvasHeight = 0
 		canvasSet.forEach((canvas) => {
 			const { width, height } = canvas
-			console.log('canvasListRect:', width, height)
 			maxCanvasWidth = Math.max(maxCanvasWidth, width)
 			maxCanvasHeight = Math.max(maxCanvasHeight, height)
 		})
