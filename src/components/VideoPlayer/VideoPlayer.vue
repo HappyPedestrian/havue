@@ -1,17 +1,30 @@
 <template>
-	<div class="video-player">
-		<canvas ref="canvasRef"></canvas>
+	<div ref="containerRef" class="video-player" :style="{ width: `${props.width}px`, height: `${props.height}px` }">
+		<canvas ref="canvasRef" :width="props.width" :height="props.height"></canvas>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import WsVideoManager from '../../utils/wsVideoManager/index'
+import WsVideoManager from '@/utils/wsVideoManager/index'
 
+const props = withDefaults(
+	defineProps<{
+		url: string
+		width?: number
+		height?: number
+	}>(),
+	{
+		width: 640,
+		height: 320,
+	}
+)
+
+const containerRef = ref<HTMLDivElement>()
 const canvasRef = ref()
 
 onMounted(() => {
-	WsVideoManager.addCanvas(canvasRef.value, 'ws://10.168.11.200:8080/record/1.mp4.live.mp4')
+	WsVideoManager.addCanvas(canvasRef.value, props.url)
 })
 
 onUnmounted(() => {
@@ -21,8 +34,6 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .video-player {
-	width: 640px;
-	height: 320px;
 	canvas {
 		height: 100%;
 		width: 100%;

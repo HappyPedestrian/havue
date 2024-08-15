@@ -10,8 +10,25 @@ const color = ref('#ffffff')
 	<div>颜色：<input type="color" v-model="color" /></div>
 	<ColorPicker v-model="color"></ColorPicker>
 	<div class="video-list">
-		<VideoPlayer v-for="i in 24" :key="i"></VideoPlayer>
+		<VideoPlayer
+			v-for="i in 10"
+			:key="i"
+			url="ws://10.168.11.200:8080/record/1.mp4.live.mp4"
+			:width="i * 32"
+			:height="i * 16"
+		></VideoPlayer>
 	</div>
+	<div class="video-list">
+		<VideoPlayer
+			v-for="i in 10"
+			:key="i"
+			url="ws://10.168.11.200:8080/record/2.mp4.live.mp4"
+			type="video"
+			:width="i * 32"
+			:height="i * 16"
+		></VideoPlayer>
+	</div>
+	<canvas id="testCanvasId"></canvas>
 </template>
 
 <style lang="scss" scoped>

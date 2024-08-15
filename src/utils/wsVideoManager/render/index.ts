@@ -1,4 +1,4 @@
-import { Application, Sprite, UPDATE_PRIORITY } from 'pixi.js'
+// import { Application, Sprite, UPDATE_PRIORITY } from 'pixi.js'
 import MP4Box from 'mp4box'
 
 export type RenderConstructorOptionType = {
@@ -8,7 +8,7 @@ export type RenderConstructorOptionType = {
 	maxCache: number
 }
 
-const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
 	liveMaxLatency: 3,
 	maxCache: 8,
 }
@@ -17,7 +17,7 @@ export class Render {
 	/** video元素 */
 	private _videoEl: HTMLVideoElement = document.createElement('video')
 	/** pixi.js 实例 */
-	private _pixiApp: Application = new Application()
+	// private _pixiApp: Application | null = null
 	/** mp4box 实例 */
 	private _mp4box: MP4Box = MP4Box.createFile()
 	/** 接收到的socket消息 视频数据buffer数组 */
@@ -30,20 +30,69 @@ export class Render {
 	private _lastSourceBufferedEndList: Array<number> = []
 	/** 用于MediaSource的mimeType */
 	private _mimeType: string = ''
-	private _options: RenderConstructorOptionType
+	public readonly _options: RenderConstructorOptionType
+
+	private _videoOriginWidth: number = 0
+	private _videoOriginHeight: number = 0
+	private _maxCanvasWidth: number | undefined = undefined
+	private _maxCanvasHeight: number | undefined = undefined
 	/** pixi.js ticker函数 */
-	public onRender: (canvas: HTMLCanvasElement) => void = (_: HTMLCanvasElement) => {}
+	public onRender: (canvas: HTMLCanvasElement | HTMLVideoElement) => void = (_: HTMLCanvasElement | HTMLVideoElement) => {}
 
 	constructor(options: Partial<RenderConstructorOptionType> = {}) {
 		this._options = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
-		this._mp4box.onReady = this.onMp4boxReady.bind(this)
+		this._mp4box.onReady = this._onMp4boxReady.bind(this)
+
+		// const drawTest = () => {
+		// 	let canvas = document.getElementById('testCanvasId')
+		// 	const ctx = canvas.getContext('2d')
+		// 	ctx.drawImage(this._videoEl, 0, 0, canvas.width, canvas.height)
+		// 	requestAnimationFrame(drawTest)
+		// }
+		// drawTest()
+	}
+
+	/**
+	 * 更新video元素宽高
+	 */
+	_updateVideoRect() {
+		console.log('_updateVideoRect', this._maxCanvasWidth, this._maxCanvasHeight, this._videoOriginWidth, this._videoOriginHeight)
+		const minWidth = this._maxCanvasWidth ? Math.min(this._videoOriginWidth, this._maxCanvasWidth) : this._videoOriginWidth
+		const minHeight = this._maxCanvasHeight ? Math.min(this._videoOriginHeight, this._maxCanvasHeight) : this._videoOriginHeight
+
+		const originRate = this._videoOriginWidth / this._videoOriginHeight
+
+		const currentRate = minWidth / minHeight
+
+		let width = minWidth
+		let height = minHeight
+
+		if (originRate > currentRate) {
+			width = minHeight * originRate
+		} else if (originRate < currentRate) {
+			height = minWidth / originRate
+		}
+
+		this._videoEl.width = width
+		this._videoEl.height = height
+	}
+
+	/**
+	 * 设置最大的canvas宽高
+	 * @param width
+	 * @param height
+	 */
+	public setMaxCanvasRect(width: number, height: number) {
+		this._maxCanvasWidth = width
+		this._maxCanvasHeight = height
+		this._updateVideoRect()
 	}
 
 	/**
 	 * 设置pixi.js的ticker render函数
 	 * @param fn
 	 */
-	public setRenderFn(fn: (canvas: HTMLCanvasElement) => void) {
+	public setRenderFn(fn: (canvas: HTMLCanvasElement | HTMLVideoElement) => void) {
 		this.onRender = fn
 	}
 
@@ -57,14 +106,14 @@ export class Render {
 			this._mp4box.appendBuffer(buf)
 		}
 		this._bufsQueue.push(buf)
-		this.catch()
+		this._catch()
 	}
 
 	/**
 	 * mp4box解析完成
 	 * @param info
 	 */
-	private onMp4boxReady(info: any) {
+	private _onMp4boxReady(info: any) {
 		console.log('onMp4boxReady', info)
 		this._mp4box.flush()
 		if (!info.isFragmented) {
@@ -74,45 +123,67 @@ export class Render {
 		const videoTrack = info.videoTracks[0]
 		this._mimeType = info.mime
 		const { track_width = 640, track_height = 320 } = videoTrack || {}
-		this.setupVideo(track_width, track_height)
-		this.setupPixi(track_width, track_height)
+		this._videoOriginWidth = track_width
+		this._videoOriginHeight = track_height
+		this._setupVideo()
+		// this.setupPixi()
+		this._setupRender()
 	}
 
 	/**
-	 * 初始化pixi实例
-	 * @param width
-	 * @param height
+	 * canvas绘制循环
 	 */
-	private setupPixi(width: number, height: number) {
-		this._pixiApp
-			.init({
-				width,
-				height,
-				backgroundColor: 0x000000,
-				clearBeforeRender: true,
-			})
-			.then(() => {
-				// document.body.appendChild(this._pixiApp.canvas)
-				this._pixiApp.ticker.add(
-					() => {
-						this.onRender(this._pixiApp.canvas)
-					},
-					null,
-					UPDATE_PRIORITY.UTILITY
-				)
-				this.setupMSE()
-			})
+	private _setupRender() {
+		const render = () => {
+			this.onRender(this._videoEl)
+			requestAnimationFrame(render)
+		}
+		render()
+		this._setupMSE()
 	}
+
+	// /**
+	//  * 初始化pixi实例
+	//  * @param width
+	//  * @param height
+	//  */
+	// private setupPixi() {
+	// 	this._pixiApp = new Application()
+	// 	const videoSprite = Sprite.from(this._videoEl)
+	// 	this._pixiApp.stage.addChild(videoSprite)
+	// 	this._pixiApp
+	// 		.init({
+	// 			resizeTo: this._videoEl,
+	// 			// height: this._videoEl.height,
+	// 			// width: this._videoEl.width,
+	// 			backgroundColor: 0x000000,
+	// 			clearBeforeRender: true,
+	// 		})
+	// 		.then(() => {
+	// 			if (!this._pixiApp) {
+	// 				return
+	// 			}
+	// 			document.body.appendChild(this._pixiApp.canvas)
+	// 			this._pixiApp.ticker.add(
+	// 				() => {
+	// 					if (!this._pixiApp) {
+	// 						return
+	// 					}
+	// 					this.onRender(this._pixiApp.canvas)
+	// 				},
+	// 				null,
+	// 				UPDATE_PRIORITY.UTILITY
+	// 			)
+	// 			this._setupMSE()
+	// 		})
+	// }
 
 	/**
 	 * 初始化视频元素
-	 * @param width
-	 * @param height
 	 */
-	private setupVideo(width: number, height: number) {
-		// this._videoEl.preload = 'metadata'
-		this._videoEl.width = width
-		this._videoEl.height = height
+	private _setupVideo() {
+		this._updateVideoRect()
+		this._videoEl.preload = 'metadata'
 		this._videoEl.controls = false
 		this._videoEl.muted = true
 		this._videoEl.autoplay = true
@@ -120,9 +191,6 @@ export class Render {
 		this._videoEl.crossOrigin = 'anonymous'
 		this._videoEl.playsInline = true
 		// this._videoEl['webkit-playsinline'] = true
-
-		const videoSprite = Sprite.from(this._videoEl)
-		this._pixiApp.stage.addChild(videoSprite)
 		// document.body.appendChild(this._videoEl)
 	}
 
@@ -138,7 +206,7 @@ export class Render {
 	 * 初始化MSE
 	 * @returns
 	 */
-	private setupMSE(): void {
+	private _setupMSE(): void {
 		if (!this.isSupportMSE()) {
 			console.error('your borwser do not support MediaSource')
 			return
@@ -148,6 +216,7 @@ export class Render {
 			return
 		}
 		this._mediaSource = new MediaSource()
+		URL.revokeObjectURL(this._videoEl.src)
 		this._videoEl.src = URL.createObjectURL(this._mediaSource)
 
 		this._mediaSource.addEventListener('sourceopen', () => {
@@ -227,7 +296,7 @@ export class Render {
 	 * 将_bufsQueue中的数据添加到SourceBuffer中
 	 * @returns
 	 */
-	private catch() {
+	private _catch() {
 		if (!this._sourceBuffer || this._sourceBuffer.updating || !this._bufsQueue.length) {
 			return
 		}
