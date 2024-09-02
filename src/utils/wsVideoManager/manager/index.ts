@@ -22,7 +22,7 @@ type WsInfoType = {
 	/** WebSocketLoader 实例 */
 	socket: WebSocketLoader
 	/** socket连接渲染render实例 */
-	render: Render | undefined
+	render: Render
 }
 
 export class WsVideoManager {
@@ -46,42 +46,12 @@ export class WsVideoManager {
 		}
 		const socket = new WebSocketLoader(url, this._option.wsOptions)
 
-		this._wsInfoMap.set(url, {
+		const render = new Render(this._option.renderOptions)
+		let wsInfo: WsInfoType = {
 			socket,
 			canvasSet: new Set(),
-			render: undefined,
-		})
-
-		this.bindSocketEvent(url, socket)
-
-		socket.open()
-	}
-
-	/**
-	 * 销毁socket实例
-	 * @param url
-	 */
-	private removeSocket(url: string) {
-		let wsInfo = this._wsInfoMap.get(url)
-		if (wsInfo) {
-			let { socket } = wsInfo
-			socket?.close()
-			this._wsInfoMap.delete(url)
+			render: render,
 		}
-	}
-
-	/**
-	 * 绑定socket事件
-	 * @param url 连接地址
-	 * @param socket WebSocketLoader实例
-	 */
-	private bindSocketEvent(url: string, socket: WebSocketLoader) {
-		const render = new Render(this._option.renderOptions)
-		const wsInfo = this._wsInfoMap.get(url)
-		if (!wsInfo) {
-			return
-		}
-		wsInfo.render = render
 
 		render.setRenderFn((pixiCanvas: HTMLCanvasElement | HTMLVideoElement) => {
 			const canvasSet = wsInfo.canvasSet
@@ -98,6 +68,34 @@ export class WsVideoManager {
 			})
 		})
 
+		this._wsInfoMap.set(url, wsInfo)
+
+		this.bindSocketEvent(socket, render)
+
+		socket.open()
+	}
+
+	/**
+	 * 销毁socket实例
+	 * @param url
+	 */
+	private removeSocket(url: string) {
+		let wsInfo = this._wsInfoMap.get(url)
+		if (wsInfo) {
+			let { socket, render } = wsInfo
+			socket.close()
+			socket.destroy()
+			render.destroy()
+			this._wsInfoMap.delete(url)
+		}
+	}
+
+	/**
+	 * 绑定socket事件
+	 * @param url 连接地址
+	 * @param socket WebSocketLoader实例
+	 */
+	private bindSocketEvent(socket: WebSocketLoader, render: Render) {
 		socket.on('message', (event: WebSocketEventMap['message']) => {
 			render.appendMediaBuffer(event.data)
 		})
@@ -143,9 +141,6 @@ export class WsVideoManager {
 	 */
 	updateCanvasMaxRect(wsInfo: WsInfoType) {
 		const { canvasSet, render } = wsInfo
-		if (!render) {
-			return
-		}
 		let maxCanvasWidth = 0
 		let maxCanvasHeight = 0
 		canvasSet.forEach((canvas) => {
@@ -193,9 +188,10 @@ export class WsVideoManager {
 	 */
 	public destroy() {
 		this._wsInfoMap.forEach((wsInfo) => {
-			const { socket } = wsInfo
+			const { socket, render } = wsInfo
 			socket.close()
 			socket.destroy()
+			render.destroy()
 		})
 		this._wsInfoMap.clear()
 	}

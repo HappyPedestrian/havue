@@ -36,8 +36,10 @@ export class Render {
 	private _videoOriginHeight: number = 0
 	private _maxCanvasWidth: number | undefined = undefined
 	private _maxCanvasHeight: number | undefined = undefined
+
+	private _reqAnimationID: number | undefined = undefined
 	/** pixi.js ticker函数 */
-	public onRender: (canvas: HTMLCanvasElement | HTMLVideoElement) => void = (_: HTMLCanvasElement | HTMLVideoElement) => {}
+	public onRender: ((canvas: HTMLCanvasElement | HTMLVideoElement) => void) | null = null
 
 	constructor(options: Partial<RenderConstructorOptionType> = {}) {
 		this._options = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
@@ -126,8 +128,8 @@ export class Render {
 	 */
 	private _setupRender() {
 		const render = () => {
-			this.onRender(this._videoEl)
-			requestAnimationFrame(render)
+			this.onRender && this.onRender(this._videoEl)
+			this._reqAnimationID = requestAnimationFrame(render)
 		}
 		render()
 		this._setupMSE()
@@ -259,6 +261,9 @@ export class Render {
 					// 设置开始时间
 					if (!currentTime && start) {
 						this._videoEl.currentTime = start
+						if (this._videoEl.paused) {
+							this._videoEl.play()
+						}
 						return
 					}
 					if (currentTime > end) {
@@ -276,6 +281,9 @@ export class Render {
 					// 移除当前时间之前的buffer
 					if (!this._sourceBuffer!.updating && currentTime - start > this._options.maxCache) {
 						this._sourceBuffer?.remove(0, currentTime - this._options.maxCache)
+					}
+					if (this._videoEl.paused) {
+						this._videoEl.play()
 					}
 					this._lastSourceBufferedEndList = bufferedEndList
 				}
@@ -310,5 +318,28 @@ export class Render {
 		if (frame) {
 			this._sourceBuffer.appendBuffer(frame)
 		}
+	}
+
+	public destroy() {
+		this._bufsQueue = []
+		this._videoEl.pause()
+		this._videoEl.currentTime = 0
+		URL.revokeObjectURL(this._videoEl.src)
+
+		this._mimeType = ''
+		this._lastSourceBufferedEndList = []
+
+		this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+
+		if (this._mediaSource) {
+			this._sourceBuffer && this._sourceBuffer.abort()
+
+			this._sourceBuffer && this._mediaSource.removeSourceBuffer(this._sourceBuffer)
+
+			this._mediaSource = undefined
+			this._sourceBuffer = undefined
+		}
+
+		this.onRender = null
 	}
 }
