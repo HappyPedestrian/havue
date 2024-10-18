@@ -1,6 +1,7 @@
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
+import type { RenderConstructorOptionType } from '../render'
 import { WebSocketLoader } from '../loader'
-import { Render, RenderConstructorOptionType, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS } from '../render'
+import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS } from '../render'
 
 export type WsVideoManaCstorOptionType = {
   /** WebSocketLoader 实例配置 */
@@ -192,6 +193,7 @@ export class WsVideoManager {
   /**
    * 设置单个render静音状态
    * @param url
+   * @param muted boolean 是否静音
    */
   public setOneMutedState(url: string, muted: boolean) {
     const wsInfo = this._wsInfoMap.get(url)
@@ -220,6 +222,46 @@ export class WsVideoManager {
   public playOneAudio(url: string) {
     this.setAllVideoMutedState(true)
     this.setOneMutedState(url, false)
+  }
+
+  /**
+   * 设置单个render是否继续处理ws数据
+   * @param url
+   */
+  public setOneVideoPausedState(url: string, paused: boolean) {
+    const wsInfo = this._wsInfoMap.get(url)
+    if (!wsInfo) {
+      return
+    }
+    wsInfo.render.paused = paused
+  }
+
+  /** 设置全部render是否继续处理ws数据 */
+  public setAllVideoPausedState(paused: boolean) {
+    this._wsInfoMap.forEach((wsInfo) => {
+      wsInfo.render.paused = paused
+    })
+  }
+
+  /**
+   * 获取url对应render video元素是否继续播放
+   * @param url socket地址
+   */
+  public getOneVideoPausedState(url: string) {
+    const wsInfo = this._wsInfoMap.get(url)
+    if (!wsInfo) {
+      return false
+    }
+    return wsInfo.render.paused
+  }
+
+  /**
+   * 单个视频继续播放，其他暂停处理数据
+   * @param url socket地址
+   */
+  public playOneVideo(url: string) {
+    this.setAllVideoPausedState(true)
+    this.setOneVideoPausedState(url, false)
   }
 
   /**
