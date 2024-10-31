@@ -491,6 +491,7 @@ export function useDragAndScale(
   }
 
   function onMouseDown(e: MouseEvent) {
+    e.preventDefault()
     // 非左键按下
     if (e.buttons !== 1) {
       return
@@ -504,6 +505,7 @@ export function useDragAndScale(
   }
 
   function onMouseMove(e: MouseEvent) {
+    e.preventDefault()
     // 非左键按下
     if (e.buttons !== 1) {
       return
