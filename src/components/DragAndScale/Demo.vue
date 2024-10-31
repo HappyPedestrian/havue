@@ -8,7 +8,7 @@
         scaleCase: 'min'
       }"
       :limit="{ minWidth: 64, minHeight: 64 }"
-      :disabled="true"
+      :disabled="false"
       class="drag-box"
       @change="handleChange"
       :style="dragStyle"
@@ -53,10 +53,10 @@ function handleChange(params: ChangeResultType) {
 
 <style lang="scss" scoped>
 .drag-area {
-  position: relative;
+  position: fixed;
   box-sizing: border-box;
-  width: 800px;
-  height: 600px;
+  width: 100%;
+  height: 100%;
   background-color: rgb(71, 121, 105);
   .drag-box {
     position: absolute;

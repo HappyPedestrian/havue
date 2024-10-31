@@ -152,6 +152,8 @@ export function useDragAndScale(
     center: false
   }
 
+  let isOperateStart = false
+
   let realRateEl_w = 1
   let realRateEl_h = 1
 
@@ -200,6 +202,26 @@ export function useDragAndScale(
     }
     const { x: targetX, y: targetY, width: targetW, height: targetH } = _targetEl.value.getBoundingClientRect()
 
+    const {
+      x: operateElX,
+      y: operateElY,
+      width: operateElW,
+      height: operateElH
+    } = _operateEl.value.getBoundingClientRect()
+
+    const { x: startX, y: startY } = point
+    if (
+      !(
+        startX >= operateElX &&
+        startX <= operateElX + operateElW &&
+        startY >= operateElY &&
+        startY <= operateElY + operateElH
+      )
+    ) {
+      return
+    }
+    isOperateStart = true
+
     Object.assign(startArea, {
       elX: Math.round(targetX - containerX),
       elY: Math.round(targetY - containerY),
@@ -207,10 +229,6 @@ export function useDragAndScale(
       elHeight: Math.round(targetH)
     })
 
-    const { x: startX, y: startY } = point
-    if (Math.abs(startX - targetX) < _halfScaleAreaWidth.value) {
-      effectDirection
-    }
     let leftSide = Math.abs(startX - targetX) <= _halfScaleAreaWidth.value
     let topSide = Math.abs(startY - targetY) <= _halfScaleAreaWidth.value
     let rightSide = Math.abs(startX - targetX - targetW) <= _halfScaleAreaWidth.value
@@ -247,7 +265,7 @@ export function useDragAndScale(
   }
 
   function onMove(point: Point) {
-    if (_disabled.value) {
+    if (_disabled.value || isOperateStart !== true) {
       return
     }
     const deltaX = point.x - startPoint.x
@@ -436,10 +454,13 @@ export function useDragAndScale(
   }
 
   function onEnd() {
+    isOperateStart = false
     _options.value.onFinish && _options.value.onFinish()
   }
 
   function onTouchStart(e: TouchEvent) {
+    // alert('touch start')
+    e.preventDefault()
     if (e.touches.length > 1) {
       return
     }
@@ -449,12 +470,11 @@ export function useDragAndScale(
       x: pageX,
       y: pageY
     })
-
-    document.body.addEventListener('touchmove', onTouchMove, { passive: true })
-    document.body.addEventListener('touchend', onTouchEnd, { passive: true })
   }
 
   function onTouchMove(e: TouchEvent) {
+    e.preventDefault()
+    e.stopPropagation()
     if (e.touches.length > 1) {
       return
     }
@@ -468,24 +488,26 @@ export function useDragAndScale(
 
   function onTouchEnd() {
     onEnd()
-
-    document.body.removeEventListener('touchstart', onTouchMove)
-    document.body.removeEventListener('touchend', onTouchEnd)
   }
 
   function onMouseDown(e: MouseEvent) {
+    // 非左键按下
+    if (e.buttons !== 1) {
+      return
+    }
     const { x, y } = e
 
     onStart({
       x,
       y
     })
-
-    document.body.addEventListener('mousemove', onMouseMove, { passive: true })
-    document.body.addEventListener('mouseup', onMouseUp, { passive: true })
   }
 
   function onMouseMove(e: MouseEvent) {
+    // 非左键按下
+    if (e.buttons !== 1) {
+      return
+    }
     const { x, y } = e
 
     onMove({
@@ -503,20 +525,29 @@ export function useDragAndScale(
 
   function bindEvent() {
     removeEvent()
-    _operateEl.value.addEventListener('mousedown', onMouseDown, { passive: true })
-    _operateEl.value.addEventListener('touchstart', onTouchStart, { passive: true })
+    _operateEl.value.addEventListener('mousedown', onMouseDown)
+    _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
+
+    document.body.addEventListener('touchmove', onTouchMove, { capture: true })
+    document.body.addEventListener('touchend', onTouchEnd, { capture: true })
+    document.body.addEventListener('touchcancel', onTouchEnd, { capture: true })
+    document.body.addEventListener('mousemove', onMouseMove, { capture: true })
+    document.body.addEventListener('mouseup', onMouseUp, { capture: true })
   }
 
   function removeEvent() {
-    _operateEl.value.removeEventListener('mousedown', onMouseDown)
     _operateEl.value.removeEventListener('touchstart', onTouchStart)
     document.body.removeEventListener('touchmove', onTouchMove)
     document.body.removeEventListener('touchend', onTouchEnd)
+    document.body.removeEventListener('touchcancel', onTouchEnd)
+
+    _operateEl.value.removeEventListener('mousedown', onMouseDown)
     document.body.removeEventListener('mousemove', onMouseMove)
     document.body.removeEventListener('mouseup', onMouseUp)
   }
 
   onBeforeUnmount(() => {
+    isOperateStart = false
     removeEvent
   })
 }
