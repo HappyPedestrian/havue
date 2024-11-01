@@ -4,13 +4,43 @@ import { ref, computed, onBeforeUnmount, watchEffect, toValue, isRef, watch } fr
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
 import wsVideoPlayer from '../index'
 
+export type Options = {
+  /** 监听canvas尺寸变化， 自动更新canvas宽高 */
+  canvasResize: Required<ParamsOptions['canvasResize']>
+}
+
+export type ParamsOptions = {
+  canvasResize: {
+    /** 是否启用自动更新canvas width 和 height属性，默认为true */
+    enable?: boolean
+    /** 设置canvas width 和 height时，
+     * 缩放的比例，即元素实际尺寸乘以scale，
+     * 放大是为了画面更清晰
+     * 默认 1
+     */
+    scale: number
+    /** 限制canvas width最大值，默认1920 */
+    maxWidth?: number
+    /** 限制canvas height最大值，默认1080 */
+    maxHeight?: number
+  }
+}
+
+// canvasResize 默认值
+export const DEFAULT_RESIZE_OPTIONS = Object.freeze<Options['canvasResize']>({
+  enable: true,
+  scale: 1,
+  maxWidth: 1920,
+  maxHeight: 1080
+})
+
 /**
  * websocket视频流播放
  * @param wsUrl rtsp地址
  * @param isReady 是否可播放
  * @param wsVideoPlayerIns WsVideoManager实例
  * @param target canvas元素，可不提供，自动生成
- * @param autoResizeCanvas 是否自动监听canvas尺寸更改，更新canvas宽高, 不传为 true
+ * @param options 配置项
  * @returns
  */
 export function useVideoPlay(
@@ -18,7 +48,7 @@ export function useVideoPlay(
   isReady: MaybeRef<boolean>,
   wsVideoPlayerIns: WsVideoManager = wsVideoPlayer,
   target?: MaybeRef<HTMLCanvasElement | undefined>,
-  autoResizeCanvas?: MaybeRef<boolean>
+  options?: MaybeRef<Partial<ParamsOptions> | undefined>
 ) {
   let canvasRef: Ref<HTMLCanvasElement | undefined> = ref<HTMLCanvasElement>()
   if (target) {
@@ -27,8 +57,20 @@ export function useVideoPlay(
     })
   }
 
+  const _options = computed<Options>(() => {
+    const opts = (isRef(options) ? toValue(options) : options) || {}
+
+    const canvasResizeOpt = (isRef(opts.canvasResize) ? toValue(opts.canvasResize) : opts.canvasResize) || {}
+
+    const resizeCanvasOpts = Object.assign({}, DEFAULT_RESIZE_OPTIONS, canvasResizeOpt || {})
+
+    return {
+      canvasResize: resizeCanvasOpts
+    }
+  })
+
   const needResizeCanvas = computed(() => {
-    return isRef(autoResizeCanvas) ? toValue(autoResizeCanvas) : autoResizeCanvas
+    return _options.value.canvasResize.enable
   })
 
   /** 是否静音 */
@@ -55,8 +97,27 @@ export function useVideoPlay(
           }
           const [entry] = entries
           const { width, height } = entry.contentRect
-          canvasRef.value.width = width
-          canvasRef.value.height = height
+          const { scale, maxWidth, maxHeight } = _options.value.canvasResize
+
+          // 乘以scale
+          let comWidth = width * scale
+          let comHeight = height * scale
+
+          /**
+           * 如果超出最大值，设置为
+           * 能被maxWidth*maxHeight的矩形中能包含的
+           * 最大矩形宽高， (保持canvas宽高比)
+           */
+          const canvasRate = width / height
+          if (comWidth > maxWidth || comHeight > maxHeight) {
+            const optionRate = maxWidth / maxHeight
+
+            comWidth = canvasRate > optionRate ? maxWidth : maxHeight * canvasRate
+            comHeight = canvasRate > optionRate ? maxWidth / canvasRate : maxHeight
+          }
+          // 限制最大值
+          canvasRef.value.width = comWidth
+          canvasRef.value.height = comHeight
         })
         stopResizeObserver = stop
       }
