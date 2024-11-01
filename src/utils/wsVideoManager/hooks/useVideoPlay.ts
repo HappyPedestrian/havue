@@ -45,38 +45,38 @@ export const DEFAULT_RESIZE_OPTIONS = Object.freeze({
  * @param {ParamsOptions} options 配置项
  * @returns
  */
-export function useVideoPlay(options: MaybeRef<ParamsOptions | undefined>) {
+export function useVideoPlay(options: ParamsOptions) {
   let canvasRef: Ref<HTMLCanvasElement | undefined> = ref<HTMLCanvasElement>()
 
-  const _options = computed(() => {
-    const opts: ParamsOptions = (isRef(options) ? toValue(options) : options) || {
-      wsUrl: '',
-      isReady: false
-    }
+  const { wsUrl, isReady, target, wsVideoPlayerIns = wsVideoPlayer, canvasResize } = options
 
-    const { wsUrl, isReady, target, wsVideoPlayerIns, canvasResize } = opts
+  if (target) {
+    canvasRef = computed<HTMLCanvasElement | undefined>(() => {
+      return isRef(target) ? toValue(target) : target
+    })
+  }
 
-    if (target) {
-      canvasRef = computed<HTMLCanvasElement | undefined>(() => {
-        return isRef(target) ? toValue(target) : target
-      })
-    }
+  /** 是否可添加到WsViderPlayer中 */
+  const _isReady = computed<boolean>(() => {
+    return isRef(isReady) ? toValue(isReady) : isReady
+  })
 
+  /** 预监WebSocket地址 */
+  const previewWsUrl = computed<string>(() => {
+    const url = wsUrl
+    const _wsUrl = (isRef(url) ? toValue(url) : url) || ''
+    return _wsUrl
+  })
+
+  const _canvasResizeOpt = computed(() => {
     const canvasResizeOpt = isRef(canvasResize) ? toValue(canvasResize) : canvasResize || {}
 
-    const _canvasResizeOpt = Object.assign({}, DEFAULT_RESIZE_OPTIONS, canvasResizeOpt || {})
-
-    return {
-      wsUrl: isRef(wsUrl) ? toValue(wsUrl) : wsUrl,
-      isReady: isRef(isReady) ? toValue(isReady) : isReady || false,
-      wsVideoPlayerIns: wsVideoPlayerIns || wsVideoPlayer,
-      target: isRef(target) ? toValue(target) : target,
-      canvasResize: _canvasResizeOpt
-    }
+    const opt = Object.assign({}, DEFAULT_RESIZE_OPTIONS, canvasResizeOpt || {})
+    return opt
   })
 
   const needResizeCanvas = computed(() => {
-    return _options.value.canvasResize.enable
+    return _canvasResizeOpt.value.enable
   })
 
   /** 是否静音 */
@@ -103,7 +103,7 @@ export function useVideoPlay(options: MaybeRef<ParamsOptions | undefined>) {
           }
           const [entry] = entries
           const { width, height } = entry.contentRect
-          const { scale, maxWidth, maxHeight } = _options.value.canvasResize
+          const { scale, maxWidth, maxHeight } = _canvasResizeOpt.value
 
           // 乘以scale
           let comWidth = width * scale
@@ -133,26 +133,11 @@ export function useVideoPlay(options: MaybeRef<ParamsOptions | undefined>) {
     }
   )
 
-  /** 是否可添加到WsViderPlayer中 */
-  const _isReady = computed<boolean>(() => {
-    return _options.value.isReady
-  })
-
-  /** 预监WebSocket地址 */
-  const previewWsUrl = computed<string>(() => {
-    const _wsUrl = _options.value.wsUrl
-    return _wsUrl || ''
-  })
-
-  const wsVideoPlayerIns = computed(() => {
-    return _options.value.wsVideoPlayerIns
-  })
-
   onBeforeUnmount(() => {
     stopResizeObserver()
     if (!canvasRef.value) return
     // 删除收集的 canvas
-    wsVideoPlayerIns.value.removeCanvas(canvasRef.value)
+    wsVideoPlayerIns.removeCanvas(canvasRef.value)
     isMuted.value = true
   })
 
@@ -165,23 +150,23 @@ export function useVideoPlay(options: MaybeRef<ParamsOptions | undefined>) {
       if (
         lastPreviewUrl.value &&
         previewWsUrl.value !== lastPreviewUrl.value &&
-        wsVideoPlayerIns.value.isCanvasExist(canvasRef.value)
+        wsVideoPlayerIns.isCanvasExist(canvasRef.value)
       ) {
-        wsVideoPlayerIns.value.removeCanvas(canvasRef.value)
+        wsVideoPlayerIns.removeCanvas(canvasRef.value)
       }
 
-      if (!wsVideoPlayerIns.value.isCanvasExist(canvasRef.value)) {
+      if (!wsVideoPlayerIns.isCanvasExist(canvasRef.value)) {
         // 新增canvas
-        wsVideoPlayerIns.value.addCanvas(canvasRef.value, previewWsUrl.value)
+        wsVideoPlayerIns.addCanvas(canvasRef.value, previewWsUrl.value)
         lastPreviewUrl.value = previewWsUrl.value
         // 更新是否静音 / 视频暂停
         isMuted.value = wsVideoPlayer.getOneMutedState(previewWsUrl.value)
         isPaused.value = wsVideoPlayer.getOneVideoPausedState(previewWsUrl.value)
       }
     } else {
-      if (wsVideoPlayerIns.value.isCanvasExist(canvasRef.value)) {
+      if (wsVideoPlayerIns.isCanvasExist(canvasRef.value)) {
         // 移除canvas
-        wsVideoPlayerIns.value.removeCanvas(canvasRef.value)
+        wsVideoPlayerIns.removeCanvas(canvasRef.value)
         isMuted.value = true
         isPaused.value = false
       }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+// import { ref } from 'vue'
 // import ColorPicker from './components/ColorPicker/ColorPicker.vue'
-// import VideoPlayer from './components/VideoPlayer/VideoPlayer.vue'
+import VideoPlayerDemo from './components/VideoPlayer/Demo.vue'
 // import MousePassThrough from './components/MousePassThrough/MousePassThrough.vue'
 // import FFMpegTest from './components/FFMpegTest/FFMpegTest.vue'
-import DragAndScaleDemo from './components/DragAndScale/Demo.vue'
+// import DragAndScaleDemo from './components/DragAndScale/Demo.vue'
 
 // const color = ref('#ffffff')
 </script>
@@ -35,7 +35,8 @@ import DragAndScaleDemo from './components/DragAndScale/Demo.vue'
 		<MousePassThrough :width="1920" :height="1080"></MousePassThrough>
 	</div> -->
   <!-- <FFMpegTest></FFMpegTest> -->
-  <DragAndScaleDemo></DragAndScaleDemo>
+  <VideoPlayerDemo></VideoPlayerDemo>
+  <!-- <DragAndScaleDemo></DragAndScaleDemo> -->
 </template>
 
 <style lang="scss" scoped>

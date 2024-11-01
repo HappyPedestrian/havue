@@ -1,0 +1,56 @@
+<template>
+  <div>
+    <div class="form-box">
+      <div class="form-item"><span class="label">websocket url:</span><input v-model="url" /></div>
+      <div class="form-item"><span class="label">width:</span><input v-model="width" /></div>
+      <div class="form-item"><span class="label">height:</span><input v-model="height" /></div>
+    </div>
+    <div class="video-player" :style="{ width: `${width}px`, height: `${height}px` }">
+      <canvas ref="canvasRef" :width="width" :height="height"></canvas>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useVideoPlay } from '@/utils/wsVideoManager/hooks/useVideoPlay'
+
+const url = ref('')
+const width = ref(640)
+const height = ref(320)
+
+const canvasRef = ref()
+
+useVideoPlay({
+  wsUrl: url,
+  isReady: true,
+  target: canvasRef
+})
+</script>
+
+<style lang="scss" scoped>
+.form-box {
+  padding: 15px;
+  background: #25465845;
+  .form-item {
+    margin-bottom: 5px;
+    .label {
+      margin-right: 20px;
+      display: inline-block;
+      width: 120px;
+      text-align: right;
+    }
+    input {
+      padding: 1px 8px;
+      border: 1px solid gray;
+    }
+  }
+}
+.video-player {
+  background: #578895;
+  canvas {
+    height: 100%;
+    width: 100%;
+  }
+}
+</style>
