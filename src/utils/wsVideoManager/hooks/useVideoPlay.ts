@@ -4,30 +4,36 @@ import { ref, computed, onBeforeUnmount, watchEffect, toValue, isRef, watch } fr
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
 import wsVideoPlayer from '../index'
 
-export type Options = {
-  /** 监听canvas尺寸变化， 自动更新canvas宽高 */
-  canvasResize: Required<ParamsOptions['canvasResize']>
+export type CanvasResizeOption = {
+  /** 是否启用自动更新canvas width 和 height属性，默认为true */
+  enable?: boolean
+  /** 设置canvas width 和 height时，
+   * 缩放的比例，即元素实际尺寸乘以scale，
+   * 放大是为了画面更清晰
+   * 默认 1
+   */
+  scale: number
+  /** 限制canvas width最大值，默认1920 */
+  maxWidth?: number
+  /** 限制canvas height最大值，默认1080 */
+  maxHeight?: number
 }
 
 export type ParamsOptions = {
-  canvasResize: {
-    /** 是否启用自动更新canvas width 和 height属性，默认为true */
-    enable?: boolean
-    /** 设置canvas width 和 height时，
-     * 缩放的比例，即元素实际尺寸乘以scale，
-     * 放大是为了画面更清晰
-     * 默认 1
-     */
-    scale: number
-    /** 限制canvas width最大值，默认1920 */
-    maxWidth?: number
-    /** 限制canvas height最大值，默认1080 */
-    maxHeight?: number
-  }
+  /** websocket 地址 */
+  wsUrl: MaybeRef<string | undefined>
+  /** 是否播放视频 */
+  isReady: MaybeRef<boolean>
+  /** 使用的WsVideoManager 实例 默认为wsVideoPlayer */
+  wsVideoPlayerIns?: WsVideoManager
+  /** 视频渲染到的canvas元素, 不传会返回一个元素引用变量：canvasRef */
+  target?: MaybeRef<HTMLCanvasElement | undefined>
+  /** 是否自动更新canvas width和height属性的配置， 默认为 DEFAULT_RESIZE_OPTIONS */
+  canvasResize?: MaybeRef<CanvasResizeOption | undefined>
 }
 
 // canvasResize 默认值
-export const DEFAULT_RESIZE_OPTIONS = Object.freeze<Options['canvasResize']>({
+export const DEFAULT_RESIZE_OPTIONS = Object.freeze({
   enable: true,
   scale: 1,
   maxWidth: 1920,
@@ -36,36 +42,36 @@ export const DEFAULT_RESIZE_OPTIONS = Object.freeze<Options['canvasResize']>({
 
 /**
  * websocket视频流播放
- * @param wsUrl rtsp地址
- * @param isReady 是否可播放
- * @param wsVideoPlayerIns WsVideoManager实例
- * @param target canvas元素，可不提供，自动生成
- * @param options 配置项
+ * @param {ParamsOptions} options 配置项
  * @returns
  */
-export function useVideoPlay(
-  wsUrl: MaybeRef<string | undefined>,
-  isReady: MaybeRef<boolean>,
-  wsVideoPlayerIns: WsVideoManager = wsVideoPlayer,
-  target?: MaybeRef<HTMLCanvasElement | undefined>,
-  options?: MaybeRef<Partial<ParamsOptions> | undefined>
-) {
+export function useVideoPlay(options: MaybeRef<ParamsOptions | undefined>) {
   let canvasRef: Ref<HTMLCanvasElement | undefined> = ref<HTMLCanvasElement>()
-  if (target) {
-    canvasRef = computed(() => {
-      return isRef(target) ? toValue(target) : target
-    })
-  }
 
-  const _options = computed<Options>(() => {
-    const opts = (isRef(options) ? toValue(options) : options) || {}
+  const _options = computed(() => {
+    const opts: ParamsOptions = (isRef(options) ? toValue(options) : options) || {
+      wsUrl: '',
+      isReady: false
+    }
 
-    const canvasResizeOpt = (isRef(opts.canvasResize) ? toValue(opts.canvasResize) : opts.canvasResize) || {}
+    const { wsUrl, isReady, target, wsVideoPlayerIns, canvasResize } = opts
 
-    const resizeCanvasOpts = Object.assign({}, DEFAULT_RESIZE_OPTIONS, canvasResizeOpt || {})
+    if (target) {
+      canvasRef = computed<HTMLCanvasElement | undefined>(() => {
+        return isRef(target) ? toValue(target) : target
+      })
+    }
+
+    const canvasResizeOpt = isRef(canvasResize) ? toValue(canvasResize) : canvasResize || {}
+
+    const _canvasResizeOpt = Object.assign({}, DEFAULT_RESIZE_OPTIONS, canvasResizeOpt || {})
 
     return {
-      canvasResize: resizeCanvasOpts
+      wsUrl: isRef(wsUrl) ? toValue(wsUrl) : wsUrl,
+      isReady: isRef(isReady) ? toValue(isReady) : isReady || false,
+      wsVideoPlayerIns: wsVideoPlayerIns || wsVideoPlayer,
+      target: isRef(target) ? toValue(target) : target,
+      canvasResize: _canvasResizeOpt
     }
   })
 
@@ -129,20 +135,24 @@ export function useVideoPlay(
 
   /** 是否可添加到WsViderPlayer中 */
   const _isReady = computed<boolean>(() => {
-    return isRef(isReady) ? toValue(isReady) : isReady
+    return _options.value.isReady
   })
 
   /** 预监WebSocket地址 */
   const previewWsUrl = computed<string>(() => {
-    const _wsUrl = toValue(wsUrl)
+    const _wsUrl = _options.value.wsUrl
     return _wsUrl || ''
+  })
+
+  const wsVideoPlayerIns = computed(() => {
+    return _options.value.wsVideoPlayerIns
   })
 
   onBeforeUnmount(() => {
     stopResizeObserver()
     if (!canvasRef.value) return
     // 删除收集的 canvas
-    wsVideoPlayerIns.removeCanvas(canvasRef.value)
+    wsVideoPlayerIns.value.removeCanvas(canvasRef.value)
     isMuted.value = true
   })
 
@@ -155,23 +165,23 @@ export function useVideoPlay(
       if (
         lastPreviewUrl.value &&
         previewWsUrl.value !== lastPreviewUrl.value &&
-        wsVideoPlayerIns.isCanvasExist(canvasRef.value)
+        wsVideoPlayerIns.value.isCanvasExist(canvasRef.value)
       ) {
-        wsVideoPlayerIns.removeCanvas(canvasRef.value)
+        wsVideoPlayerIns.value.removeCanvas(canvasRef.value)
       }
 
-      if (!wsVideoPlayerIns.isCanvasExist(canvasRef.value)) {
+      if (!wsVideoPlayerIns.value.isCanvasExist(canvasRef.value)) {
         // 新增canvas
-        wsVideoPlayerIns.addCanvas(canvasRef.value, previewWsUrl.value)
+        wsVideoPlayerIns.value.addCanvas(canvasRef.value, previewWsUrl.value)
         lastPreviewUrl.value = previewWsUrl.value
         // 更新是否静音 / 视频暂停
         isMuted.value = wsVideoPlayer.getOneMutedState(previewWsUrl.value)
         isPaused.value = wsVideoPlayer.getOneVideoPausedState(previewWsUrl.value)
       }
     } else {
-      if (wsVideoPlayerIns.isCanvasExist(canvasRef.value)) {
+      if (wsVideoPlayerIns.value.isCanvasExist(canvasRef.value)) {
         // 移除canvas
-        wsVideoPlayerIns.removeCanvas(canvasRef.value)
+        wsVideoPlayerIns.value.removeCanvas(canvasRef.value)
         isMuted.value = true
         isPaused.value = false
       }
