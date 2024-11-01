@@ -57,6 +57,10 @@ const originHexColor = computed(() => {
 
 // 颜色值更改，更新显示
 watch(color, (val) => {
+  const hex = getOriginHexByLightAndDepth(lightColor.value, colorDepth.value)
+  if (hex === val) {
+    return
+  }
   handleColorChange(val)
 })
 
