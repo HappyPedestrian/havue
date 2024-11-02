@@ -508,6 +508,7 @@ export function useDragAndScale(
     e.preventDefault()
     // 非左键按下
     if (e.buttons !== 1) {
+      onEnd()
       return
     }
     const { x, y } = e
@@ -520,9 +521,6 @@ export function useDragAndScale(
 
   function onMouseUp() {
     onEnd()
-
-    document.body.removeEventListener('mousemove', onMouseMove)
-    document.body.removeEventListener('mouseup', onMouseUp)
   }
 
   function bindEvent() {
