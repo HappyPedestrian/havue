@@ -1,5 +1,5 @@
 <template>
-  <div ref="dragItemRef" class="draggable-item">
+  <div ref="dragItemRef" class="draggable-area">
     <slot></slot>
     <div class="draggable-clone-item" :style="cloneNodeStyle" v-if="isDragThis">
       <slot></slot>
@@ -62,7 +62,7 @@ DnDManagerInstance.on('end', () => {
 </script>
 
 <style lang="scss" scoped>
-.draggable-item {
+.draggable-area {
   width: fit-content;
   cursor: grab;
 }

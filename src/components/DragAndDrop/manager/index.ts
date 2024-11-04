@@ -1,4 +1,5 @@
 import EventBus from '@/utils/EventBus'
+import { isMobile } from '@/utils/platform'
 
 export type Point = {
   x: number
@@ -14,11 +15,22 @@ type Events = {
 }
 
 export class DnDManager extends EventBus<Events> {
+  /** 是否开始拖动 */
   public isDragStart: boolean = false
+  /** 拖动元素类型 */
   public dragType: DragType | undefined = undefined
+  /** Draggable传递的数据，
+   * 供Droppable使用
+   */
   public dragData: any
 
+  /** 移动端长按一定时间才触发 onStart */
+  private touchStartPressTime = 300
+  /** touchstart事件触发的时的时间 */
+  private touchStartTime: number = 0
+  /** touchstart时间触发的位置 */
   private touchStartPosition: Point = { x: 0, y: 0 }
+  /** onMove最后位置 */
   private lastMovePoint: Point = { x: 0, y: 0 }
   private emitTouchStartTimer: number | undefined = undefined
 
@@ -120,11 +132,12 @@ export class DnDManager extends EventBus<Events> {
       x: pageX,
       y: pageY
     }
+    this.touchStartTime = Date.now()
     this.touchStartPosition = position
     // 300ms后调用onStart（如果在此期间没有移动超过30px）
     this.emitTouchStartTimer = window.setTimeout(() => {
       this.onStart(position)
-    }, 300)
+    }, this.touchStartPressTime)
   }
 
   private onTouchMove(e: TouchEvent) {
@@ -142,7 +155,8 @@ export class DnDManager extends EventBus<Events> {
     } else {
       // touch 300ms内移动了超过30px，认为不是拖拽
       const { x, y } = this.touchStartPosition
-      if (Math.abs(x - pageX) > 30 || Math.abs(y - pageY) > 30) {
+      const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
+      if (timeInLimit && (Math.abs(x - pageX) > 30 || Math.abs(y - pageY) > 30)) {
         clearTimeout(this.emitTouchStartTimer)
       }
     }
@@ -154,13 +168,22 @@ export class DnDManager extends EventBus<Events> {
 
   private bindEventListener() {
     if (document.body) {
-      document.body.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false })
-      document.body.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false })
-      document.body.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false })
-      document.body.addEventListener('touchcancel', this.onTouchEnd.bind(this))
-      document.body.addEventListener('mousedown', this.onMouseDown.bind(this))
-      document.body.addEventListener('mousemove', this.onMouseMove.bind(this))
-      document.body.addEventListener('mouseup', this.onMouseUp.bind(this))
+      if (isMobile) {
+        document.body.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false })
+        document.body.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false })
+        document.body.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false })
+        // document.body.addEventListener(
+        //   'touchcancel',
+        //   () => {
+        //     alert('touchcancel')
+        //   },
+        //   { passive: false }
+        // )
+      } else {
+        document.body.addEventListener('mousedown', this.onMouseDown.bind(this))
+        document.body.addEventListener('mousemove', this.onMouseMove.bind(this))
+        document.body.addEventListener('mouseup', this.onMouseUp.bind(this))
+      }
     } else {
       document.addEventListener('DOMContentLoaded', this.bindEventListener)
     }
