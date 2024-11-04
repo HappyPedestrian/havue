@@ -4,19 +4,19 @@
     <div class="zoom-mark-box">
       <div class="zoom-operate-box" :class="disabled ? 'disabled' : ''" ref="operateRef">
         <div class="top-box block">
-          <div class="left-box"></div>
-          <div class="center-box"></div>
-          <div class="right-box"></div>
+          <div class="left-box" data-scale-side="left,top"></div>
+          <div class="center-box" data-scale-side="top"></div>
+          <div class="right-box" data-scale-side="right,top"></div>
         </div>
         <div class="middle-box block">
-          <div class="left-box"></div>
-          <div class="center-box"></div>
-          <div class="right-box"></div>
+          <div class="left-box" data-scale-side="left"></div>
+          <div class="center-box" data-scale-side="center"></div>
+          <div class="right-box" data-scale-side="right"></div>
         </div>
         <div class="bottom-box block">
-          <div class="left-box"></div>
-          <div class="center-box"></div>
-          <div class="right-box"></div>
+          <div class="left-box" data-scale-side="left,bottom"></div>
+          <div class="center-box" data-scale-side="bottom"></div>
+          <div class="right-box" data-scale-side="right,bottom"></div>
         </div>
       </div>
     </div>
@@ -71,15 +71,23 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
 
 <style lang="scss" scoped>
 .drag-and-scale-box {
+  --drag-box-border-width: 1px;
+  // 周围响应拖放操作区域宽度
+  --scale-area-width: 30px;
+  // 缩放标志与内容的距离
+  --scale-mark-gap: 2px;
+  // 缩放标志 边框的宽度
+  --scale-mark-width: 3px;
+  // 缩放边框图标区域inset
+  --scale-mark-inset: calc(0px - (var(--scale-mark-width) + var(--scale-mark-gap) + var(--drag-box-border-width)));
+  // 缩放边框图标 边框长度
+  --scale-mark-line-width: calc(var(--scale-area-width) / 2);
+  // 缩放操作区域inset
+  --scale-area-inset: calc(0px - var(--scale-area-width) / 2 + var(--scale-mark-width) + var(--scale-mark-gap));
   position: relative;
-  border: 1px dashed #fff;
+  border: var(--drag-box-border-width) dashed #fff;
   box-sizing: border-box;
   .zoom-mark-box {
-    --scale-width: 30px;
-    --scale-mark-gap: 2px;
-    --scale-mark-width: 3px;
-    --scale-mark-inset: calc(0px - var(--scale-mark-width) - var(--scale-mark-gap));
-    --scale-mark-line-width: calc(var(--scale-width) / 2);
     position: absolute;
     inset: var(--scale-mark-inset);
     background:
@@ -111,9 +119,10 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
 
     .zoom-operate-box {
       position: absolute;
-      inset: calc(var(--scale-mark-inset) - var(--scale-mark-width));
+      inset: var(--scale-area-inset);
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
 
       &.disabled {
         .block {
@@ -130,12 +139,14 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
 
         .left-box,
         .right-box {
-          width: var(--scale-width);
-          height: var(--scale-width);
+          box-sizing: border-box;
+          width: var(--scale-area-width);
+          height: var(--scale-area-width);
         }
         .center-box {
           flex: 1;
-          height: var(--scale-width);
+          height: var(--scale-area-width);
+          box-sizing: border-box;
         }
       }
 
@@ -174,7 +185,7 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       }
       .top-box,
       .bottom-box {
-        height: var(--scale-width);
+        height: var(--scale-area-width);
       }
     }
   }

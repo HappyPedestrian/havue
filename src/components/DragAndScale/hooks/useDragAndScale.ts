@@ -1,5 +1,6 @@
 import type { MaybeRef } from 'vue'
 import { computed, isRef, watch, toValue, onBeforeUnmount } from 'vue'
+import { isMobile } from '@/utils/platform'
 
 export type UseDragAndScaleOptions = {
   container: HTMLElement
@@ -66,15 +67,6 @@ export function useDragAndScale(
   /** 父级容器实际对应的宽高（非页面元素宽高） */
   const _containerRealSize = computed(() => {
     return _options.value.containerRealSize
-  })
-
-  /** 响应缩放的区域宽度 */
-  const _scaleAreaWidth = computed(() => {
-    return _options.value.scaleAreaWidth || 30
-  })
-
-  const _halfScaleAreaWidth = computed(() => {
-    return _scaleAreaWidth.value / 2
   })
 
   /** 保持宽高比 */
@@ -220,7 +212,6 @@ export function useDragAndScale(
     ) {
       return
     }
-    isOperateStart = true
 
     Object.assign(startArea, {
       elX: Math.round(targetX - containerX),
@@ -229,11 +220,28 @@ export function useDragAndScale(
       elHeight: Math.round(targetH)
     })
 
-    let leftSide = Math.abs(startX - targetX) <= _halfScaleAreaWidth.value
-    let topSide = Math.abs(startY - targetY) <= _halfScaleAreaWidth.value
-    let rightSide = Math.abs(startX - targetX - targetW) <= _halfScaleAreaWidth.value
-    let bottomSide = Math.abs(startY - targetY - targetH) <= _halfScaleAreaWidth.value
-    const center = !leftSide && !topSide && !rightSide && !bottomSide
+    const touchEl = document.elementFromPoint(startX, startY) as HTMLElement
+    if (!touchEl) {
+      return
+    }
+    const sides = (touchEl.dataset['scaleSide'] || '').split(',')
+    if (!sides.length) {
+      return
+    }
+
+    // let leftSide = Math.abs(startX - targetX) < _halfScaleAreaWidth.value
+    // let topSide = Math.abs(startY - targetY) < _halfScaleAreaWidth.value
+    // let rightSide = Math.abs(startX - targetX - targetW) < _halfScaleAreaWidth.value
+    // let bottomSide = Math.abs(startY - targetY - targetH) < _halfScaleAreaWidth.value
+    // const center = !leftSide && !topSide && !rightSide && !bottomSide
+
+    let leftSide = sides.includes('left')
+    let topSide = sides.includes('top')
+    let rightSide = sides.includes('right')
+    let bottomSide = sides.includes('bottom')
+    const center = sides.includes('center')
+
+    isOperateStart = true
 
     // 保持宽高比，认为在4个角拖动
     if (_keepRatio.value.enable && !center) {
@@ -525,25 +533,29 @@ export function useDragAndScale(
 
   function bindEvent() {
     removeEvent()
-    _operateEl.value.addEventListener('mousedown', onMouseDown)
-    _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
-
-    document.body.addEventListener('touchmove', onTouchMove, { capture: true })
-    document.body.addEventListener('touchend', onTouchEnd, { capture: true })
-    document.body.addEventListener('touchcancel', onTouchEnd, { capture: true })
-    document.body.addEventListener('mousemove', onMouseMove, { capture: true })
-    document.body.addEventListener('mouseup', onMouseUp, { capture: true })
+    if (isMobile) {
+      _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
+      document.body.addEventListener('touchcancel', onTouchEnd, { capture: true })
+      document.body.addEventListener('touchmove', onTouchMove, { capture: true })
+      document.body.addEventListener('touchend', onTouchEnd, { capture: true })
+    } else {
+      _operateEl.value.addEventListener('mousedown', onMouseDown)
+      document.body.addEventListener('mousemove', onMouseMove, { capture: true })
+      document.body.addEventListener('mouseup', onMouseUp, { capture: true })
+    }
   }
 
   function removeEvent() {
-    _operateEl.value.removeEventListener('touchstart', onTouchStart)
-    document.body.removeEventListener('touchmove', onTouchMove)
-    document.body.removeEventListener('touchend', onTouchEnd)
-    document.body.removeEventListener('touchcancel', onTouchEnd)
-
-    _operateEl.value.removeEventListener('mousedown', onMouseDown)
-    document.body.removeEventListener('mousemove', onMouseMove)
-    document.body.removeEventListener('mouseup', onMouseUp)
+    if (isMobile) {
+      _operateEl.value.removeEventListener('touchstart', onTouchStart)
+      document.body.removeEventListener('touchmove', onTouchMove)
+      document.body.removeEventListener('touchend', onTouchEnd)
+      document.body.removeEventListener('touchcancel', onTouchEnd)
+    } else {
+      _operateEl.value.removeEventListener('mousedown', onMouseDown)
+      document.body.removeEventListener('mousemove', onMouseMove)
+      document.body.removeEventListener('mouseup', onMouseUp)
+    }
   }
 
   onBeforeUnmount(() => {
