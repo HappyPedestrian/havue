@@ -96,11 +96,11 @@ export class DnDManager extends EventBus<Events> {
       this.onEnd()
       return
     }
-    const { x, y } = e
+    const { clientX, clientY } = e
 
     this.onStart({
-      x,
-      y
+      x: clientX,
+      y: clientY
     })
   }
 
@@ -111,11 +111,11 @@ export class DnDManager extends EventBus<Events> {
       this.onEnd()
       return
     }
-    const { x, y } = e
+    const { clientX, clientY } = e
 
     this.onMove({
-      x,
-      y
+      x: clientX,
+      y: clientY
     })
   }
 
@@ -127,10 +127,10 @@ export class DnDManager extends EventBus<Events> {
     if (e.touches.length > 1) {
       return
     }
-    const { pageX, pageY } = e.touches[0]
+    const { clientX, clientY } = e.touches[0]
     const position = {
-      x: pageX,
-      y: pageY
+      x: clientX,
+      y: clientY
     }
     this.touchStartTime = Date.now()
     this.touchStartPosition = position
@@ -144,19 +144,19 @@ export class DnDManager extends EventBus<Events> {
     if (e.touches.length > 1) {
       return
     }
-    const { pageX, pageY } = e.touches[0]
+    const { clientX, clientY } = e.touches[0]
     if (this.isDragStart) {
       e.preventDefault()
       e.stopPropagation()
       this.onMove({
-        x: pageX,
-        y: pageY
+        x: clientX,
+        y: clientY
       })
     } else {
       // touch 300ms内移动了超过30px，认为不是拖拽
       const { x, y } = this.touchStartPosition
       const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
-      if (timeInLimit && (Math.abs(x - pageX) > 30 || Math.abs(y - pageY) > 30)) {
+      if (timeInLimit && (Math.abs(x - clientX) > 30 || Math.abs(y - clientY) > 30)) {
         clearTimeout(this.emitTouchStartTimer)
       }
     }

@@ -467,16 +467,15 @@ export function useDragAndScale(
   }
 
   function onTouchStart(e: TouchEvent) {
-    // alert('touch start')
     e.preventDefault()
     if (e.touches.length > 1) {
       return
     }
-    const { pageX, pageY } = e.touches[0]
+    const { clientX, clientY } = e.touches[0]
 
     onStart({
-      x: pageX,
-      y: pageY
+      x: clientX,
+      y: clientY
     })
   }
 
@@ -486,11 +485,11 @@ export function useDragAndScale(
     if (e.touches.length > 1) {
       return
     }
-    const { pageX, pageY } = e.touches[0]
+    const { clientX, clientY } = e.touches[0]
 
     onMove({
-      x: pageX,
-      y: pageY
+      x: clientX,
+      y: clientY
     })
   }
 
@@ -504,11 +503,11 @@ export function useDragAndScale(
     if (e.buttons !== 1) {
       return
     }
-    const { x, y } = e
+    const { clientX, clientY } = e
 
     onStart({
-      x,
-      y
+      x: clientX,
+      y: clientY
     })
   }
 
@@ -519,11 +518,11 @@ export function useDragAndScale(
       onEnd()
       return
     }
-    const { x, y } = e
+    const { clientX, clientY } = e
 
     onMove({
-      x,
-      y
+      x: clientX,
+      y: clientY
     })
   }
 
