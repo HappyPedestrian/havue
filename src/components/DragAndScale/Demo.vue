@@ -1,3 +1,4 @@
+// #region template
 <template>
   <div class="drag-area" ref="containerRef">
     <DragAndScale
@@ -15,7 +16,9 @@
     ></DragAndScale>
   </div>
 </template>
-
+// #endregion template
+<empty></empty>
+// #region script
 <script setup lang="ts">
 import type { ChangeResultType } from './DragAndScale.vue'
 import { ref, computed } from 'vue'
@@ -50,13 +53,15 @@ function handleChange(params: ChangeResultType) {
   console.log(params)
 }
 </script>
-
+// #endregion script
+<empty></empty>
+// #region style
 <style lang="scss" scoped>
 .drag-area {
-  position: fixed;
+  position: relative;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: 400px;
   background-color: rgb(71, 121, 105);
   .drag-box {
     position: absolute;
@@ -64,3 +69,4 @@ function handleChange(params: ChangeResultType) {
   }
 }
 </style>
+// #endregion style

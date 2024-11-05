@@ -84,128 +84,17 @@ export function useVideoPlay(options: ParamsOptions : void {}
 ## 示例
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useVideoPlay } from '@/utils/wsVideoManager/hooks/useVideoPlay'
-
-const wsUrl = ref('')
-const width = ref(640)
-const height = ref(320)
-
-const isReady = ref(true)
-
-const canvasRef = ref()
-
-useVideoPlay({
-  wsUrl,
-  isReady,
-  target: canvasRef
-})
+import Demo from '@/components/VideoPlayer/Demo.vue'
 </script>
 
-<div class="form-box">
-  <div class="form-item"><span class="label">websocket url:</span><input v-model="wsUrl"></input></div>
-  <div class="form-item"><span class="label">width:</span><input v-model="width"></input></div>
-  <div class="form-item"><span class="label">height:</span><input v-model="height"></input></div>
-</div>
-<div class="video-player" :style="{ width: `${width}px`, height: `${height}px` }">
-  <canvas ref="canvasRef" :width="width" :height="height"></canvas>
- </div>
-
-<style lang="scss">
-.form-box {
-  padding: 15px;
-  background: #25465845;
-  .form-item {
-    margin-bottom: 5px;
-    .label {
-      margin-right: 20px;
-      display: inline-block;
-      width: 120px;
-      text-align: right;
-    }
-    input {
-      padding: 1px 8px;
-      border: 1px solid gray;
-    }
-  }
-  
-}
-.video-player {
-  background: #578895;
- canvas {
-  height: 100%;
-  width: 100%;
- }
-}
-</style>
+<Demo></Demo>
 
 ::: code-group
+<<< ../../src/components/VideoPlayer/Demo.vue#template{1} [template]
 
-```vue [template]
-<template>
-  <div class="form-box">
-  <div class="form-item"><span class="label">websocket url:</span><input v-model="wsUrl"></input></div>
-  <div class="form-item"><span class="label">width:</span><input v-model="width"></input></div>
-  <div class="form-item"><span class="label">height:</span><input v-model="height"></input></div>
-</div>
-<div class="video-player" :style="{ width: `${width}px`, height: `${height}px` }">
-  <canvas ref="canvasRef" :width="width" :height="height"></canvas>
- </div>
-</template>
-```
+<<< ../../src/components/VideoPlayer/Demo.vue#script{1} [script]
 
-```vue [script]
-<script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useVideoPlay } from '@/utils/wsVideoManager/hooks/useVideoPlay'
-
-const wsUrl = ref('')
-const width = ref(640)
-const height = ref(320)
-
-const isReady = ref(true)
-
-const canvasRef = ref()
-
-useVideoPlay({
-  wsUrl,
-  isReady,
-  target: canvasRef
-})
-</script>
-
-```
-
-```vue [style]
-<style lang="scss" module>
-.form-box {
-  padding: 15px;
-  background: #25465845;
-  .form-item {
-    margin-bottom: 5px;
-    .label {
-      margin-right: 20px;
-      display: inline-block;
-      width: 120px;
-      text-align: right;
-    }
-    input {
-      padding: 1px 8px;
-      border: 1px solid gray;
-    }
-  }
-  
-}
-.video-player {
-  background: #578895;
- canvas {
-  height: 100%;
-  width: 100%;
- }
-}
-</style>
-```
-
+<<< ../../src/components/VideoPlayer/Demo.vue#style{1} [style]
 :::
 
 ## 函数参数

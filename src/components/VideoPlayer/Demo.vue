@@ -1,3 +1,4 @@
+// #region template
 <template>
   <div>
     <div class="form-box">
@@ -10,7 +11,9 @@
     </div>
   </div>
 </template>
-
+// #endregion template
+<empty></empty>
+// #region script
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useVideoPlay } from '@/utils/wsVideoManager/hooks/useVideoPlay'
@@ -27,7 +30,9 @@ useVideoPlay({
   target: canvasRef
 })
 </script>
-
+// #endregion script
+<empty></empty>
+// #region style
 <style lang="scss" scoped>
 .form-box {
   padding: 15px;
