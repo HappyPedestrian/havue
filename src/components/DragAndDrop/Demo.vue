@@ -1,3 +1,4 @@
+// #region template
 <template>
   <div class="dnd-demo" ref="divRef">
     <div class="left-box">
@@ -70,7 +71,9 @@
     </div>
   </div>
 </template>
-
+// #endregion template
+<empty></empty>
+// #region script
 <script setup lang="ts">
 import type { Point } from './manager'
 import { computed, ref, reactive } from 'vue'
@@ -195,11 +198,13 @@ function onDrop(point: Point, data: any) {
   previewData.value = undefined
 }
 </script>
-
+// #endregion script
+<empty></empty>
+// #region style
 <style lang="scss" scoped>
 .dnd-demo {
   width: 100%;
-  height: 100%;
+  height: 700px;
   background-color: rgba(20, 177, 177, 0.416);
   overflow: auto;
   display: flex;
@@ -220,7 +225,7 @@ function onDrop(point: Point, data: any) {
       gap: 20px;
       .drag-box {
         height: 50px;
-        width: 150px;
+        width: 130px;
         color: white;
         background-color: black;
       }
@@ -230,7 +235,7 @@ function onDrop(point: Point, data: any) {
     flex: 1;
     .drop-box {
       position: relative;
-      width: 500px;
+      width: 400px;
       height: 300px;
       background-color: rgb(11, 104, 28);
       overflow: hidden;
@@ -250,3 +255,4 @@ function onDrop(point: Point, data: any) {
   }
 }
 </style>
+// #endregion style
