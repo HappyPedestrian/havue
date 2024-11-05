@@ -162,7 +162,28 @@ function handleChange(params: ChangeResultType) {
 
 ## 事件
 
-|          事件            |        说明          |            参数类型                |
-| :----------------        | :------------------ | :-------------------------------   |
-| change                   | 拖动或者缩放时触发         | "{elX: number, elY: number, elW: number, elH: number, realX: numbere, realY: number, realW: number, realH: number}"    |
-| finish                   | 拖动或者缩放结束时触发 | —                                 |
+|   事件     |        说明          |            参数类型                |
+| :-------  | :------------------ | :-------------------------------   |
+| change     | 拖动或者缩放时触发    | (params: ChangeParamsType) => void    |
+| finish  | 拖动或者缩放结束时触发    | () => void                     |
+
+```ts
+type ChangeParamsType {
+  /** 拖动元素位于 container中的 x */
+  elX: number
+  /** 拖动元素位于 container中的 y */
+  elY: number
+  /** 拖动元素宽度 */
+  elWidth: number
+  /** 拖动元素高度 */
+  elHeight: number
+  /** 拖动元素基于containerRealSize 转换的实际x坐标 */
+  realX: number
+  /** 拖动元素基于containerRealSize 转换的实际y坐标 */
+  realY: number
+  /** 拖动元素基于containerRealSize 转换的实际宽度 */
+  realWidth: number
+  /** 拖动元素基于containerRealSize 转换的实际高度 */
+  realHeight: number
+}
+```
