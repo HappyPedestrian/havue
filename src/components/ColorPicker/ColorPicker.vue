@@ -22,7 +22,7 @@ import type ColorConstruct from 'color'
 import { ref, computed, watch, onMounted } from 'vue'
 import Color from 'color'
 import { useColorArea } from './hooks/useColorArea'
-import { useMouseEvent } from './hooks/useMouseEvent'
+import { useOperateEvent } from './hooks/useOperateEvent'
 import { getLightColorAndDepth, hexToColor, getOriginHexByLightAndDepth, colorToHex } from './utils/color'
 import ColorForm from './children/ColorForm/ColorForm.vue'
 import PresetColors from './children/PresetColors/PresetColors.vue'
@@ -33,7 +33,7 @@ const emits = defineEmits<{
   (name: 'update:model-value', value: string): void
 }>()
 const { colorAreaCanvas, getColorByCoordinate, getCoordinateByColor, canvasWidth, canvasHeight } = useColorArea()
-const { colorAreaRef, circlePickerCoordinate, setCirclePickerCoordinate } = useMouseEvent()
+const { colorAreaRef, circlePickerCoordinate, setCirclePickerCoordinate } = useOperateEvent()
 
 // const color = ref<string>('#ffccaa')
 const color = defineModel({
