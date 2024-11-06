@@ -8,13 +8,14 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 </script>
 
 <Demo></Demo>
-
+::: details 点我看代码
 ::: code-group
-<<< ../../src/components/DragAndScale/Demo.vue#template{1} [template]
 
-<<< ../../src/components/DragAndScale/Demo.vue#script{1} [script]
+<<< ../../src/components/DragAndScale/Demo.vue#template [template]
 
-<<< ../../src/components/DragAndScale/Demo.vue#style{1} [style]
+<<< ../../src/components/DragAndScale/Demo.vue#script [script]
+
+<<< ../../src/components/DragAndScale/Demo.vue#style [style]
 
 :::
 

@@ -89,12 +89,14 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 
 <Demo></Demo>
 
+::: details 点我看代码
 ::: code-group
-<<< ../../src/components/VideoPlayer/Demo.vue#template{1} [template]
 
-<<< ../../src/components/VideoPlayer/Demo.vue#script{1} [script]
+<<< ../../src/components/VideoPlayer/Demo.vue#template [template]
 
-<<< ../../src/components/VideoPlayer/Demo.vue#style{1} [style]
+<<< ../../src/components/VideoPlayer/Demo.vue#script [script]
+
+<<< ../../src/components/VideoPlayer/Demo.vue#style [style]
 :::
 
 ## 函数参数

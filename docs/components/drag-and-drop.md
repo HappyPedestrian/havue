@@ -13,12 +13,14 @@ import Demo from '@/components/DragAndDrop/Demo.vue'
 
 <Demo></Demo>
 
+::: details 点我看代码
 ::: code-group
-<<< ../../src/components/DragAndDrop/Demo.vue#template{1} [template]
 
-<<< ../../src/components/DragAndDrop/Demo.vue#script{1} [script]
+<<< ../../src/components/DragAndDrop/Demo.vue#template [template]
 
-<<< ../../src/components/DragAndDrop/Demo.vue#style{1} [style]
+<<< ../../src/components/DragAndDrop/Demo.vue#script [script]
+
+<<< ../../src/components/DragAndDrop/Demo.vue#style [style]
 :::
 
 ## Draggable 属性
