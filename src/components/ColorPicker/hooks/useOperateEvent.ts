@@ -44,6 +44,7 @@ export function useOperateEvent() {
 
   function handleTouchEnd() {
     document.body.removeEventListener('touchmove', handleTouchMove)
+    document.body.removeEventListener('touchend', handleTouchEnd)
   }
 
   function handleMounseDown(e: HTMLElementEventMap['mousedown']) {
@@ -95,6 +96,7 @@ export function useOperateEvent() {
 
   function handleMouseUp() {
     document.body.removeEventListener('mousemove', handleMouseMove)
+    document.body.removeEventListener('mouseup', handleMouseUp)
   }
 
   /**
@@ -125,9 +127,15 @@ export function useOperateEvent() {
   })
 
   onBeforeUnmount(() => {
-    colorAreaRef.value?.removeEventListener('mousedown', handleMounseDown)
-    document.body.removeEventListener('mousemove', handleMouseMove)
-    document.body.removeEventListener('mouseup', handleMouseUp)
+    if (isMobile) {
+      colorAreaRef.value?.removeEventListener('touchstart', handleTouchStart)
+      document.body.removeEventListener('touchmove', handleTouchMove)
+      document.body.removeEventListener('touchend', handleTouchEnd)
+    } else {
+      colorAreaRef.value?.removeEventListener('mousedown', handleMounseDown)
+      document.body.removeEventListener('mousemove', handleMouseMove)
+      document.body.removeEventListener('mouseup', handleMouseUp)
+    }
   })
 
   return {
