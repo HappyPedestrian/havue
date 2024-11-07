@@ -10,6 +10,9 @@ export default defineConfig({
   description: 'A Components list site',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: '组件', link: '/components/' },
       { text: '解决方案', link: '/solutions/' }
