@@ -9,9 +9,14 @@ export type RenderConstructorOptionType = {
 }
 
 export const DEFAULT_OPTIONS = {
-  liveMaxLatency: 1,
+  liveMaxLatency: 0.4,
   maxCache: 10
 }
+
+// 调试代码
+// let id = 0
+// const curPosX = 0
+// let curPosY = 0
 
 export class Render {
   /** video元素 */
@@ -27,7 +32,6 @@ export class Render {
   /** SourceBuffer 实例 */
   private _sourceBuffer: SourceBuffer | undefined
   /** 上次sourcebuffer buffer段结束时间列表 ：[100, 200]*/
-  private _lastSourceBufferedStartList: Array<number> = []
   /** 用于MediaSource的mimeType */
   private _mimeType: string = ''
   /** 是否暂停播放 */
@@ -37,6 +41,9 @@ export class Render {
   private _reqAnimationID: number | undefined = undefined
   /** pixi.js ticker函数 */
   public onRender: ((canvas: HTMLCanvasElement | HTMLVideoElement) => void) | null = null
+
+  // 调试代码
+  // private divID = ''
 
   constructor(options: Partial<RenderConstructorOptionType> = {}) {
     this._options = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
@@ -86,7 +93,7 @@ export class Render {
       this._mp4box.appendBuffer(buf)
     }
     this._bufsQueue.push(buf)
-    this._catch()
+    requestAnimationFrame(() => this._catch())
   }
 
   /**
@@ -168,7 +175,7 @@ export class Render {
     this._videoEl['webkit-playsinline'] = true
 
     this._videoEl.addEventListener('canplay', () => {
-      if (!this._paused && this._videoEl.paused) {
+      if (!this._paused) {
         this._videoEl.play()
       }
     })
@@ -181,7 +188,6 @@ export class Render {
      * 后面有时间寻找一下是否有其他解决方案
      */
     // this._videoEl.controls = true
-    document.body.appendChild(this._videoEl)
     this._videoEl.style.position = 'fixed'
     this._videoEl.style.left = `0px`
     this._videoEl.style.top = `0px`
@@ -191,6 +197,27 @@ export class Render {
     this._videoEl.style.opacity = '0.01'
     this._videoEl.style.pointerEvents = 'none'
     this._videoEl.style.touchAction = 'none'
+
+    // 调试代码
+    // document.body.appendChild(this._videoEl)
+    // this._videoEl.style.left = `${curPosX}px`
+    // this._videoEl.style.top = `${curPosY}px`
+    // this._videoEl.style.zIndex = '99999'
+    // this._videoEl.style.width = '200px'
+    // this._videoEl.style.height = '100px'
+    // this._videoEl.controls = true
+    // this._videoEl.style.opacity = '1'
+    // const div = document.createElement('div')
+    // div.id = `divID${id}`
+    // this.divID = `divID${id}`
+    // id = id + 1
+
+    // div.style.position = 'fixed'
+    // div.style.left = `${curPosX}px`
+    // div.style.top = `${curPosY}px`
+    // curPosY += 100
+    // div.style.zIndex = '99999'
+    // document.body.appendChild(div)
   }
 
   /**
@@ -221,7 +248,7 @@ export class Render {
 
     this._mediaSource.addEventListener('sourceopen', () => {
       const sourceBuffer = (this._sourceBuffer = this._mediaSource!.addSourceBuffer(this._mimeType))
-      sourceBuffer.mode === 'segments'
+      sourceBuffer.mode === 'sequence'
       sourceBuffer.onupdateend = () => {
         const currentTime = this._videoEl.currentTime
         if (
@@ -231,45 +258,39 @@ export class Render {
         ) {
           return
         }
+        // 调试代码
+        // const div = document.getElementById(this.divID)
+        // let innerHTML = `len:${sourceBuffer.buffered.length}`
         if (sourceBuffer.buffered.length > 0) {
-          // console.log('this._lastSourceBufferedStartList.length:', this._lastSourceBufferedStartList.length)
           let bufferedLen = sourceBuffer.buffered.length
           /** 是否需要删除sourceBuffer中的buffer段 */
           const needDelBuf = bufferedLen > 1
-
           /**
-           * 预防开发环境的预监流循环播放视频，播放的视频末尾时
-           * sourceBuffer中有多个buffered，时间又从0开始
-           * 导致视频播放到最后就暂停了
+           * sourceBuffer中有多个buffered，时间不连续
+           * 导致视频播放到其中一个buffer最后就暂停了
            * 如果出现多个buffered，删除之前有的buffer
            * 使用最新的视频buffer进行播放
            */
-          if (needDelBuf) {
+          if (needDelBuf && currentTime) {
+            if (currentTime < sourceBuffer.buffered.start(bufferedLen - 1)) {
+              this._videoEl.currentTime = sourceBuffer.buffered.start(bufferedLen - 1)
+            }
+
             for (let i = 0; i < bufferedLen; i++) {
               const curStart = sourceBuffer.buffered.start(i)
               const curEnd = sourceBuffer.buffered.end(i)
 
-              console.log(
-                'buffer',
-                i,
-                'start:',
-                sourceBuffer.buffered.start(i),
-                'end:',
-                sourceBuffer.buffered.end(i),
-                'last',
-                this._lastSourceBufferedStartList,
-                'currentTime:',
-                currentTime
-              )
-
-              if (this._lastSourceBufferedStartList.includes(curStart)) {
-                if (!this._sourceBuffer!.updating) {
-                  this._sourceBuffer?.remove(curStart, curEnd)
-                }
+              if (!this._sourceBuffer!.updating && currentTime > curEnd) {
+                this._sourceBuffer?.remove(curStart, curEnd)
                 continue
               }
             }
           }
+
+          // 调试代码
+          // innerHTML += ` - start:${sourceBuffer.buffered.start(sourceBuffer.buffered.length - 1)} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
+          // innerHTML += ` - currentTime: ${currentTime}`
+          // div && (div.innerHTML = innerHTML)
 
           bufferedLen = sourceBuffer.buffered.length
           const start = sourceBuffer.buffered.start(bufferedLen - 1)
@@ -288,18 +309,14 @@ export class Render {
             const offsetMaxLatency = this._options.liveMaxLatency
 
             if (end - currentTime > offsetMaxLatency) {
-              console.log('延迟大于设定值，更新', end - currentTime)
-              this._videoEl.currentTime = end - 0.5
+              this._videoEl.currentTime = end
             }
           }
           // 移除当前时间之前的buffer
           if (!this._sourceBuffer!.updating && currentTime - start > this._options.maxCache) {
             this._sourceBuffer?.remove(0, currentTime - this._options.maxCache / 2)
           }
-
-          this._lastSourceBufferedStartList = [sourceBuffer.buffered.start(bufferedLen - 1)]
         }
-        requestAnimationFrame(() => this._catch())
       }
     })
   }
@@ -316,11 +333,11 @@ export class Render {
       !this._bufsQueue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      return
+      return requestIdleCallback(() => this._catch())
     }
     if (this._videoEl.error) {
       this._setupMSE()
-      return
+      return requestIdleCallback(() => this._catch())
     }
     let frame: ArrayBuffer
     if (this._bufsQueue.length > 1) {
@@ -382,7 +399,6 @@ export class Render {
     URL.revokeObjectURL(this._videoEl.src)
 
     this._mimeType = ''
-    this._lastSourceBufferedStartList = []
 
     this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
 
