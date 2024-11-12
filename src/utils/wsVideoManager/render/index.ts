@@ -188,6 +188,7 @@ export class Render {
      * 后面有时间寻找一下是否有其他解决方案
      */
     // this._videoEl.controls = true
+    document.body.appendChild(this._videoEl)
     this._videoEl.style.position = 'fixed'
     this._videoEl.style.left = `0px`
     this._videoEl.style.top = `0px`
@@ -199,7 +200,6 @@ export class Render {
     this._videoEl.style.touchAction = 'none'
 
     // 调试代码
-    // document.body.appendChild(this._videoEl)
     // this._videoEl.style.left = `${curPosX}px`
     // this._videoEl.style.top = `${curPosY}px`
     // this._videoEl.style.zIndex = '99999'
@@ -248,7 +248,7 @@ export class Render {
 
     this._mediaSource.addEventListener('sourceopen', () => {
       const sourceBuffer = (this._sourceBuffer = this._mediaSource!.addSourceBuffer(this._mimeType))
-      sourceBuffer.mode === 'sequence'
+      sourceBuffer.mode = 'sequence'
       sourceBuffer.onupdateend = () => {
         const currentTime = this._videoEl.currentTime
         if (
@@ -300,16 +300,13 @@ export class Render {
           if (!currentTime && start) {
             this._videoEl.currentTime = start
           }
-          if (currentTime > end) {
-            this._videoEl.currentTime = start
-          }
 
           // 限制最低延迟时间
           if (this._options.liveMaxLatency) {
             const offsetMaxLatency = this._options.liveMaxLatency
 
             if (end - currentTime > offsetMaxLatency) {
-              this._videoEl.currentTime = end
+              this._videoEl.currentTime = end - 0.1
             }
           }
           // 移除当前时间之前的buffer
