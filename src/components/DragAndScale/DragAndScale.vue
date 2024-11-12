@@ -141,11 +141,12 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
         .right-box {
           box-sizing: border-box;
           width: var(--scale-area-width);
-          height: var(--scale-area-width);
+          max-width: 33.333333%;
+          height: 100%;
         }
         .center-box {
           flex: 1;
-          height: var(--scale-area-width);
+          height: 100%;
           box-sizing: border-box;
         }
       }
@@ -185,7 +186,9 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       }
       .top-box,
       .bottom-box {
+        box-sizing: border-box;
         height: var(--scale-area-width);
+        max-height: 33.333333%;
       }
     }
   }
