@@ -9,7 +9,7 @@ export type RenderConstructorOptionType = {
 }
 
 export const DEFAULT_OPTIONS = {
-  liveMaxLatency: 0.4,
+  liveMaxLatency: 0.3,
   maxCache: 10
 }
 
@@ -178,6 +178,13 @@ export class Render {
       if (!this._paused) {
         this._videoEl.play()
       }
+    })
+
+    this._videoEl.addEventListener('error', (error) => {
+      console.error('video error', error)
+      setTimeout(() => {
+        this._setupMSE()
+      }, 500)
     })
 
     /**
