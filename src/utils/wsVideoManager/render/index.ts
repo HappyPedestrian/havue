@@ -20,7 +20,7 @@ export const DEFAULT_OPTIONS = {
 
 export class Render {
   /** video元素 */
-  private _videoEl: HTMLVideoElement = document.createElement('video')
+  private _videoEl: HTMLVideoElement | undefined = undefined
   /** pixi.js 实例 */
   // private _pixiApp: Application | null = null
   /** mp4box 实例 */
@@ -52,19 +52,19 @@ export class Render {
   }
 
   get muted(): boolean {
-    return this._videoEl.muted
+    return this._videoEl?.muted || false
   }
 
   set muted(val: boolean) {
-    this._videoEl.muted = val
+    this._videoEl && (this._videoEl.muted = val)
   }
 
   set paused(paused: boolean) {
     this._paused = paused
     if (paused) {
-      this._videoEl.pause()
+      this._videoEl?.pause()
     } else {
-      this._videoEl.play()
+      this._videoEl?.play()
     }
   }
 
@@ -118,7 +118,7 @@ export class Render {
    */
   private _setupRender() {
     const render = () => {
-      !this._paused && this.onRender && this.onRender(this._videoEl)
+      this._videoEl && !this._paused && this.onRender && this.onRender(this._videoEl)
       this._reqAnimationID = requestAnimationFrame(render)
     }
     render()
@@ -165,6 +165,7 @@ export class Render {
    * 初始化视频元素
    */
   private _setupVideo() {
+    this._videoEl = document.createElement('video')
     this._videoEl.preload = 'auto'
     this._videoEl.controls = false
     this._videoEl.muted = true
@@ -176,14 +177,14 @@ export class Render {
 
     this._videoEl.addEventListener('canplay', () => {
       if (!this._paused) {
-        this._videoEl.play()
+        this._videoEl?.play()
       }
     })
 
     this._videoEl.addEventListener('error', (error) => {
       console.error('video error', error)
       setTimeout(() => {
-        this._setupMSE()
+        this._mediaSource && this._setupMSE()
       }, 500)
     })
 
@@ -248,6 +249,9 @@ export class Render {
       console.error('Unsupported MIME type or codec: ', this._mimeType)
       return
     }
+    if (!this._videoEl) {
+      return
+    }
     this.destroyMediaSource()
     this._mediaSource = new MediaSource()
     URL.revokeObjectURL(this._videoEl.src)
@@ -257,6 +261,9 @@ export class Render {
       const sourceBuffer = (this._sourceBuffer = this._mediaSource!.addSourceBuffer(this._mimeType))
       sourceBuffer.mode = 'sequence'
       sourceBuffer.onupdateend = () => {
+        if (!this._videoEl) {
+          return
+        }
         const currentTime = this._videoEl.currentTime
         if (
           !sourceBuffer ||
@@ -330,6 +337,9 @@ export class Render {
    * @returns
    */
   private _catch() {
+    if (!this._videoEl) {
+      return
+    }
     if (
       !this._mediaSource ||
       !this._sourceBuffer ||
@@ -376,8 +386,6 @@ export class Render {
 
   private destroyMediaSource() {
     if (this._mediaSource) {
-      URL.revokeObjectURL(this._videoEl.src)
-      this._videoEl.src = ''
       if (this._mediaSource.readyState === 'open') {
         this._sourceBuffer && this._sourceBuffer.abort()
 
@@ -395,12 +403,16 @@ export class Render {
    */
   public destroy() {
     this._bufsQueue = []
-    this._videoEl.pause()
-    this._videoEl.currentTime = 0
-    if (this._videoEl.parentElement === document.body) {
-      document.body.removeChild(this._videoEl)
+    if (this._videoEl) {
+      this._videoEl.pause()
+      this._videoEl.currentTime = 0
+      if (this._videoEl.parentElement === document.body) {
+        document.body.removeChild(this._videoEl)
+      }
+      URL.revokeObjectURL(this._videoEl.src)
+      this._videoEl.src = ''
+      this._videoEl = undefined
     }
-    URL.revokeObjectURL(this._videoEl.src)
 
     this._mimeType = ''
 
