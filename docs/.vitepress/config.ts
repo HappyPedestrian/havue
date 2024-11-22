@@ -36,7 +36,8 @@ export default defineConfig({
           text: '解决方案',
           items: [
             { text: '开始', link: '/solutions/' },
-            { text: '全屏页面适配', link: '/solutions/full-screen-adapt' }
+            { text: '全屏页面适配', link: '/solutions/full-screen-adapt' },
+            { text: 'BroadcastChannel广播消息', link: '/solutions/broadcast-channel-connect' }
           ]
         }
       ]
