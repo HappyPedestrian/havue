@@ -50,19 +50,19 @@ import Demo from '@/solutions/broadcast-channel-connect/Demo.vue'
 
 ### 实例属性
 
-|   属性     |        说明          |            (参数)类型                |
+|   属性     |        说明          |            (参数)类型             |
 | :-------  | :------------------ | :-------------------------------   |
-| id     | 实例id    | `number`              |
-| nodeType  | 当前节点类型    | `NodeTypeEnum \| null`                     |
-| friendList  | 存储的其他标签页通道实例id列表    | `number[]`          |
-| connect  | 建立通信，监听通道消息    | `() => void`        |
-| close  | 断开通信，不再监听通道消息    | `() => void`        |
-| destroy  | 销毁实例    | `() => void`        |
-| send  | 广播消息,其他实例会触发`type`事件    | `(type: string, data?:any) => void`        |
+| id        | 实例id                | `number`                         |
+| nodeType  | 当前节点类型           | `NodeTypeEnum \| null`           |
+| friendList  | 存储的其他标签页通道实例id列表    | `number[]`           |
+| connect   | 建立通信，监听通道消息    | `() => void`                   |
+| close     | 断开通信，不再监听通道消息    | `() => void`                |
+| destroy   | 销毁实例              | `() => void`                      |
+| send      | 广播消息,其他实例会触发`type`事件    | `(type: string, data?:any) => void`        |
 | sendToTarget  | 给特定id的实例广播消息    | `(type: string, targetId: number, data?:any) => void`        |
-| on  | 监听特定事件    | `(event: string, callback: (_: SendMessageType) => void) => void`        |
-| off  | 取消监听事件, 不传`callback`会清空事件    | `(event: string, callback?: (_: SendMessageType) => void) => void`        |
-| emit  | 触发事件    | `(event: string, data: SendMessageType) => void`        |
+| on        | 监听特定事件        | `(event: string, callback: (_: SendMessageType) => void) => void`        |
+| off       | 取消监听事件, 不传`callback`会清空事件    | `(event: string, callback?: (_: SendMessageType) => void) => void`        |
+| emit      | 触发事件          | `(event: string, data: SendMessageType) => void`        |
 
 ```ts
 
