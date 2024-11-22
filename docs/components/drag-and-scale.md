@@ -11,11 +11,11 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 ::: details 点我看代码
 ::: code-group
 
-<<< ../../src/components/DragAndScale/Demo.vue#template [template]
+<<< ../../src/components/DragAndScale/Demo.vue#template{vue:line-numbers} [template]
 
-<<< ../../src/components/DragAndScale/Demo.vue#script [script]
+<<< ../../src/components/DragAndScale/Demo.vue#script{ts:line-numbers} [script]
 
-<<< ../../src/components/DragAndScale/Demo.vue#style [style]
+<<< ../../src/components/DragAndScale/Demo.vue#style{scss:line-numbers} [style]
 
 :::
 
@@ -23,23 +23,23 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 
 |          属性名          |        说明         |      类型      |    默认值     |
 | :----------------------- | :------------------ | :-------------| :----------- |
-| container                | 容器元素             | HTMLElement &#124; Ref &lt;HTMLElement &gt;     |   —   |
-| containerRealSize?       | 容器现实实际宽高      | object        | —           |
-| containerRealSize.width  | 容器现实实际宽        | number        | —           |
-| containerRealSize.height | 容器现实实际高        | number        | —           |
-| keepRatio?                | 保持宽高比配置        | object        | —           |
-| keepRatio.enable         | 是否保持宽高比        | boolean       | false       |
-| keepRatio.scaleCase      | 缩放时使用最大改动值还是最小改动值      | 'min' &#124; 'max'  |     'min'     |
-| limit?                   | 限制缩放的尺寸        | object        |  —          |
-| limit.minWidth           | 限制缩放的最小宽度     | number       | 0           |
-| limit.minHeight          | 限制缩放的最小高度     | number       | 0           |
+| container                | 容器元素             | `HTMLElement \| Ref<HTMLElement>`     |   —   |
+| containerRealSize?       | 容器现实实际宽高      | `object`        | —           |
+| containerRealSize.width  | 容器现实实际宽        | `number`        | —           |
+| containerRealSize.height | 容器现实实际高        | `number`        | —           |
+| keepRatio?                | 保持宽高比配置        | `object`        | —           |
+| keepRatio.enable         | 是否保持宽高比        | `boolean`       | `false`       |
+| keepRatio.scaleCase      | 缩放时使用最大改动值还是最小改动值      | `'min' \| 'max'`  |     'min'     |
+| limit?                   | 限制缩放的尺寸        | `object`        |  —          |
+| limit.minWidth           | 限制缩放的最小宽度     | `number`       | `0`           |
+| limit.minHeight          | 限制缩放的最小高度     | `number`       | `0`           |
 
 ## 事件
 
 |   事件     |        说明          |            参数类型                |
 | :-------  | :------------------ | :-------------------------------   |
-| change     | 拖动或者缩放时触发    | (params: ChangeParamsType) => void    |
-| finish  | 拖动或者缩放结束时触发    | () => void                     |
+| change     | 拖动或者缩放时触发    | `(params: ChangeParamsType) => void`    |
+| finish  | 拖动或者缩放结束时触发    | `() => void`                     |
 
 ```ts
 type ChangeParamsType {

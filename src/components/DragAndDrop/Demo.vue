@@ -72,7 +72,7 @@
   </div>
 </template>
 // #endregion template
-<empty></empty>
+<!--  -->
 // #region script
 <script setup lang="ts">
 import type { Point } from './manager'
@@ -199,7 +199,7 @@ function onDrop(point: Point, data: any) {
 }
 </script>
 // #endregion script
-<empty></empty>
+<!--  -->
 // #region style
 <style lang="scss" scoped>
 .dnd-demo {

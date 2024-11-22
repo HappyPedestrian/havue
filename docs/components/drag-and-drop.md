@@ -16,19 +16,19 @@ import Demo from '@/components/DragAndDrop/Demo.vue'
 ::: details 点我看代码
 ::: code-group
 
-<<< ../../src/components/DragAndDrop/Demo.vue#template [template]
+<<< ../../src/components/DragAndDrop/Demo.vue#template{vue:line-numbers} [template]
 
-<<< ../../src/components/DragAndDrop/Demo.vue#script [script]
+<<< ../../src/components/DragAndDrop/Demo.vue#script{ts:line-numbers} [script]
 
-<<< ../../src/components/DragAndDrop/Demo.vue#style [style]
+<<< ../../src/components/DragAndDrop/Demo.vue#style{scss:line-numbers} [style]
 :::
 
 ## Draggable 属性
 
 |  属性名   |        说明         |      类型      |    默认值     |
 | :------- | :------------------ | :-------------| :----------- |
-| type     | 拖拽元素类型         | DragType      | -            |
-| data     | 拖拽元素相关数据，供Droppable使用  | any    | -      |
+| type     | 拖拽元素类型         | `DragType`      | -            |
+| data     | 拖拽元素相关数据，供Droppable使用  | `any`    | -      |
 
 ```ts
 DragType: string | number | symbol
@@ -38,16 +38,16 @@ DragType: string | number | symbol
 
 |  属性名   |        说明         |      类型      |    默认值     |
 | :------- | :------------------ | :-------------| :----------- |
-| acceptDragType   | 可接受拖拽元素类型         | DragType &#124; Array&lt;DragType&gt; | - |
+| acceptDragType   | 可接受拖拽元素类型         | `DragType \| Array<DragType>` | - |
 
 ## Droppable 事件
 
 |    事件    |        说明               |            参数类型                  |
 | :--------- | :----------------------- | :------------------------------------|
-| enter     | Draggable进入是触发        | (point: Point, data: any) => void    |
-| move      | Draggable在区域内拖动时触发 | (point: Point, data: any) => void    |
-| drop      | Draggable放下时触发        | (point: Point, data: any) => void     |
-| leave     | Draggable离开时触发        | () => void                            |
+| enter     | Draggable进入是触发        | `(point: Point, data: any) => void`    |
+| move      | Draggable在区域内拖动时触发 | `(point: Point, data: any) => void`    |
+| drop      | Draggable放下时触发        | `(point: Point, data: any) => void`     |
+| leave     | Draggable离开时触发        | `() => void`                            |
 
 ```ts
 Point: {

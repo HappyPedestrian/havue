@@ -92,19 +92,19 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 ::: details 点我看代码
 ::: code-group
 
-<<< ../../src/components/VideoPlayer/Demo.vue#template [template]
+<<< ../../src/components/VideoPlayer/Demo.vue#template{vue:line-numbers} [template]
 
-<<< ../../src/components/VideoPlayer/Demo.vue#script [script]
+<<< ../../src/components/VideoPlayer/Demo.vue#script{ts:line-numbers} [script]
 
-<<< ../../src/components/VideoPlayer/Demo.vue#style [style]
+<<< ../../src/components/VideoPlayer/Demo.vue#style{scss:line-numbers} [style]
 :::
 
 ## 函数参数
 
 |       参数名          |        说明         |      类型      |    默认值     |
 | :------------------- | :------------------ | :-------------| :----------- |
-| wsUrl                | WebSocket地址        | string        |   —   |
-| isReady              | 是否播放             | boolean &#124; Ref&lt;boolean&gt;     |   —   |
-| wsVideoPlayerIns     | WsVideoManager实例   | WsVideoManager     |   WsVideoManager()  |
-| target               |    canvas元素, 不传会自动生成一个ref供外部使用  | HTMLCanvasElement &#124; Ref&lt;HTMLCanvasElement&gt;     |   —   |
-| autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height             |  boolean &#124; Ref&lt;boolean&gt;     |   false   |
+| wsUrl                | WebSocket地址        | `string`        |   —   |
+| isReady              | 是否播放             | `boolean \| Ref<boolean>`     |   —   |
+| wsVideoPlayerIns     | WsVideoManager实例   | `WsVideoManager`     |   `WsVideoManager()`  |
+| target               |    canvas元素, 不传会自动生成一个ref供外部使用  | `HTMLCanvasElement \| Ref<HTMLCanvasElement>`     |   —   |
+| autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height             |  `boolean \| Ref<boolean>`     |   `false`   |

@@ -9,5 +9,5 @@ import Demo from '@/components/ColorPicker/Demo.vue'
 <Demo></Demo>
 
 ::: details 点我看代码
-<<< ../../src/components/ColorPicker/Demo.vue
+<<< ../../src/components/ColorPicker/Demo.vue{ts:line-numbers}
 :::

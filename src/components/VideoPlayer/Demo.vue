@@ -12,7 +12,7 @@
   </div>
 </template>
 // #endregion template
-<empty></empty>
+<!--  -->
 // #region script
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -31,7 +31,7 @@ useVideoPlay({
 })
 </script>
 // #endregion script
-<empty></empty>
+<!--  -->
 // #region style
 <style lang="scss" scoped>
 .form-box {

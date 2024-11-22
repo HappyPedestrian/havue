@@ -17,7 +17,7 @@
   </div>
 </template>
 // #endregion template
-<empty></empty>
+<!--  -->
 // #region script
 <script setup lang="ts">
 import type { ChangeResultType } from './DragAndScale.vue'
@@ -54,7 +54,7 @@ function handleChange(params: ChangeResultType) {
 }
 </script>
 // #endregion script
-<empty></empty>
+<!--  -->
 // #region style
 <style lang="scss" scoped>
 .drag-area {
