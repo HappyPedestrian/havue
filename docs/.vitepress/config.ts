@@ -27,6 +27,7 @@ export default defineConfig({
             { text: '颜色选择器', link: '/components/color-picker' },
             { text: '拖动缩放', link: '/components/drag-and-scale' },
             { text: '拖拽', link: '/components/drag-and-drop' },
+            { text: '移动端手势识别', link: '/components/mouse-event-pass-through' },
             { text: 'WebSocket视频播放器', link: '/components/websocket-fmp4-player' }
           ]
         }

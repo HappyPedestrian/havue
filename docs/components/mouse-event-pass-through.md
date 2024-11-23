@@ -1,0 +1,47 @@
+# 移动端手势转换为pc端鼠标事件
+
+监听移动端的特殊手势操作（单击、双击、单指滑动、双指滑动、双指单击等事件）
+
+## 使用
+
+引入
+
+```ts
+import { useOperateTransform } from '@/components/hooks/useOperateTransform'
+```
+
+## 示例
+
+下面区域为可操作区域，操作时，页面显示当前操作类型
+
+<script setup lang="ts">
+import Demo from '@/components/MousePassThrough/Demo.vue'
+
+</script>
+
+<Demo></Demo>
+
+::: details 点我看代码
+::: code-group
+
+<<< ../../src/components/MousePassThrough/Demo.vue#template{vue:line-numbers} [template]
+
+<<< ../../src/components/MousePassThrough/Demo.vue#script{ts:line-numbers} [script]
+
+<<< ../../src/components/MousePassThrough/Demo.vue#style{scss:line-numbers} [style]
+
+:::
+
+## useOperateTransform函数参数
+
+|       参数名          |        说明         |      类型      |    默认值     |
+| :------------------- | :------------------ | :-------------| :----------- |
+| targetRect            | 目标区域对应现实宽高（非页面元素宽高）      | `MaybeRef<TargetRectType>`        |   —   |
+| target             | 操作元素      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
+| options             | 需要监听的事件处理函数      | `Partial<EventOptions>`        |   —   |
+
+类型定义
+
+::: details 点我看代码
+<<< ../../src/components/MousePassThrough/hooks/useOperateTransform.ts#typedefine{ts:line-numbers}
+:::
