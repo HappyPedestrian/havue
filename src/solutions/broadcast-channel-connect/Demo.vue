@@ -6,11 +6,12 @@
       <div class="friend-item" v-for="friend in friendList">{{ friend }}</div>
     </div>
     <div class="right-box">
-      <div class="current-id">当前标签页实例 id: {{ currentBcId }}</div>
+      <div class="current-info">当前标签页实例 id: {{ currentBcId }}</div>
+      <div class="current-info">当前标签页实例 类型: {{ currentBcNodeType }}</div>
       <div class="options-box">
         <div class="form-item"><span class="label">发送消息:</span><input v-model="message" /></div>
         <button class="borad-btn" @click="handleBroadMessage">广播</button>
-        <div class="form-item"><span class="label">目标id:</span><input v-model="targetId" /></div>
+        <div class="form-item"><span class="label">目标实例id:</span><input v-model="targetId" /></div>
         <button class="sigle-btn" @click="handleBroadOneMessage">单发</button>
       </div>
       <div class="message-box">
@@ -33,6 +34,7 @@ import { BroadcastChannelManager, EventTypeEnum } from './manager'
 let bcManager: BroadcastChannelManager | null = null
 
 const currentBcId = ref()
+const currentBcNodeType = ref()
 
 const friendList = ref<Array<number>>([])
 const message = ref()
@@ -74,6 +76,9 @@ onMounted(() => {
   bcManager.on(EventTypeEnum.Friend_List_Update, (info) => {
     friendList.value = info.data || []
   })
+  bcManager.on(EventTypeEnum.Node_Type_Change, (info) => {
+    currentBcNodeType.value = info.data
+  })
 })
 
 onBeforeUnmount(() => {
@@ -114,7 +119,7 @@ onBeforeUnmount(() => {
     flex-direction: column;
     background-color: #4e7c4d;
 
-    .current-id {
+    .current-info {
       padding: 3px 5px;
       background-color: #a8b9be;
     }
@@ -142,7 +147,7 @@ onBeforeUnmount(() => {
       align-items: center;
       .label {
         display: inline-block;
-        width: 80px;
+        width: 100px;
         text-align: right;
       }
       input {

@@ -1,3 +1,6 @@
+const IS_LOG_DEBUG_INFO = true
+// #region typedefine
+/** 事件数据类型 */
 export type SendMessageType = {
   /** 事件类型 */
   type: string
@@ -9,9 +12,7 @@ export type SendMessageType = {
   targetId?: number
 }
 
-const IS_LOG_DEBUG_INFO = true
-
-// 事件类型
+/** 事件类型 */
 export enum EventTypeEnum {
   /** 初始广播 */
   Broadcast = 'Hello world',
@@ -31,11 +32,12 @@ export enum EventTypeEnum {
   Friend_List_Update = 'friend list update'
 }
 
-// 当前webview BroadcastChannel节点类型
+/** 当前webview BroadcastChannel节点类型 */
 export enum NodeTypeEnum {
   Main = 'main',
   Normal = 'normal'
 }
+// #endregion typedefine
 
 // 消息超时时间
 const MessageTimeout = 300
@@ -84,6 +86,23 @@ export class BroadcastChannelManager {
   public close() {
     IS_LOG_DEBUG_INFO && console.log('BC:bc close')
     this._broadcastChannel && this._broadcastChannel.close()
+  }
+
+  /**
+   * 切换节点类型
+   * @param {NodeTypeEnum} type
+   * @returns
+   */
+  private _setNodeType(type: NodeTypeEnum) {
+    if (this.nodeType === type) {
+      return
+    }
+    this.nodeType = type
+    this.emit(EventTypeEnum.Node_Type_Change, {
+      type: EventTypeEnum.Node_Type_Change,
+      data: type,
+      id: this.id
+    })
   }
 
   /** 更新友方列表 */
@@ -188,17 +207,12 @@ export class BroadcastChannelManager {
       if (this.nodeType === NodeTypeEnum.Main) {
         return
       }
-      this._beMainNode()
+      this._setNodeType(NodeTypeEnum.Main)
     } else {
       if (this.nodeType === NodeTypeEnum.Normal) {
         return
       }
-      this.nodeType = NodeTypeEnum.Normal
-      this.emit(EventTypeEnum.Node_Type_Change, {
-        type: EventTypeEnum.Node_Type_Change,
-        data: NodeTypeEnum.Normal,
-        id: this.id
-      })
+      this._setNodeType(NodeTypeEnum.Normal)
     }
   }
 
@@ -228,12 +242,7 @@ export class BroadcastChannelManager {
 
     if (this.nodeType === NodeTypeEnum.Main && Math.min(...this._oldFrendChannelIdList) < this.id) {
       // 有更小的id，不再为主节点
-      this.nodeType = NodeTypeEnum.Normal
-      this.emit(EventTypeEnum.Node_Type_Change, {
-        type: EventTypeEnum.Node_Type_Change,
-        data: NodeTypeEnum.Normal,
-        id: this.id
-      })
+      this._setNodeType(NodeTypeEnum.Normal)
     }
 
     this.friendChannelIdSet.clear()
@@ -250,7 +259,7 @@ export class BroadcastChannelManager {
 
     // 如果长时间未回复，认为自己可以当主节点
     const timer = setTimeout(() => {
-      this._beMainNode()
+      this._setNodeType(NodeTypeEnum.Main)
     }, MessageTimeout)
 
     // 收到拒绝回复，清空timeout
@@ -260,18 +269,6 @@ export class BroadcastChannelManager {
     }
 
     this.on(EventTypeEnum.Res_Be_Main_Node, handleRes_beMainNode)
-  }
-
-  /**
-   * 切换成为主节点
-   */
-  private _beMainNode() {
-    this.nodeType = NodeTypeEnum.Main
-    this.emit(EventTypeEnum.Node_Type_Change, {
-      type: EventTypeEnum.Node_Type_Change,
-      data: NodeTypeEnum.Main,
-      id: this.id
-    })
   }
 
   /**
