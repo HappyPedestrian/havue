@@ -61,9 +61,9 @@ export class BroadcastChannelManager {
   /** 记录的友方id数组 */
   private _oldFrendChannelIdList: Array<number> = []
   /** 正在更新的右方id数组 */
-  public friendChannelIdSet: Set<number> = new Set()
+  private _friendChannelIdSet: Set<number> = new Set()
   /** 当前节点类型 */
-  public nodeType: NodeTypeEnum | undefined = undefined
+  private _nodeType: NodeTypeEnum | undefined = undefined
 
   constructor(name: string) {
     this._bcName = name
@@ -71,8 +71,12 @@ export class BroadcastChannelManager {
     IS_LOG_DEBUG_INFO && console.log('BC:id:', this.id)
   }
 
+  get nodeType() {
+    return this._nodeType
+  }
+
   get friendList() {
-    return this._oldFrendChannelIdList
+    return [...this._oldFrendChannelIdList]
   }
 
   public connect() {
@@ -94,10 +98,10 @@ export class BroadcastChannelManager {
    * @returns
    */
   private _setNodeType(type: NodeTypeEnum) {
-    if (this.nodeType === type) {
+    if (this._nodeType === type) {
       return
     }
-    this.nodeType = type
+    this._nodeType = type
     this.emit(EventTypeEnum.Node_Type_Change, {
       type: EventTypeEnum.Node_Type_Change,
       data: type,
@@ -138,8 +142,8 @@ export class BroadcastChannelManager {
     // 收到世界呼唤
     this.on(EventTypeEnum.Broadcast, (data) => {
       const { id } = data
-      if (!this.friendChannelIdSet.has(id)) {
-        this.friendChannelIdSet.add(id)
+      if (!this._friendChannelIdSet.has(id)) {
+        this._friendChannelIdSet.add(id)
       }
 
       this.sendToTarget(EventTypeEnum.Broadcast_Reply, id)
@@ -196,7 +200,7 @@ export class BroadcastChannelManager {
 
   /** 获取最新的友方列表 */
   private _getNewFriendList() {
-    return [...this.friendChannelIdSet].sort((a, b) => a - b)
+    return [...this._friendChannelIdSet].sort((a, b) => a - b)
   }
   /**
    * 更新当前节点类型
@@ -204,12 +208,12 @@ export class BroadcastChannelManager {
   private _updataNodeType() {
     this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
     if (this._oldFrendChannelIdList.length === 0 || Math.min(...this._oldFrendChannelIdList) > this.id) {
-      if (this.nodeType === NodeTypeEnum.Main) {
+      if (this._nodeType === NodeTypeEnum.Main) {
         return
       }
       this._setNodeType(NodeTypeEnum.Main)
     } else {
-      if (this.nodeType === NodeTypeEnum.Normal) {
+      if (this._nodeType === NodeTypeEnum.Normal) {
         return
       }
       this._setNodeType(NodeTypeEnum.Normal)
@@ -240,12 +244,12 @@ export class BroadcastChannelManager {
       this._oldFrendChannelIdList = [...newFriendList]
     }
 
-    if (this.nodeType === NodeTypeEnum.Main && Math.min(...this._oldFrendChannelIdList) < this.id) {
+    if (this._nodeType === NodeTypeEnum.Main && Math.min(...this._oldFrendChannelIdList) < this.id) {
       // 有更小的id，不再为主节点
       this._setNodeType(NodeTypeEnum.Normal)
     }
 
-    this.friendChannelIdSet.clear()
+    this._friendChannelIdSet.clear()
   }
 
   /**
@@ -276,8 +280,8 @@ export class BroadcastChannelManager {
    * @param id 节点id
    */
   public _addFriend(id: number) {
-    if (!this.friendChannelIdSet.has(id)) {
-      this.friendChannelIdSet.add(id)
+    if (!this._friendChannelIdSet.has(id)) {
+      this._friendChannelIdSet.add(id)
     }
   }
 
@@ -371,9 +375,9 @@ export class BroadcastChannelManager {
     this._broadcastChannel?.close()
     this._broadcastChannel = undefined
     this._oldFrendChannelIdList = []
-    this.friendChannelIdSet.clear()
+    this._friendChannelIdSet.clear()
     this.id = -1
-    this.nodeType = undefined
+    this._nodeType = undefined
 
     this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
     this._mainNodeMsgInterval = null
