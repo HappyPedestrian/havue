@@ -12,7 +12,7 @@
 1. 标签页面打开，连接BroadcastChannel时，先广播消息（id为当前时间+随机数）。
 2. 已经存在的标签页面广播通道收到广播消息，进行回复。
 3. 收到回复后，将该标签页添加到id列表（`friendChannelIdSet`）中。
-4. 一定时间（300m）后，根据收到的最新的id列表（`friendChannelIdSet`），可以知道都有那些标签页。
+4. 一定时间（300ms）后，根据收到的最新的id列表（`friendChannelIdSet`），可以知道都有那些标签页。
 5. 根据id列表信息（`friendChannelIdSet`），可以知道自己是否可以为主节点。
 6. 如果是主节点，定时发送主节点心跳广播信息，并将id列表信息保存为旧节点信息列表（`_oldFrendChannelIdList`），清空id列表信息（`friendChannelIdSet`）。
 7. 此时主节点根据旧节点信息列表，可以知道自己是否应该是主节点，如果不应该是，则自动变为普通节点。

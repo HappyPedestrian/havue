@@ -125,10 +125,7 @@ export class BroadcastChannelManager {
       this._updataNodeType()
     }, MessageTimeout)
   }
-  /**
-   * 绑定事件
-   * @param {BroadcastChannel} bc BroadcastChannel实例
-   */
+  /** 绑定事件 */
   private _bindBroadcastChannelEvent() {
     this._broadcastChannel &&
       (this._broadcastChannel.onmessage = (event) => {
