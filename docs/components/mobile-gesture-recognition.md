@@ -1,4 +1,4 @@
-# 移动端手势转换为pc端鼠标事件
+# 移动端手势识别
 
 监听移动端的特殊手势操作（单击、双击、单指滑动、双指滑动、双指单击等事件）
 
@@ -7,7 +7,7 @@
 引入
 
 ```ts
-import { useOperateTransform } from '@/components/hooks/useOperateTransform'
+import { useOperateTransform } from '@/components/MobileGestureRecognition/hooks/useOperateTransform'
 ```
 
 ## 示例
@@ -15,7 +15,7 @@ import { useOperateTransform } from '@/components/hooks/useOperateTransform'
 下面区域为可操作区域，操作时，页面显示当前操作类型
 
 <script setup lang="ts">
-import Demo from '@/components/MousePassThrough/Demo.vue'
+import Demo from '@/components/MobileGestureRecognition/Demo.vue'
 
 </script>
 
@@ -24,11 +24,11 @@ import Demo from '@/components/MousePassThrough/Demo.vue'
 ::: details 点我看代码
 ::: code-group
 
-<<< ../../src/components/MousePassThrough/Demo.vue#template{vue:line-numbers} [template]
+<<< ../../src/components/MobileGestureRecognition/Demo.vue#template{vue:line-numbers} [template]
 
-<<< ../../src/components/MousePassThrough/Demo.vue#script{ts:line-numbers} [script]
+<<< ../../src/components/MobileGestureRecognition/Demo.vue#script{ts:line-numbers} [script]
 
-<<< ../../src/components/MousePassThrough/Demo.vue#style{scss:line-numbers} [style]
+<<< ../../src/components/MobileGestureRecognition/Demo.vue#style{scss:line-numbers} [style]
 
 :::
 
@@ -43,5 +43,5 @@ import Demo from '@/components/MousePassThrough/Demo.vue'
 类型定义
 
 ::: details 点我看代码
-<<< ../../src/components/MousePassThrough/hooks/useOperateTransform.ts#typedefine{ts:line-numbers}
+<<< ../../src/components/MobileGestureRecognition/hooks/useOperateTransform.ts#typedefine{ts:line-numbers}
 :::
