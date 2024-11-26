@@ -10,10 +10,10 @@ import { computed, ref } from 'vue'
 import { DnDManagerInstance } from './manager'
 
 const emits = defineEmits<{
-  (name: 'enter', point: Point, data: any): void
-  (name: 'move', point: Point, data: any): void
-  (name: 'drop', point: Point, data: any): void
-  (name: 'leave'): void
+  (name: 'enter', type: DragType, point: Point, data: any): void
+  (name: 'move', type: DragType, point: Point, data: any): void
+  (name: 'drop', type: DragType, point: Point, data: any): void
+  (name: 'leave', type: DragType, data: any): void
 }>()
 
 const props = defineProps<{
@@ -57,14 +57,14 @@ DnDManagerInstance.on('move', (params) => {
     const { isInArea, position } = getPositionInArea(point)
     if (isInArea) {
       if (isEntered.value) {
-        emits('move', position, data)
+        emits('move', type, position, data)
       } else {
         isEntered.value = true
-        emits('enter', position, data)
+        emits('enter', type, position, data)
       }
     } else if (isEntered.value) {
       isEntered.value = false
-      emits('leave')
+      emits('leave', type, data)
     }
   }
 })
@@ -72,7 +72,7 @@ DnDManagerInstance.on('move', (params) => {
 DnDManagerInstance.on('end', ({ type, point, data }) => {
   if (dropAreaRef.value && acceptDragTypeList.value.includes(type) && isEntered.value) {
     const { position } = getPositionInArea(point)
-    emits('drop', position, data)
+    emits('drop', type, position, data)
   }
 })
 </script>

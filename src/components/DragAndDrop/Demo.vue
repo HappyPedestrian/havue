@@ -75,7 +75,7 @@
 <!--  -->
 // #region script
 <script setup lang="ts">
-import type { Point } from './manager'
+import type { Point, DragType } from './manager'
 import { computed, ref, reactive } from 'vue'
 import Draggable from './Draggable.vue'
 import Droppable from './Droppable.vue'
@@ -157,12 +157,12 @@ const previewStyle = computed(() => {
   }
 })
 
-function onEnter(point: Point, data: any) {
+function onEnter(type: DragType, point: Point, data: any) {
   enteredPoint.value = point
   previewData.value = data
 }
 
-function onMove(point: Point, data: any) {
+function onMove(type: DragType, point: Point, data: any) {
   enteredPoint.value = point
   previewData.value = data
 }
@@ -173,7 +173,7 @@ function onLeave() {
   previewData.value = undefined
 }
 
-function onDrop(point: Point, data: any) {
+function onDrop(type: DragType, point: Point, data: any) {
   data = data || {}
   const { width = 100, height = 50 } = data
   if (enteredType.value === 'green') {

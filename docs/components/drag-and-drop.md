@@ -44,10 +44,10 @@ DragType: string | number | symbol
 
 |    事件    |        说明               |            参数类型                  |
 | :--------- | :----------------------- | :------------------------------------|
-| enter     | Draggable进入是触发        | `(point: Point, data: any) => void`    |
-| move      | Draggable在区域内拖动时触发 | `(point: Point, data: any) => void`    |
-| drop      | Draggable放下时触发        | `(point: Point, data: any) => void`     |
-| leave     | Draggable离开时触发        | `() => void`                            |
+| enter     | Draggable进入时触发        | `(type: DragType, point: Point, data: any) => void`    |
+| move      | Draggable在区域内拖动时触发 | `(type: DragType, point: Point, data: any) => void`    |
+| drop      | Draggable放下时触发        | `(type: DragType, point: Point, data: any) => void`     |
+| leave     | Draggable离开时触发        | `(type: DragType, data: any) => void`                            |
 
 ```ts
 Point: {

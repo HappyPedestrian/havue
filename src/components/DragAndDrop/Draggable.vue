@@ -45,7 +45,6 @@ DnDManagerInstance.on('start', (params) => {
 
 DnDManagerInstance.on('move', (params) => {
   const { point } = params
-  console.log('move:', params)
   if (isDragThis.value) {
     cloneNodePosition.x = point.x
     cloneNodePosition.y = point.y
