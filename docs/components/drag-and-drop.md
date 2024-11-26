@@ -28,6 +28,7 @@ import Demo from '@/components/DragAndDrop/Demo.vue'
 |  属性名   |        说明         |      类型      |    默认值     |
 | :------- | :------------------ | :-------------| :----------- |
 | type     | 拖拽元素类型         | `DragType`      | -            |
+| disabled | 是否禁用             | `any`          | -            |
 | data     | 拖拽元素相关数据，供Droppable使用  | `any`    | -      |
 
 ```ts

@@ -1,5 +1,5 @@
 <template>
-  <div ref="dragItemRef" class="draggable-area">
+  <div ref="dragItemRef" class="draggable-area" :class="disabled ? 'disabled' : ''">
     <slot></slot>
     <div class="draggable-clone-item" :style="cloneNodeStyle" v-if="isDragThis">
       <slot></slot>
@@ -13,10 +13,16 @@ import type { DragType } from './manager'
 
 import { DnDManagerInstance } from './manager'
 
-const props = defineProps<{
-  type: DragType
-  data?: any
-}>()
+const props = withDefaults(
+  defineProps<{
+    type: DragType
+    disabled?: boolean
+    data?: any
+  }>(),
+  {
+    disabled: false
+  }
+)
 
 const dragItemRef = ref<HTMLElement>()
 const isDragThis = ref(false)
@@ -35,7 +41,7 @@ const cloneNodeStyle = computed(() => {
 DnDManagerInstance.on('start', (params) => {
   const { x, y } = params
   const startEl = document.elementFromPoint(x, y)
-  if (dragItemRef.value && dragItemRef.value.contains(startEl)) {
+  if (!props.disabled && dragItemRef.value && dragItemRef.value.contains(startEl)) {
     isDragThis.value = true
     cloneNodePosition.x = params.x
     cloneNodePosition.y = params.y
@@ -64,6 +70,9 @@ DnDManagerInstance.on('end', () => {
 .draggable-area {
   width: fit-content;
   cursor: grab;
+  &.disabled {
+    cursor: not-allowed;
+  }
 }
 
 .draggable-clone-item {
