@@ -4,7 +4,7 @@ import { useTouchEvent } from '@/plugins/touch/hooks'
 
 const IS_LOG_DEBUG_INFO = true
 // #region typedefine
-export type TargetRectType = {
+export type TargetRealSizeType = {
   width: number
   height: number
 }
@@ -55,8 +55,8 @@ export type EventOptions = {
 // #endregion typedefine
 
 export function useOperateTransform(
-  targetRect: MaybeRef<TargetRectType>,
-  target: MaybeRef<HTMLElement | undefined> = ref<HTMLElement | undefined>(),
+  TargetRealSize: MaybeRef<TargetRealSizeType>,
+  target: MaybeRef<HTMLElement | undefined>,
   options?: Partial<EventOptions>
 ) {
   /** 正在缩放 */
@@ -70,13 +70,16 @@ export function useOperateTransform(
   /** 双指拖动起始信息 */
   const pan2StartInfo = ref<PanStartInfoType>()
   /** 目标元素 */
-  const operateBoxRef = computed(() => {
-    return isRef(target) ? toValue(target) : target
-  })
+  let operateBoxRef = ref<HTMLElement>()
+  if (target) {
+    operateBoxRef = computed(() => {
+      return isRef(target) ? toValue(target) : target
+    })
+  }
 
   /** 信号源实际宽高 */
-  const rect = computed<TargetRectType>(() => {
-    return isRef(targetRect) ? toValue(targetRect) : targetRect
+  const rect = computed<TargetRealSizeType>(() => {
+    return isRef(TargetRealSize) ? toValue(TargetRealSize) : TargetRealSize
   })
 
   const { destroy } = useTouchEvent(operateBoxRef, {

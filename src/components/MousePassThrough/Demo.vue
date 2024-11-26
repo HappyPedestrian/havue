@@ -1,6 +1,6 @@
 // #region template
 <template>
-  <div ref="boxRef" class="mouse-pass-through">
+  <div ref="operateBoxRef" class="mouse-pass-through">
     {{ stateText }}
     <div class="point" :style="pointStyle"></div>
   </div>
@@ -12,7 +12,6 @@
 import { ref, reactive, computed } from 'vue'
 import { useOperateTransform } from './hooks/useOperateTransform'
 
-const boxRef = ref()
 const stateText = ref<string>('')
 
 const originRect = ref({
@@ -32,7 +31,7 @@ const pointStyle = computed(() => {
   }
 })
 
-useOperateTransform(originRect, boxRef, {
+const { operateBoxRef } = useOperateTransform(originRect, undefined, {
   onTap: (e) => {
     Object.assign(currentPoint, {
       x: e.x,

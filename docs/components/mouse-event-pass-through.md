@@ -36,8 +36,8 @@ import Demo from '@/components/MousePassThrough/Demo.vue'
 
 |       参数名          |        说明         |      类型      |    默认值     |
 | :------------------- | :------------------ | :-------------| :----------- |
-| targetRect            | 目标区域对应现实宽高（非页面元素宽高）      | `MaybeRef<TargetRectType>`        |   —   |
-| target             | 操作元素      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
+| targetRealSize            | 目标区域对应现实宽高（非页面元素宽高）      | `MaybeRef<TargetRealSizeType>`        |   —   |
+| target             | 操作元素，如果不传，函数会返回一个`operateBoxRef`元素引用供外部使用      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
 | options             | 需要监听的事件处理函数      | `Partial<EventOptions>`        |   —   |
 
 类型定义
