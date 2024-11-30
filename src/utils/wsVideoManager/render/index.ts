@@ -1,4 +1,5 @@
 import MP4Box from 'mp4box'
+import EventBus from '@/utils/EventBus'
 
 export type RenderConstructorOptionType = {
   /** 当前播放currentTime和最新视频时长最多相差 秒数 */
@@ -15,12 +16,32 @@ export const DEFAULT_OPTIONS = {
   maxCache: 10
 }
 
+export enum AudioState {
+  NOTMUTED = 'notmuted',
+  MUTED = 'muted'
+}
+
+export enum VideoState {
+  PLAY = 'play',
+  PAUSE = 'pause'
+}
+
+export enum RenderEventsEnum {
+  AUDIO_STATE_CHANGE = 'audioStateChange',
+  VIDEO_STATE_CHANGE = 'videoStateChange'
+}
+
+export type RenderEvents = {
+  [RenderEventsEnum.AUDIO_STATE_CHANGE]: (s: AudioState) => void
+  [RenderEventsEnum.VIDEO_STATE_CHANGE]: (s: VideoState) => void
+}
+
 // 调试代码
 // let id = 0
 // const curPosX = 0
 // let curPosY = 0
 
-export class Render {
+export class Render extends EventBus<RenderEvents> {
   /** video元素 */
   private _videoEl: HTMLVideoElement | undefined = undefined
   /** pixi.js 实例 */
@@ -46,6 +67,7 @@ export class Render {
   // private divID = ''
 
   constructor(options: Partial<RenderConstructorOptionType> = {}) {
+    super()
     this._options = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
     this._setupVideo()
@@ -144,6 +166,18 @@ export class Render {
       if (!this._paused) {
         this._videoEl?.play()
       }
+    })
+
+    this._videoEl.addEventListener('play', () => {
+      this.emit(RenderEventsEnum.VIDEO_STATE_CHANGE, VideoState.PLAY)
+    })
+
+    this._videoEl.addEventListener('pause', () => {
+      this.emit(RenderEventsEnum.VIDEO_STATE_CHANGE, VideoState.PAUSE)
+    })
+
+    this._videoEl.addEventListener('volumechange', () => {
+      this.emit(RenderEventsEnum.AUDIO_STATE_CHANGE, this._videoEl?.muted ? AudioState.MUTED : AudioState.NOTMUTED)
     })
 
     this._videoEl.addEventListener('error', (error) => {

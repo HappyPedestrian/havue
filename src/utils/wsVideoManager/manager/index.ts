@@ -2,7 +2,7 @@ import EventBus from '@/utils/EventBus'
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
 import type { RenderConstructorOptionType } from '../render'
 import { WebSocketLoader } from '../loader'
-import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS } from '../render'
+import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS, RenderEventsEnum, AudioState, VideoState } from '../render'
 
 export type WsVideoManaCstorOptionType = {
   /** WebSocketLoader 实例配置 */
@@ -26,13 +26,18 @@ type WsInfoType = {
   /** socket连接渲染render实例 */
   render: Render
 }
+
 export enum EventEnums {
   WS_URL_CHANGE = 'wsUrlChange'
 }
 
 type Events = {
   [EventEnums.WS_URL_CHANGE]: (urls: string[]) => void
+  [RenderEventsEnum.AUDIO_STATE_CHANGE]: (url: string, state: AudioState) => void
+  [RenderEventsEnum.VIDEO_STATE_CHANGE]: (url: string, state: VideoState) => void
 }
+
+export const WsVideoManagerEnums = Object.assign({}, EventEnums, RenderEventsEnum)
 
 export class WsVideoManager extends EventBus<Events> {
   /** socket连接 渲染相关对应信息 */
@@ -96,9 +101,24 @@ export class WsVideoManager extends EventBus<Events> {
     this._wsInfoMap.set(url, wsInfo)
     this._emitWsUrlListChange()
 
+    this.bindRenderEvent(url, render)
     this.bindSocketEvent(socket, render)
 
     socket.open()
+  }
+
+  /**
+   * 绑定render事件
+   * @param url 连接地址
+   * @param render Render实例
+   */
+  bindRenderEvent(url: string, render: Render) {
+    render.on(RenderEventsEnum.AUDIO_STATE_CHANGE, (state) => {
+      this.emit(RenderEventsEnum.AUDIO_STATE_CHANGE, url, state)
+    })
+    render.on(RenderEventsEnum.VIDEO_STATE_CHANGE, (state) => {
+      this.emit(RenderEventsEnum.VIDEO_STATE_CHANGE, url, state)
+    })
   }
 
   /**

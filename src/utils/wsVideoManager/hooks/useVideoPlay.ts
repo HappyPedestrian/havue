@@ -1,9 +1,10 @@
 import type { Ref, MaybeRef } from 'vue'
 import type { WsVideoManager } from '../manager'
-import { EventEnums } from '../manager'
+import { WsVideoManagerEnums } from '../manager'
 import { ref, computed, onBeforeUnmount, watchEffect, toValue, isRef, watch } from 'vue'
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
 import wsVideoPlayer from '../index'
+import { AudioState, VideoState } from '../render'
 
 export type CanvasResizeOption = {
   /** 是否启用自动更新canvas width 和 height属性，默认为true */
@@ -112,8 +113,22 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
   /** 已连接的websocket地址 */
   const linkedWsUrlList = ref<string[]>([])
 
-  wsVideoPlayer.on(EventEnums.WS_URL_CHANGE, (urls) => {
+  wsVideoPlayer.on(WsVideoManagerEnums.WS_URL_CHANGE, (urls) => {
     linkedWsUrlList.value = [...urls]
+  })
+
+  wsVideoPlayer.on(WsVideoManagerEnums.AUDIO_STATE_CHANGE, (url, state) => {
+    if (url === previewWsUrl.value) {
+      console.log('音频状态更改', url, state)
+      isMuted.value = state === AudioState.MUTED
+    }
+  })
+
+  wsVideoPlayer.on(WsVideoManagerEnums.VIDEO_STATE_CHANGE, (url, state) => {
+    if (url === previewWsUrl.value) {
+      console.log('视频状态更改', url, state)
+      isPaused.value = state === VideoState.PAUSE
+    }
   })
 
   /** canvas在视口中 */
@@ -189,9 +204,6 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
         // 新增canvas
         wsVideoPlayerIns.addCanvas(canvasRef.value, previewWsUrl.value)
         lastPreviewUrl.value = previewWsUrl.value
-        // 更新是否静音 / 视频暂停
-        isMuted.value = wsVideoPlayer.getOneMutedState(previewWsUrl.value)
-        isPaused.value = wsVideoPlayer.getOneVideoPausedState(previewWsUrl.value)
       }
     } else {
       if (wsVideoPlayerIns.isCanvasExist(canvasRef.value)) {
@@ -206,7 +218,6 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
   /** 播放当前音乐，静音其他音乐 */
   function pauseOtherAudio() {
     wsVideoPlayer.playOneAudio(previewWsUrl.value)
-    isMuted.value = wsVideoPlayer.getOneMutedState(previewWsUrl.value)
   }
 
   /**
@@ -215,7 +226,6 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
    */
   function setAudioMutedState(muted: boolean) {
     wsVideoPlayer.setOneMutedState(previewWsUrl.value, muted)
-    isMuted.value = wsVideoPlayer.getOneMutedState(previewWsUrl.value)
   }
 
   /**
@@ -223,7 +233,6 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
    */
   function pauseOtherVideo() {
     wsVideoPlayer.playOneVideo(previewWsUrl.value)
-    isPaused.value = wsVideoPlayer.getOneVideoPausedState(previewWsUrl.value)
   }
 
   /**
@@ -232,7 +241,6 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
    */
   function setOneVideoPausedState(paused: boolean) {
     wsVideoPlayer.setOneVideoPausedState(previewWsUrl.value, paused)
-    isPaused.value = wsVideoPlayer.getOneVideoPausedState(previewWsUrl.value)
   }
 
   /**
@@ -241,7 +249,6 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
    */
   function setAllVideoPausedState(paused: boolean) {
     wsVideoPlayer.setAllVideoPausedState(paused)
-    isPaused.value = wsVideoPlayer.getOneVideoPausedState(previewWsUrl.value)
   }
 
   const refresh = () => {
