@@ -1,3 +1,4 @@
+import EventBus from '@/utils/EventBus'
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
 import type { RenderConstructorOptionType } from '../render'
 import { WebSocketLoader } from '../loader'
@@ -25,15 +26,53 @@ type WsInfoType = {
   /** socket连接渲染render实例 */
   render: Render
 }
+export enum EventEnums {
+  WS_URL_CHANGE = 'wsUrlChange'
+}
 
-export class WsVideoManager {
+type Events = {
+  [EventEnums.WS_URL_CHANGE]: (urls: string[]) => void
+}
+
+export class WsVideoManager extends EventBus<Events> {
   /** socket连接 渲染相关对应信息 */
   private _wsInfoMap: Map<string, WsInfoType> = new Map()
 
   private _option: WsVideoManaCstorOptionType = {}
 
+  private _reqAnimationID: number | null = null
+
   constructor(options?: WsVideoManaCstorOptionType) {
+    super()
     this._option = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
+    this.setAnimate()
+  }
+
+  private setAnimate() {
+    const render = () => {
+      this._wsInfoMap.forEach((item) => {
+        const { render, canvasSet } = item
+
+        if (!render) {
+          return
+        }
+        const { videoEl, paused } = render
+        if (videoEl && !paused && canvasSet.size) {
+          ;[...canvasSet].forEach((canvas) => {
+            const ctx = canvas.getContext('2d')
+            if (!ctx) {
+              return
+            }
+            ctx.fillStyle = 'black'
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+            ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height)
+          })
+        }
+      })
+
+      this._reqAnimationID = requestAnimationFrame(render)
+    }
+    render()
   }
 
   /**
@@ -54,24 +93,8 @@ export class WsVideoManager {
       render: render
     }
 
-    render.setRenderFn((pixiCanvas: HTMLCanvasElement | HTMLVideoElement) => {
-      const canvasSet = wsInfo.canvasSet
-
-      if (!canvasSet || !canvasSet.size) {
-        return
-      }
-      ;[...canvasSet].forEach((canvas) => {
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          return
-        }
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(pixiCanvas, 0, 0, canvas.width, canvas.height)
-      })
-    })
-
     this._wsInfoMap.set(url, wsInfo)
+    this._emitWsUrlListChange()
 
     this.bindSocketEvent(socket, render)
 
@@ -90,6 +113,7 @@ export class WsVideoManager {
       socket.destroy()
       render.destroy()
       this._wsInfoMap.delete(url)
+      this._emitWsUrlListChange()
     }
   }
 
@@ -100,8 +124,12 @@ export class WsVideoManager {
    */
   private bindSocketEvent(socket: WebSocketLoader, render: Render) {
     socket.on('message', (event: WebSocketEventMap['message']) => {
-      render.appendMediaBuffer(event.data)
+      render.appendMediaBuffer([event.data])
     })
+  }
+
+  private _emitWsUrlListChange() {
+    this.emit(EventEnums.WS_URL_CHANGE, [...this._wsInfoMap.keys()])
   }
 
   /**
@@ -297,5 +325,7 @@ export class WsVideoManager {
       render.destroy()
     })
     this._wsInfoMap.clear()
+    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+    this._reqAnimationID = null
   }
 }

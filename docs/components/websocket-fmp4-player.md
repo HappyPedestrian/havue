@@ -65,17 +65,17 @@ export const DEFAULT_RESIZE_OPTIONS = Object.freeze({
  * @param {ParamsOptions} options 配置项
  * @returns
  */
-export function useVideoPlay(options: ParamsOptions : void {}
+export function useVideoPlay(options: ParamsOptions) : ReturnType {}
 ```
 
 :::tip
 如果canvas显示不清晰，建议设置options.canvasResize, 增大canvas width和height的值，
-如增大为两倍：
+如增大为window.devicePixelRatio：
 
 ```ts
 {
   enable: true,
-  scale: 2,
+  scale: window.devicePixelRatio || 1,
 }
 ```
 
@@ -108,3 +108,28 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 | wsVideoPlayerIns     | WsVideoManager实例   | `WsVideoManager`     |   `WsVideoManager()`  |
 | target               |    canvas元素, 不传会自动生成一个ref供外部使用  | `HTMLCanvasElement \| Ref<HTMLCanvasElement>`     |   —   |
 | autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height             |  `boolean \| Ref<boolean>`     |   `false`   |
+
+```ts
+type ReturnType {
+  /** canvas引用 */
+  canvasRef: Ref<HTMLCanvasElement | undefined>
+  /** 是否静音 */
+  isMuted: Ref<boolean>
+  /** 是否暂停 */
+  isPaused: Ref<boolean>
+  /** 已经连接的WebSocket地址列表 */
+  linkedWsUrlList: Ref<string[]>
+  /** 暂停其他WebSocket视频流的音频播放 */
+  pauseOtherAudio: () => void
+  /** 设置当前WebSocket视频流的音频是否暂停 */
+  setAudioMutedState: (muted: boolean) => void
+  /** 暂停其他WebSocket视频流的视频播放 */
+  pauseOtherVideo: () => void
+  /** 设置当前WebSocket视频流的视频是否暂停 */
+  setOneVideoPausedState: (paused: boolean) => void
+  /** 设置所有WebSocket视频流的视频是否暂停 */
+  setAllVideoPausedState: (paused: boolean) => void
+  /** 刷新当前WebSocket视频流的时间 */
+  refresh: () => void
+}
+```

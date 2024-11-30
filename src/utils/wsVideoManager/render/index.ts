@@ -1,15 +1,17 @@
-// import { Application, Sprite, UPDATE_PRIORITY } from 'pixi.js'
 import MP4Box from 'mp4box'
 
 export type RenderConstructorOptionType = {
   /** 当前播放currentTime和最新视频时长最多相差 秒数 */
   liveMaxLatency: number
+  /** 最多缓存ws传输的buffer数据长度, 默认40kb */
+  maxCacheBufByte: number
   /** 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据 */
   maxCache: number
 }
 
 export const DEFAULT_OPTIONS = {
   liveMaxLatency: 0.3,
+  maxCacheBufByte: 40 * 1024,
   maxCache: 10
 }
 
@@ -39,8 +41,6 @@ export class Render {
   private _options: RenderConstructorOptionType
 
   private _reqAnimationID: number | undefined = undefined
-  /** pixi.js ticker函数 */
-  public onRender: ((canvas: HTMLCanvasElement | HTMLVideoElement) => void) | null = null
 
   // 调试代码
   // private divID = ''
@@ -72,27 +72,40 @@ export class Render {
     return this._paused
   }
 
-  /**
-   * 设置pixi.js的ticker render函数
-   * @param fn
-   */
-  public setRenderFn(fn: (canvas: HTMLCanvasElement | HTMLVideoElement) => void) {
-    this.onRender = fn
+  get videoEl(): HTMLVideoElement | undefined {
+    return this._videoEl
   }
 
   /**
    * 添加视频流buffer数据
    * @param buf
    */
-  public appendMediaBuffer(buf: ArrayBuffer & { fileStart: number }) {
+  public appendMediaBuffer(bufs: Array<ArrayBuffer & { fileStart: number }>) {
     if (this._paused) {
       return
     }
     if (!this._sourceBuffer) {
+      const buf = bufs[0]
       buf.fileStart = 0
       this._mp4box.appendBuffer(buf)
     }
-    this._bufsQueue.push(buf)
+    this._bufsQueue.push(...bufs)
+
+    if (this._sourceBuffer && !this._videoEl?.paused) {
+      const len = this._bufsQueue.length
+      const maxTotal = this._options.maxCacheBufByte
+      let lastIndex = len - 1
+      let total = 0
+      for (let i = len - 1; i > 0; i--) {
+        total += this._bufsQueue[i].byteLength
+        lastIndex = i
+        if (total >= maxTotal) {
+          this._bufsQueue = this._bufsQueue.slice(lastIndex)
+          break
+        }
+      }
+    }
+    // this._catch()
     requestAnimationFrame(() => this._catch())
   }
 
@@ -110,56 +123,8 @@ export class Render {
     this._mimeType = info.mime
     // this._setupVideo()
     // this.setupPixi()
-    this._setupRender()
-  }
-
-  /**
-   * canvas绘制循环
-   */
-  private _setupRender() {
-    const render = () => {
-      this._videoEl && !this._paused && this.onRender && this.onRender(this._videoEl)
-      this._reqAnimationID = requestAnimationFrame(render)
-    }
-    render()
     this._setupMSE()
   }
-
-  // /**
-  //  * 初始化pixi实例
-  //  * @param width
-  //  * @param height
-  //  */
-  // private setupPixi() {
-  // 	this._pixiApp = new Application()
-  // 	const videoSprite = Sprite.from(this._videoEl)
-  // 	this._pixiApp.stage.addChild(videoSprite)
-  // 	this._pixiApp
-  // 		.init({
-  // 			resizeTo: this._videoEl,
-  // 			// height: this._videoEl.height,
-  // 			// width: this._videoEl.width,
-  // 			backgroundColor: 0x000000,
-  // 			clearBeforeRender: true,
-  // 		})
-  // 		.then(() => {
-  // 			if (!this._pixiApp) {
-  // 				return
-  // 			}
-  // 			document.body.appendChild(this._pixiApp.canvas)
-  // 			this._pixiApp.ticker.add(
-  // 				() => {
-  // 					if (!this._pixiApp) {
-  // 						return
-  // 					}
-  // 					this.onRender(this._pixiApp.canvas)
-  // 				},
-  // 				null,
-  // 				UPDATE_PRIORITY.UTILITY
-  // 			)
-  // 			this._setupMSE()
-  // 		})
-  // }
 
   /**
    * 初始化视频元素
@@ -183,9 +148,9 @@ export class Render {
 
     this._videoEl.addEventListener('error', (error) => {
       console.error('video error', error)
-      setTimeout(() => {
-        this._mediaSource && this._setupMSE()
-      }, 500)
+      // setTimeout(() => {
+      //   this._mediaSource && this._setupMSE()
+      // }, 500)
     })
 
     /**
@@ -347,11 +312,11 @@ export class Render {
       !this._bufsQueue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      return requestIdleCallback(() => this._catch())
+      return requestAnimationFrame(() => this._catch())
     }
     if (this._videoEl.error) {
       this._setupMSE()
-      return requestIdleCallback(() => this._catch())
+      return requestAnimationFrame(() => this._catch())
     }
     let frame: ArrayBuffer
     if (this._bufsQueue.length > 1) {
@@ -386,6 +351,10 @@ export class Render {
 
   private destroyMediaSource() {
     if (this._mediaSource) {
+      if (this._videoEl) {
+        URL.revokeObjectURL(this._videoEl?.src || '')
+        this._videoEl.src = ''
+      }
       if (this._mediaSource.readyState === 'open') {
         this._sourceBuffer && this._sourceBuffer.abort()
 
@@ -419,7 +388,5 @@ export class Render {
     this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
 
     this.destroyMediaSource()
-
-    this.onRender = null
   }
 }

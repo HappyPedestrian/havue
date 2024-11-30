@@ -1,5 +1,6 @@
 import type { Ref, MaybeRef } from 'vue'
 import type { WsVideoManager } from '../manager'
+import { EventEnums } from '../manager'
 import { ref, computed, onBeforeUnmount, watchEffect, toValue, isRef, watch } from 'vue'
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
 import wsVideoPlayer from '../index'
@@ -40,12 +41,35 @@ export const DEFAULT_RESIZE_OPTIONS = Object.freeze({
   maxHeight: 1080
 })
 
+export type ReturnType = {
+  /** canvas引用 */
+  canvasRef: Ref<HTMLCanvasElement | undefined>
+  /** 是否静音 */
+  isMuted: Ref<boolean>
+  /** 是否暂停 */
+  isPaused: Ref<boolean>
+  /** 已经连接的WebSocket地址列表 */
+  linkedWsUrlList: Ref<string[]>
+  /** 暂停其他WebSocket视频流的音频播放 */
+  pauseOtherAudio: () => void
+  /** 设置当前WebSocket视频流的音频是否暂停 */
+  setAudioMutedState: (muted: boolean) => void
+  /** 暂停其他WebSocket视频流的视频播放 */
+  pauseOtherVideo: () => void
+  /** 设置当前WebSocket视频流的视频是否暂停 */
+  setOneVideoPausedState: (paused: boolean) => void
+  /** 设置所有WebSocket视频流的视频是否暂停 */
+  setAllVideoPausedState: (paused: boolean) => void
+  /** 刷新当前WebSocket视频流的时间 */
+  refresh: () => void
+}
+
 /**
  * websocket视频流播放
  * @param {ParamsOptions} options 配置项
  * @returns
  */
-export function useVideoPlay(options: ParamsOptions) {
+export function useVideoPlay(options: ParamsOptions): ReturnType {
   let canvasRef: Ref<HTMLCanvasElement | undefined> = ref<HTMLCanvasElement>()
 
   const { wsUrl, isReady, target, wsVideoPlayerIns = wsVideoPlayer, canvasResize } = options
@@ -85,6 +109,12 @@ export function useVideoPlay(options: ParamsOptions) {
   const isPaused = ref(false)
   /** 上一次播放使用的url */
   const lastPreviewUrl = ref<string>()
+  /** 已连接的websocket地址 */
+  const linkedWsUrlList = ref<string[]>([])
+
+  wsVideoPlayer.on(EventEnums.WS_URL_CHANGE, (urls) => {
+    linkedWsUrlList.value = [...urls]
+  })
 
   /** canvas在视口中 */
   const canvasIsVisible = useElementVisibility(canvasRef)
@@ -222,6 +252,7 @@ export function useVideoPlay(options: ParamsOptions) {
     canvasRef,
     isMuted,
     isPaused,
+    linkedWsUrlList,
     pauseOtherAudio,
     setAudioMutedState,
     pauseOtherVideo,
