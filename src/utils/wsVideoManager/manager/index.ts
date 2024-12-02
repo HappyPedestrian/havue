@@ -37,7 +37,7 @@ type Events = {
   [RenderEventsEnum.VIDEO_STATE_CHANGE]: (url: string, state: VideoState) => void
 }
 
-export const WsVideoManagerEnums = Object.assign({}, EventEnums, RenderEventsEnum)
+export const WsVideoManagerEventEnums = Object.assign({}, EventEnums, RenderEventsEnum)
 
 export class WsVideoManager extends EventBus<Events> {
   /** socket连接 渲染相关对应信息 */
@@ -50,10 +50,10 @@ export class WsVideoManager extends EventBus<Events> {
   constructor(options?: WsVideoManaCstorOptionType) {
     super()
     this._option = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
-    this.setAnimate()
+    this._setAnimate()
   }
 
-  private setAnimate() {
+  private _setAnimate() {
     const render = () => {
       this._wsInfoMap.forEach((item) => {
         const { render, canvasSet } = item
@@ -85,8 +85,8 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url socket地址
    * @returns
    */
-  private addSocket(url: string) {
-    if (this.isSocketExist(url)) {
+  private _addSocket(url: string) {
+    if (this._isSocketExist(url)) {
       return
     }
     const socket = new WebSocketLoader(url, this._option.wsOptions)
@@ -101,8 +101,8 @@ export class WsVideoManager extends EventBus<Events> {
     this._wsInfoMap.set(url, wsInfo)
     this._emitWsUrlListChange()
 
-    this.bindRenderEvent(url, render)
-    this.bindSocketEvent(socket, render)
+    this._bindRenderEvent(url, render)
+    this._bindSocketEvent(socket, render)
 
     socket.open()
   }
@@ -112,7 +112,7 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url 连接地址
    * @param render Render实例
    */
-  bindRenderEvent(url: string, render: Render) {
+  private _bindRenderEvent(url: string, render: Render) {
     render.on(RenderEventsEnum.AUDIO_STATE_CHANGE, (state) => {
       this.emit(RenderEventsEnum.AUDIO_STATE_CHANGE, url, state)
     })
@@ -125,7 +125,7 @@ export class WsVideoManager extends EventBus<Events> {
    * 销毁socket实例
    * @param url socket地址
    */
-  private removeSocket(url: string) {
+  private _removeSocket(url: string) {
     const wsInfo = this._wsInfoMap.get(url)
     if (wsInfo) {
       const { socket, render } = wsInfo
@@ -142,7 +142,7 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url 连接地址
    * @param socket WebSocketLoader实例
    */
-  private bindSocketEvent(socket: WebSocketLoader, render: Render) {
+  private _bindSocketEvent(socket: WebSocketLoader, render: Render) {
     socket.on('message', (event: WebSocketEventMap['message']) => {
       render.appendMediaBuffer([event.data])
     })
@@ -157,7 +157,7 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url socket地址
    * @returns boolean
    */
-  private isSocketExist(url: string): boolean {
+  private _isSocketExist(url: string): boolean {
     return this._wsInfoMap.has(url)
   }
 
@@ -167,7 +167,7 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url socket url地址
    */
   public addCanvas(canvas: HTMLCanvasElement, url: string) {
-    this.addSocket(url)
+    this._addSocket(url)
     if (this.isCanvasExist(canvas)) {
       throw new Error('the canvas allready exsist! please remove it before add')
     }
@@ -182,7 +182,7 @@ export class WsVideoManager extends EventBus<Events> {
       canvasSet.add(canvas)
     }
 
-    this.setupCanvas(canvas)
+    this._setupCanvas(canvas)
   }
 
   /**
@@ -190,7 +190,7 @@ export class WsVideoManager extends EventBus<Events> {
    * @param canvas canvas元素
    * @returns
    */
-  setupCanvas(canvas: HTMLCanvasElement) {
+  private _setupCanvas(canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext('2d')
     if (!ctx) {
       return
@@ -211,7 +211,7 @@ export class WsVideoManager extends EventBus<Events> {
       if (canvasSet.has(canvas)) {
         canvasSet.delete(canvas)
         if (canvasSet.size === 0) {
-          this.removeSocket(url)
+          this._removeSocket(url)
         }
         return true
       }

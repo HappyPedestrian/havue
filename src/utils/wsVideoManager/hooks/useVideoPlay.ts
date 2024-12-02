@@ -1,6 +1,6 @@
 import type { Ref, MaybeRef } from 'vue'
 import type { WsVideoManager } from '../manager'
-import { WsVideoManagerEnums } from '../manager'
+import { WsVideoManagerEventEnums } from '../manager'
 import { ref, computed, onBeforeUnmount, watchEffect, toValue, isRef, watch } from 'vue'
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
 import wsVideoPlayer from '../index'
@@ -113,18 +113,18 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
   /** 已连接的websocket地址 */
   const linkedWsUrlList = ref<string[]>([])
 
-  wsVideoPlayer.on(WsVideoManagerEnums.WS_URL_CHANGE, (urls) => {
+  wsVideoPlayer.on(WsVideoManagerEventEnums.WS_URL_CHANGE, (urls) => {
     linkedWsUrlList.value = [...urls]
   })
 
-  wsVideoPlayer.on(WsVideoManagerEnums.AUDIO_STATE_CHANGE, (url, state) => {
+  wsVideoPlayer.on(WsVideoManagerEventEnums.AUDIO_STATE_CHANGE, (url, state) => {
     if (url === previewWsUrl.value) {
       console.log('音频状态更改', url, state)
       isMuted.value = state === AudioState.MUTED
     }
   })
 
-  wsVideoPlayer.on(WsVideoManagerEnums.VIDEO_STATE_CHANGE, (url, state) => {
+  wsVideoPlayer.on(WsVideoManagerEventEnums.VIDEO_STATE_CHANGE, (url, state) => {
     if (url === previewWsUrl.value) {
       console.log('视频状态更改', url, state)
       isPaused.value = state === VideoState.PAUSE

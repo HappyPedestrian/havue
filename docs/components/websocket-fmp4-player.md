@@ -93,13 +93,15 @@ export function useVideoPlay(options: ParamsOptions) : ReturnType {}
 
 :::tip
 如果canvas显示不清晰，建议设置options.canvasResize, 增大canvas width和height的值，
-如增大为window.devicePixelRatio：
+如增大为window.devicePixelRatio
 
 ```ts
-{
-  enable: true,
-  scale: window.devicePixelRatio || 1,
-}
+useVideoPlay({
+  canvasResize: {
+    enable: true,
+    scale: window.devicePixelRatio || 1,
+  }
+})
 ```
 
 :::
