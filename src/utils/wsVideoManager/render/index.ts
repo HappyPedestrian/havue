@@ -61,7 +61,7 @@ export class Render extends EventBus<RenderEvents> {
   private _paused: boolean = false
   private _options: RenderConstructorOptionType
 
-  private _reqAnimationID: number | undefined = undefined
+  private _catchAnimationID: number | undefined = undefined
 
   // 调试代码
   // private divID = ''
@@ -127,8 +127,7 @@ export class Render extends EventBus<RenderEvents> {
         }
       }
     }
-    // this._catch()
-    requestAnimationFrame(() => this._catch())
+    this._catch()
   }
 
   /**
@@ -346,12 +345,16 @@ export class Render extends EventBus<RenderEvents> {
       !this._bufsQueue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      return requestAnimationFrame(() => this._catch())
+      this._catchAnimationID === undefined && (this._catchAnimationID = requestAnimationFrame(() => this._catch()))
+      return
     }
     if (this._videoEl.error) {
       this._setupMSE()
-      return requestAnimationFrame(() => this._catch())
+      return (
+        this._catchAnimationID === undefined && (this._catchAnimationID = requestAnimationFrame(() => this._catch()))
+      )
     }
+    this._catchAnimationID = undefined
     let frame: ArrayBuffer
     if (this._bufsQueue.length > 1) {
       const freeBuffer = this._bufsQueue.splice(0, this._bufsQueue.length)
@@ -419,7 +422,7 @@ export class Render extends EventBus<RenderEvents> {
 
     this._mimeType = ''
 
-    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+    this._catchAnimationID && cancelAnimationFrame(this._catchAnimationID)
 
     this.destroyMediaSource()
   }
