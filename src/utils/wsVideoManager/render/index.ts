@@ -10,11 +10,11 @@ export type RenderConstructorOptionType = {
   maxCache: number
 }
 
-export const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = Object.freeze({
   liveMaxLatency: 0.3,
   maxCacheBufByte: 40 * 1024,
   maxCache: 10
-}
+})
 
 export enum AudioState {
   NOTMUTED = 'notmuted',

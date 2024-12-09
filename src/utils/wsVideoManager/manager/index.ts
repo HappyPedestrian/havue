@@ -11,12 +11,12 @@ export type WsVideoManaCstorOptionType = {
   renderOptions?: Partial<RenderConstructorOptionType>
 }
 
-const DEFAULT_OPTIONS: WsVideoManaCstorOptionType = {
+const DEFAULT_OPTIONS: WsVideoManaCstorOptionType = Object.freeze({
   wsOptions: {
     binaryType: 'arraybuffer' as WebSocket['binaryType']
   },
   renderOptions: RENDER_DEFAULT_OPTIONS
-}
+})
 
 type WsInfoType = {
   /** 需要绘制的canvas列表 */

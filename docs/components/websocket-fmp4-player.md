@@ -124,7 +124,7 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 <<< ../../src/components/VideoPlayer/Demo.vue#style{scss:line-numbers} [style]
 :::
 
-## 函数参数
+## useVideoPlay函数配置对象介绍
 
 |       参数名          |        说明         |      类型      |    默认值     |
 | :------------------- | :------------------ | :-------------| :----------- |
@@ -132,4 +132,100 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 | isReady              | 是否播放             | `boolean \| Ref<boolean>`     |   —   |
 | wsVideoPlayerIns     | WsVideoManager实例   | `WsVideoManager`     |   `WsVideoManager()`  |
 | target               |    canvas元素, 不传会自动生成一个ref供外部使用  | `HTMLCanvasElement \| Ref<HTMLCanvasElement>`     |   —   |
-| autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height             |  `boolean \| Ref<boolean>`     |   `false`   |
+| autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height | `CanvasResizeOption \| Ref<CanvasResizeOption>` | `false` |
+
+## WsVideoManager
+
+## WsVideoManager构造函数
+
+```ts
+/** 心跳配置 */
+type HeartbeatConfigType = {
+  /** 只发送一次 */
+  once: boolean
+  /** 心跳消息 */
+  message: string
+  /** 时间间隔 */
+  interval?: number
+}
+
+/** 重连配置 */
+type InterruptConfigType = {
+  /** 是否重连 */
+  reconnect: boolean
+  /** 最大重连次数 */
+  maxReconnectTimes: number
+  /** 每次重连延时 */
+  delay: number
+}
+
+type WebSocketOptionsType = {
+  /** WebSocket 子协议 WebSocket(url: string, protocols: string | string[]) */
+  protocols?: string | string[]
+  /** WebSocket 连接所传输二进制数据的类型 */
+  binaryType?: WebSocket['binaryType']
+  heartbeat?: HeartbeatConfigType
+  interrupt?: InterruptConfigType
+}
+
+type RenderConstructorOptionType = {
+  /** 当前播放currentTime和最新视频时长最多相差 秒数，默认0.3s */
+  liveMaxLatency: number
+  /** 最多缓存ws传输的未处理的buffer数据大小, 默认40kb */
+  maxCacheBufByte: number
+  /** 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据, 默认10s */
+  maxCache: number
+}
+
+export type WsVideoManaCstorOptionType = {
+  /** WebSocketLoader 实例配置 */
+  wsOptions?: WebSocketOptionsType
+  /** Render 实例配置 */
+  renderOptions?: Partial<RenderConstructorOptionType>
+}
+
+class WsVideoManager {
+  constructor(options?: WsVideoManaCstorOptionType) {}
+}
+```
+
+### WsVideoManager实例属性
+
+|       参数名           |        说明                   |      类型      |
+| :-------------------- | :---------------------------- | :-------------|
+| addCanvas             | 添加WebSocket地址以及需要绘制的cannvas元素  | `(canvas: HTMLCanvasElement, url: string) => void`       |
+| removeCanvas          | 移除需要绘制cannvas元素        | `(canvas: HTMLCanvasElement) => void`       |
+| isCanvasExist         | 判断canvas是否存在             | `(canvas: HTMLCanvasElement) => boolean`       |
+| setAllVideoMutedState  | 设置所有视频静音状态           | `(muted: boolean) => void`       |
+| setOneMutedState      | 设置单个视频静音状态            | `(url: string, muted: boolean) => void`     |
+| getOneMutedState      | 获取单个视频静音状态            | `(url: string) => void`       |
+| playOneAudio          | 只播放单个视频的音频，其他静音   | `(url: string) => void`       |
+| setAllVideoPausedState | 设置所有视频是否暂停播放       | `(paused: boolean) => void`       |
+| setOneVideoPausedState | 设置单个视频是否暂停播放       | `(url: string, paused: boolean) => void`    |
+| getOneVideoPausedState | 获取单个视频是否暂停播放       | `(url: string) => void`       |
+| playOneVideo           | 播放单个视频，其他暂停播放     | `(url: string) => void`       |
+| refresh                | 刷新目标视频播放时间，如果连接断开，重新连接，（可不传url,不传刷新所有）       | `(url?: string) => void`       |
+| on                    | 监听事件                      | `(event: string, cb: (...args) => void) => void`       |
+| off                   | 停止监听事件                  | `(event: string, cb?: (...args) => void) => void`       |
+| emit                   | 触发事件                     | `(event: string, ...args) => void`       |
+| destroy                | 销毁实例                     | `() => void`    |
+
+### WsVideoManager实例事件
+
+|      事件                                     |        说明       |      类型      |
+| :-------------------------------------------- | :--------------- | :-------------|
+| `WsVideoManagerEventEnums.WS_URL_CHANGE`      | 已经添加的WebSocket连接地址列表更新 | `(urls: string[]) => void` |
+| `WsVideoManagerEventEnums.AUDIO_STATE_CHANGE` | 视频静音状态更改  | `(url: string, state: AudioState) => void`  |
+| `WsVideoManagerEventEnums.VIDEO_STATE_CHANGE` | 视频播放状态更改  | `(url: string, state: VideoState) => void`  |
+
+```ts
+export enum AudioState {
+  NOTMUTED = 'notmuted',
+  MUTED = 'muted'
+}
+
+export enum VideoState {
+  PLAY = 'play',
+  PAUSE = 'pause'
+}
+```
