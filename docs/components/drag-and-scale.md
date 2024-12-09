@@ -1,5 +1,7 @@
 # 拖动缩放
 
+操作元素在父级容器元素内部移动，以及缩放。
+
 ## 示例
 
 <script setup lang="ts">
@@ -21,6 +23,10 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 
 ## 配置
 
+:::tip
+属性名后跟'?'表示该属性为可选属性。
+:::
+
 |          属性名          |        说明         |      类型      |    默认值     |
 | :----------------------- | :------------------ | :-------------| :----------- |
 | container                | 容器元素             | `HTMLElement \| Ref<HTMLElement>`     |   —   |
@@ -29,10 +35,11 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 | containerRealSize.height | 容器现实实际高        | `number`        | —           |
 | keepRatio?                | 保持宽高比配置        | `object`        | —           |
 | keepRatio.enable         | 是否保持宽高比        | `boolean`       | `false`       |
-| keepRatio.scaleCase      | 缩放时使用最大改动值还是最小改动值      | `'min' \| 'max'`  |     'min'     |
+| keepRatio.scaleCase      | 缩放时使用最大改动值还是最小改动值      | `'min' \| 'max'`  |     `'min'`     |
 | limit?                   | 限制缩放的尺寸        | `object`        |  —          |
 | limit.minWidth           | 限制缩放的最小宽度     | `number`       | `0`           |
 | limit.minHeight          | 限制缩放的最小高度     | `number`       | `0`           |
+| disabled?                | 是否禁用              | `boolean`       | `false`           |
 
 ## 事件
 
