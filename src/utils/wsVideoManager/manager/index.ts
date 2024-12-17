@@ -28,13 +28,16 @@ type WsInfoType = {
 }
 
 export enum EventEnums {
-  WS_URL_CHANGE = 'wsUrlChange'
+  WS_URL_CHANGE = 'wsUrlChange',
+  SOCKET_CLOSE = 'socketClose'
 }
 
 type Events = {
   [EventEnums.WS_URL_CHANGE]: (urls: string[]) => void
   [RenderEventsEnum.AUDIO_STATE_CHANGE]: (url: string, state: AudioState) => void
+  [RenderEventsEnum.VIDEO_INFO_UPDATE]: (url: string, info: VideoInfo) => void
   [RenderEventsEnum.VIDEO_STATE_CHANGE]: (url: string, state: VideoState) => void
+  [EventEnums.SOCKET_CLOSE]: (url: string) => void
 }
 
 export const WsVideoManagerEventEnums = Object.assign({}, EventEnums, RenderEventsEnum)
@@ -91,6 +94,10 @@ export class WsVideoManager extends EventBus<Events> {
     }
     const socket = new WebSocketLoader(url, this._option.wsOptions)
 
+    socket.on('close', () => {
+      this.emit(EventEnums.SOCKET_CLOSE, url)
+    })
+
     const render = new Render(this._option.renderOptions)
     const wsInfo: WsInfoType = {
       socket,
@@ -118,6 +125,9 @@ export class WsVideoManager extends EventBus<Events> {
     })
     render.on(RenderEventsEnum.VIDEO_STATE_CHANGE, (state) => {
       this.emit(RenderEventsEnum.VIDEO_STATE_CHANGE, url, state)
+    })
+    render.on(RenderEventsEnum.VIDEO_INFO_UPDATE, (info) => {
+      this.emit(RenderEventsEnum.VIDEO_INFO_UPDATE, url, info)
     })
   }
 
@@ -345,6 +355,7 @@ export class WsVideoManager extends EventBus<Events> {
       render.destroy()
     })
     this._wsInfoMap.clear()
+    this._emitWsUrlListChange()
     this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
     this._reqAnimationID = null
   }
