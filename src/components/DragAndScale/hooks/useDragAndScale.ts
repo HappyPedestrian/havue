@@ -559,6 +559,6 @@ export function useDragAndScale(
 
   onBeforeUnmount(() => {
     isOperateStart = false
-    removeEvent
+    removeEvent()
   })
 }
