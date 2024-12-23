@@ -158,25 +158,21 @@
     </div>
   </section>
 </template>
-<!-- <script id="rendered-js" lang="ts">
-// Parallax Code
-var scene = document.getElementById('scene')
-var parallax = new Parallax(scene)
-//# sourceURL=pen.js
-</script> -->
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import 'https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js'
-import 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'
 
 onMounted(() => {
-  var scene = document.getElementById('scene')
-  var parallax = new Parallax(scene)
+  if (!import.meta.env.SSR) {
+    Promise.all([import('./assets/parallax.min.js'), import('./assets/jquery.min.js')]).then(() => {
+      var scene = document.getElementById('scene')
+      var parallax = new Parallax(scene)
+    })
+  }
 })
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Barlow+Condensed:300,400,500,600,700,800,900|Barlow:300,400,500,600,700,800,900&display=swap');
+@import url('./assets/style.css');
 .about {
   position: fixed;
   z-index: 10;
