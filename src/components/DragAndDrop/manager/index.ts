@@ -172,13 +172,6 @@ export class DnDManager extends EventBus<Events> {
         document.body.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false })
         document.body.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false })
         document.body.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false })
-        // document.body.addEventListener(
-        //   'touchcancel',
-        //   () => {
-        //     alert('touchcancel')
-        //   },
-        //   { passive: false }
-        // )
       } else {
         document.body.addEventListener('mousedown', this.onMouseDown.bind(this))
         document.body.addEventListener('mousemove', this.onMouseMove.bind(this))

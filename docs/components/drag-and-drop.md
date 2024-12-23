@@ -5,7 +5,11 @@
 Draggable表示一个可拖动元素
 Droppable表示一个可放置拖动元素的区域
 
+为适应各种使用场景，Draggable可以配置其拖拽类型，Droppable可配置允许拖拽的类型，拖拽类型在Droppable允许拖拽类型当中的Draggalbe才可以拖动到对应Droppalbe当中
+
 ## 示例
+
+左侧标签块为Draggalbe元素，文本显示其类型和大小，右侧有两个Droppable区域，green标签块只能拖放到green区域，yellow标签块只能拖放到yellow区域
 
 <script setup lang="ts">
 import Demo from '@/components/DragAndDrop/Demo.vue'
