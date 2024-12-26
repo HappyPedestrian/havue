@@ -61,6 +61,14 @@ export class WsVideoManager extends EventBus<Events> {
     this._setAnimate()
   }
 
+  get linkedUrlList() {
+    return [...this._wsInfoMap.keys()]
+  }
+
+  get connectLimit() {
+    return this._option.connectLimit
+  }
+
   private _setAnimate() {
     const render = () => {
       this._wsInfoMap.forEach((item) => {

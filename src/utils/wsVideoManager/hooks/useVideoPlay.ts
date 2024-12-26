@@ -55,6 +55,10 @@ export type ReturnType = {
   videoInfo: Ref<VideoInfo>
   /** 已经连接的WebSocket地址列表 */
   linkedWsUrlList: Ref<string[]>
+  /** 视频流地址是否已添加 */
+  isLinked: Ref<boolean>
+  /** 是否达到websocket拉流数最大值 */
+  isReachConnectLimit: Ref<boolean>
   /** 暂停其他WebSocket视频流的音频播放 */
   pauseOtherAudio: () => void
   /** 设置当前WebSocket视频流的音频是否暂停 */
@@ -124,7 +128,19 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
   /** 上一次播放使用的url */
   const lastPreviewUrl = ref<string>()
   /** 已连接的websocket地址 */
-  const linkedWsUrlList = ref<string[]>([])
+  const linkedWsUrlList = ref<string[]>([...wsVideoPlayer.linkedUrlList])
+
+  /** 预监地址是否已添加 */
+  const isLinked = computed(() => {
+    return linkedWsUrlList.value.includes(previewWsUrl.value)
+  })
+
+  const connectLimit = wsVideoPlayer.connectLimit
+
+  /** 达到websocket拉流数最大值 */
+  const isReachConnectLimit = computed(() => {
+    return linkedWsUrlList.value.length >= connectLimit
+  })
 
   wsVideoPlayer.on(WsVideoManagerEventEnums.WS_URL_CHANGE, (urls) => {
     linkedWsUrlList.value = [...urls]
@@ -289,6 +305,8 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     isPaused,
     videoInfo,
     linkedWsUrlList,
+    isLinked,
+    isReachConnectLimit,
     pauseOtherAudio,
     setAudioMutedState,
     pauseOtherVideo,
