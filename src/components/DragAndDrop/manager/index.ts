@@ -78,6 +78,8 @@ export class DnDManager extends EventBus<Events> {
    * @returns
    */
   private onEnd() {
+    this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
+    this.emitTouchStartTimer = undefined
     if (!this.isDragStart || !this.dragType) {
       return
     }
@@ -98,10 +100,23 @@ export class DnDManager extends EventBus<Events> {
     }
     const { clientX, clientY } = e
 
-    this.onStart({
+    const position = {
       x: clientX,
       y: clientY
-    })
+    }
+
+    this.touchStartTime = Date.now()
+    this.touchStartPosition = position
+    this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
+    // 300ms后调用onStart（如果在此期间没有移动超过30px）
+    this.emitTouchStartTimer = window.setTimeout(() => {
+      this.onStart(position)
+    }, this.touchStartPressTime)
+
+    // this.onStart({
+    //   x: clientX,
+    //   y: clientY
+    // })
   }
 
   private onMouseMove(e: MouseEvent) {
@@ -113,10 +128,27 @@ export class DnDManager extends EventBus<Events> {
     }
     const { clientX, clientY } = e
 
-    this.onMove({
-      x: clientX,
-      y: clientY
-    })
+    if (this.isDragStart) {
+      e.preventDefault()
+      e.stopPropagation()
+      this.onMove({
+        x: clientX,
+        y: clientY
+      })
+    } else {
+      // touch 300ms内移动了超过30px，认为不是拖拽
+      const { x, y } = this.touchStartPosition
+      const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
+      if (timeInLimit && (Math.abs(x - clientX) > 30 || Math.abs(y - clientY) > 30)) {
+        clearTimeout(this.emitTouchStartTimer)
+        this.emitTouchStartTimer = undefined
+      }
+    }
+
+    // this.onMove({
+    //   x: clientX,
+    //   y: clientY
+    // })
   }
 
   private onMouseUp() {
@@ -162,7 +194,6 @@ export class DnDManager extends EventBus<Events> {
     }
   }
   private onTouchEnd() {
-    clearTimeout(this.emitTouchStartTimer)
     this.onEnd()
   }
 
