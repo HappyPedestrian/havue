@@ -1,6 +1,7 @@
 import type { MaybeRef } from 'vue'
-import { ref, computed, isRef, toValue, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, isRef, toValue, onBeforeUnmount } from 'vue'
 import { useTouchEvent } from '@/plugins/touch/hooks'
+import { isMobile } from '@/utils/platform'
 
 const IS_LOG_DEBUG_INFO = true
 // #region typedefine
@@ -38,9 +39,10 @@ export type PinchMoveEventParamsType = {
 export type PinchStartEventParamsType = Omit<PinchMoveEventParamsType, 'current'>
 
 export type EventOptions = {
+  onMouseMove: (e: TargetPositionType) => void
   onTap: (e: TargetPositionType) => void
   onDoubleTap: (e: TargetPositionType) => void
-  onTap2: (e: TargetPositionType) => void
+  onTap2: (e?: TargetPositionType) => void
   onPanStart: (e: PanStartEventParamsType) => void
   onPanMove: (e: PanMoveEventParamsType) => void
   onPanEnd: (e: PanMoveEventParamsType) => void
@@ -392,8 +394,87 @@ export function useOperateTransform(
     IS_LOG_DEBUG_INFO && console.log('panend:', pos, e)
   }
 
+  /** 鼠标滚轮事件 */
+  function handleWheel(e: WheelEvent) {
+    e.preventDefault()
+    if (!operateBoxRef.value) {
+      return
+    }
+    const { clientX, clientY } = e
+    const pos = transformMousePosToTargetPos(clientX, clientY, operateBoxRef.value, rect.value.width, rect.value.height)
+    const tarPos = {
+      x: pos.x,
+      y: pos.y - e.deltaY
+    }
+    Promise.resolve(
+      options?.onPan2Start &&
+        options.onPan2Start({
+          start: pos
+        })
+    )
+      .then(
+        () =>
+          options?.onPan2Move &&
+          options.onPan2Move({
+            start: pos,
+            current: tarPos
+          })
+      )
+      .then(() => {
+        options?.onPan2End &&
+          options.onPan2End({
+            start: pos,
+            current: tarPos
+          })
+      })
+  }
+
+  /** 鼠标右键点击 */
+  function handleMouseRightClick(e: MouseEvent) {
+    e.preventDefault()
+    if (!operateBoxRef.value) {
+      return
+    }
+    // 右键按下
+    if ((e.buttons & 2) !== 0) {
+      const { clientX, clientY } = e
+      const pos = transformMousePosToTargetPos(
+        clientX,
+        clientY,
+        operateBoxRef.value,
+        rect.value.width,
+        rect.value.height
+      )
+      console.log('right click', pos)
+      Promise.resolve(options?.onMouseMove && options.onMouseMove(pos)).then(
+        () => options?.onTap2 && options.onTap2(pos)
+      )
+    }
+  }
+
+  /** 阻止默认行为 */
+  function preventDefaultEvent(event: MouseEvent) {
+    event.preventDefault()
+  }
+
+  watch(
+    () => operateBoxRef.value && !isMobile,
+    (val) => {
+      if (val && operateBoxRef.value) {
+        operateBoxRef.value.addEventListener('wheel', handleWheel)
+        operateBoxRef.value.addEventListener('mousedown', handleMouseRightClick)
+        operateBoxRef.value.addEventListener('contextmenu', preventDefaultEvent)
+      }
+    }
+  )
+
   onBeforeUnmount(() => {
     destroy()
+    if (operateBoxRef.value) {
+      operateBoxRef.value.removeEventListener('wheel', handleWheel)
+      operateBoxRef.value.removeEventListener('mousedown', handleMouseRightClick)
+      operateBoxRef.value.removeEventListener('contextmenu', preventDefaultEvent)
+    }
   })
 
   return {
