@@ -11,6 +11,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useOperateTransform } from './hooks/useOperateTransform'
+import { isMobile } from '@/utils/platform'
 
 const stateText = ref<string>('')
 
@@ -41,10 +42,11 @@ const { operateBoxRef } = useOperateTransform(originRect, undefined, {
     console.log('单击', e)
   },
   onTap2: (e) => {
-    Object.assign(currentPoint, {
-      x: e.x,
-      y: e.y
-    })
+    e &&
+      Object.assign(currentPoint, {
+        x: e.x,
+        y: e.y
+      })
     stateText.value = '双指单击'
     console.log('双指单击', e)
   },
@@ -82,16 +84,16 @@ const { operateBoxRef } = useOperateTransform(originRect, undefined, {
   },
   onPan2Move: (e) => {
     Object.assign(currentPoint, {
-      x: e.current.x,
-      y: e.current.y
+      x: isMobile ? e.current.x : e.start.x,
+      y: isMobile ? e.current.y : e.start.y
     })
     stateText.value = '双指滑动'
     console.log('双指滑动', e)
   },
   onPan2End: (e) => {
     Object.assign(currentPoint, {
-      x: e.current.x,
-      y: e.current.y
+      x: isMobile ? e.current.x : e.start.x,
+      y: isMobile ? e.current.y : e.start.y
     })
     stateText.value = '双指滑动结束'
     console.log('双指滑动结束', e)
