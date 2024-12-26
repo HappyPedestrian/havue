@@ -2,17 +2,17 @@ import MP4Box from 'mp4box'
 import EventBus from '@/utils/EventBus'
 
 export type RenderConstructorOptionType = {
-  /** 当前播放currentTime和最新视频时长最多相差 秒数 */
+  /** 当前播放currentTime和最新视频时长最多相差 秒数，默认0.3s */
   liveMaxLatency: number
-  /** 最多缓存ws传输的buffer数据长度, 默认40kb */
+  /** 最多缓存ws传输的未处理的buffer数据大小, 默认200kb */
   maxCacheBufByte: number
-  /** 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据 */
+  /** 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据, 默认10s */
   maxCache: number
 }
 
 export const DEFAULT_OPTIONS = Object.freeze({
   liveMaxLatency: 0.3,
-  maxCacheBufByte: 40 * 1024,
+  maxCacheBufByte: 200 * 1024,
   maxCache: 10
 })
 
@@ -26,14 +26,21 @@ export enum VideoState {
   PAUSE = 'pause'
 }
 
+export type VideoInfo = {
+  width: number
+  height: number
+}
+
 export enum RenderEventsEnum {
   AUDIO_STATE_CHANGE = 'audioStateChange',
-  VIDEO_STATE_CHANGE = 'videoStateChange'
+  VIDEO_STATE_CHANGE = 'videoStateChange',
+  VIDEO_INFO_UPDATE = 'videoInfoUpdate'
 }
 
 export type RenderEvents = {
   [RenderEventsEnum.AUDIO_STATE_CHANGE]: (s: AudioState) => void
   [RenderEventsEnum.VIDEO_STATE_CHANGE]: (s: VideoState) => void
+  [RenderEventsEnum.VIDEO_INFO_UPDATE]: (info: VideoInfo) => void
 }
 
 // 调试代码
@@ -54,7 +61,6 @@ export class Render extends EventBus<RenderEvents> {
   private _mediaSource: MediaSource | undefined
   /** SourceBuffer 实例 */
   private _sourceBuffer: SourceBuffer | undefined
-  /** 上次sourcebuffer buffer段结束时间列表 ：[100, 200]*/
   /** 用于MediaSource的mimeType */
   private _mimeType: string = ''
   /** 是否暂停播放 */
@@ -113,7 +119,7 @@ export class Render extends EventBus<RenderEvents> {
     }
     this._bufsQueue.push(...bufs)
 
-    if (this._sourceBuffer && !this._videoEl?.paused) {
+    if (this._sourceBuffer && !this._videoEl?.paused && this._bufsQueue.length > 2) {
       const len = this._bufsQueue.length
       const maxTotal = this._options.maxCacheBufByte
       let lastIndex = len - 1
@@ -142,6 +148,16 @@ export class Render extends EventBus<RenderEvents> {
       return
     }
     this._mimeType = info.mime
+
+    try {
+      const { width, height } = info.videoTracks[0].video
+      this.emit(RenderEventsEnum.VIDEO_INFO_UPDATE, {
+        width,
+        height
+      })
+    } catch (error) {
+      console.error(error)
+    }
     // this._setupVideo()
     // this.setupPixi()
     this._setupMSE()

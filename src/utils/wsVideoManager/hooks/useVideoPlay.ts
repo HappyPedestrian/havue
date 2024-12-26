@@ -1,7 +1,7 @@
 import type { Ref, MaybeRef } from 'vue'
-import type { WsVideoManager } from '../manager'
-import { WsVideoManagerEventEnums } from '../manager'
-import { ref, computed, onBeforeUnmount, watchEffect, toValue, isRef, watch } from 'vue'
+import type { VideoInfo } from '../render'
+import { WsVideoManagerEventEnums, type WsVideoManager } from '../manager'
+import { ref, computed, onBeforeUnmount, toValue, isRef, watch } from 'vue'
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
 import wsVideoPlayer from '../index'
 import { AudioState, VideoState } from '../render'
@@ -32,6 +32,8 @@ export type ParamsOptions = {
   target?: MaybeRef<HTMLCanvasElement | undefined>
   /** 是否自动更新canvas width和height属性的配置， 默认为 DEFAULT_RESIZE_OPTIONS */
   canvasResize?: MaybeRef<CanvasResizeOption | undefined>
+  /** 视口中元素不可见时断开连接， 默认为true */
+  closeOnHidden?: MaybeRef<boolean>
 }
 
 // canvasResize 默认值
@@ -49,6 +51,8 @@ export type ReturnType = {
   isMuted: Ref<boolean>
   /** 是否暂停 */
   isPaused: Ref<boolean>
+  /** 视频信息 */
+  videoInfo: Ref<VideoInfo>
   /** 已经连接的WebSocket地址列表 */
   linkedWsUrlList: Ref<string[]>
   /** 暂停其他WebSocket视频流的音频播放 */
@@ -73,7 +77,7 @@ export type ReturnType = {
 export function useVideoPlay(options: ParamsOptions): ReturnType {
   let canvasRef: Ref<HTMLCanvasElement | undefined> = ref<HTMLCanvasElement>()
 
-  const { wsUrl, isReady, target, wsVideoPlayerIns = wsVideoPlayer, canvasResize } = options
+  const { wsUrl, isReady, target, wsVideoPlayerIns = wsVideoPlayer, canvasResize, closeOnHidden } = options
 
   if (target) {
     canvasRef = computed<HTMLCanvasElement | undefined>(() => {
@@ -104,10 +108,19 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     return _canvasResizeOpt.value.enable
   })
 
+  const _closeOnHidden = computed<boolean>(() => {
+    const closeOpt = isRef(closeOnHidden) ? toValue(closeOnHidden) : closeOnHidden
+    return closeOpt === undefined ? true : closeOpt
+  })
+
   /** 是否静音 */
   const isMuted = ref(true)
   /** 视频是否暂停播放 */
   const isPaused = ref(false)
+  const videoInfo = ref<VideoInfo>({
+    width: 0,
+    height: 0
+  })
   /** 上一次播放使用的url */
   const lastPreviewUrl = ref<string>()
   /** 已连接的websocket地址 */
@@ -128,6 +141,14 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     if (url === previewWsUrl.value) {
       console.log('视频状态更改', url, state)
       isPaused.value = state === VideoState.PAUSE
+    }
+  })
+
+  wsVideoPlayer.on(WsVideoManagerEventEnums.VIDEO_INFO_UPDATE, (url, info) => {
+    if (url === previewWsUrl.value) {
+      videoInfo.value = {
+        ...info
+      }
     }
   })
 
@@ -186,11 +207,18 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     isMuted.value = true
   })
 
-  watchEffect(() => {
+  const canPreview = computed(() => {
+    if (_closeOnHidden.value) {
+      return canvasIsVisible.value && _isReady.value && previewWsUrl.value
+    }
+    return _isReady.value && previewWsUrl.value
+  })
+
+  watch([canvasRef, canPreview, linkedWsUrlList], () => {
     if (!canvasRef.value) {
       return
     }
-    if (canvasIsVisible.value && _isReady.value && previewWsUrl.value) {
+    if (canPreview.value) {
       // 如果预监地址更改，移除canvas
       if (
         lastPreviewUrl.value &&
@@ -259,6 +287,7 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     canvasRef,
     isMuted,
     isPaused,
+    videoInfo,
     linkedWsUrlList,
     pauseOtherAudio,
     setAudioMutedState,

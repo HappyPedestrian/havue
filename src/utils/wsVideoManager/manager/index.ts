@@ -1,17 +1,20 @@
 import EventBus from '@/utils/EventBus'
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
-import type { RenderConstructorOptionType } from '../render'
+import type { RenderConstructorOptionType, VideoInfo } from '../render'
 import { WebSocketLoader } from '../loader'
 import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS, RenderEventsEnum, AudioState, VideoState } from '../render'
 
 export type WsVideoManaCstorOptionType = {
+  /** 预监流连接数量限制, 默认10个 */
+  connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
   /** Render 实例配置 */
   renderOptions?: Partial<RenderConstructorOptionType>
 }
 
-const DEFAULT_OPTIONS: WsVideoManaCstorOptionType = Object.freeze({
+const DEFAULT_OPTIONS: Required<WsVideoManaCstorOptionType> = Object.freeze({
+  connectLimit: 10,
   wsOptions: {
     binaryType: 'arraybuffer' as WebSocket['binaryType']
   },
@@ -29,7 +32,8 @@ type WsInfoType = {
 
 export enum EventEnums {
   WS_URL_CHANGE = 'wsUrlChange',
-  SOCKET_CLOSE = 'socketClose'
+  SOCKET_CLOSE = 'socketClose',
+  CONNECT_LIMIT = 'connectLimit'
 }
 
 type Events = {
@@ -38,6 +42,7 @@ type Events = {
   [RenderEventsEnum.VIDEO_INFO_UPDATE]: (url: string, info: VideoInfo) => void
   [RenderEventsEnum.VIDEO_STATE_CHANGE]: (url: string, state: VideoState) => void
   [EventEnums.SOCKET_CLOSE]: (url: string) => void
+  [EventEnums.CONNECT_LIMIT]: () => void
 }
 
 export const WsVideoManagerEventEnums = Object.assign({}, EventEnums, RenderEventsEnum)
@@ -46,7 +51,7 @@ export class WsVideoManager extends EventBus<Events> {
   /** socket连接 渲染相关对应信息 */
   private _wsInfoMap: Map<string, WsInfoType> = new Map()
 
-  private _option: WsVideoManaCstorOptionType = {}
+  private _option: Required<WsVideoManaCstorOptionType> = DEFAULT_OPTIONS
 
   private _reqAnimationID: number | null = null
 
@@ -90,6 +95,10 @@ export class WsVideoManager extends EventBus<Events> {
    */
   private _addSocket(url: string) {
     if (this._isSocketExist(url)) {
+      return
+    }
+    if (this._wsInfoMap.size >= this._option.connectLimit) {
+      this.emit(EventEnums.CONNECT_LIMIT)
       return
     }
     const socket = new WebSocketLoader(url, this._option.wsOptions)
