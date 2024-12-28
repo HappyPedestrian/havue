@@ -1,4 +1,4 @@
-import EventBus from '@/utils/EventBus'
+import EventBus from '@/utils/eventBus'
 import { isMobile } from '@/utils/platform'
 
 export type Point = {
@@ -33,6 +33,7 @@ export class DnDManager extends EventBus<Events> {
   /** onMove最后位置 */
   private lastMovePoint: Point = { x: 0, y: 0 }
   private emitTouchStartTimer: number | undefined = undefined
+  private destroy: () => void = () => {}
 
   constructor() {
     super()
@@ -92,7 +93,6 @@ export class DnDManager extends EventBus<Events> {
   }
 
   private onMouseDown(e: MouseEvent) {
-    e.preventDefault()
     // 非左键按下
     if (e.buttons !== 1) {
       this.onEnd()
@@ -120,7 +120,6 @@ export class DnDManager extends EventBus<Events> {
   }
 
   private onMouseMove(e: MouseEvent) {
-    e.preventDefault()
     // 非左键按下
     if (e.buttons !== 1) {
       this.onEnd()
@@ -199,14 +198,28 @@ export class DnDManager extends EventBus<Events> {
 
   private bindEventListener() {
     if (document.body) {
+      const onTouchStart = this.onTouchStart.bind(this)
+      const onTouchMove = this.onTouchMove.bind(this)
+      const onTouchEnd = this.onTouchEnd.bind(this)
+      const onMouseDown = this.onMouseDown.bind(this)
+      const onMouseMove = this.onMouseMove.bind(this)
+      const onMouseUp = this.onMouseUp.bind(this)
       if (isMobile) {
-        document.body.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false })
-        document.body.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false })
-        document.body.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false })
+        document.body.addEventListener('touchstart', onTouchStart, { passive: false })
+        document.body.addEventListener('touchmove', onTouchMove, { passive: false })
+        document.body.addEventListener('touchend', onTouchEnd, { passive: false })
       } else {
-        document.body.addEventListener('mousedown', this.onMouseDown.bind(this))
-        document.body.addEventListener('mousemove', this.onMouseMove.bind(this))
-        document.body.addEventListener('mouseup', this.onMouseUp.bind(this))
+        document.body.addEventListener('mousedown', onMouseDown)
+        document.body.addEventListener('mousemove', onMouseMove)
+        document.body.addEventListener('mouseup', onMouseUp)
+      }
+      this.destroy = () => {
+        document.body.removeEventListener('touchstart', onTouchStart)
+        document.body.removeEventListener('touchmove', onTouchMove)
+        document.body.removeEventListener('touchend', onTouchEnd)
+        document.body.removeEventListener('mousedown', onMouseDown)
+        document.body.removeEventListener('mousemove', onMouseMove)
+        document.body.removeEventListener('mouseup', onMouseUp)
       }
     } else {
       document.addEventListener('DOMContentLoaded', this.bindEventListener)
@@ -214,12 +227,7 @@ export class DnDManager extends EventBus<Events> {
   }
 
   private removeEventListener() {
-    document.body.removeEventListener('touchstart', this.onTouchStart)
-    document.body.removeEventListener('touchmove', this.onTouchMove)
-    document.body.removeEventListener('touchend', this.onTouchEnd)
-    document.body.removeEventListener('touchcancel', this.onTouchEnd)
-    document.body.removeEventListener('mousemove', this.onMouseMove)
-    document.body.removeEventListener('mouseup', this.onMouseUp)
+    this.destroy()
   }
 
   public destroyed() {
