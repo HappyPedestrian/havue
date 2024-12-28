@@ -35,6 +35,9 @@ importers:
       hammerjs:
         specifier: ^2.0.8
         version: 2.0.8
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       mp4box:
         specifier: ^0.5.2
         version: 0.5.2
@@ -45,6 +48,9 @@ importers:
         specifier: ^3.4.31
         version: 3.4.31(typescript@5.5.3)
     devDependencies:
+      '@types/lodash':
+        specifier: ^4.17.13
+        version: 4.17.13
       '@types/node':
         specifier: ^22.5.2
         version: 22.5.2
@@ -696,8 +702,8 @@ packages:
   '@types/lodash-es@4.17.12':
     resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
 
-  '@types/lodash@4.17.7':
-    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
+  '@types/lodash@4.17.13':
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
@@ -2408,9 +2414,9 @@ snapshots:
 
   '@types/lodash-es@4.17.12':
     dependencies:
-      '@types/lodash': 4.17.7
+      '@types/lodash': 4.17.13
 
-  '@types/lodash@4.17.7': {}
+  '@types/lodash@4.17.13': {}
 
   '@types/markdown-it@14.1.2':
     dependencies:
@@ -2904,7 +2910,7 @@ snapshots:
       '@element-plus/icons-vue': 2.3.1(vue@3.4.31(typescript@5.5.3))
       '@floating-ui/dom': 1.6.7
       '@popperjs/core': '@sxzz/popperjs-es@2.11.7'
-      '@types/lodash': 4.17.7
+      '@types/lodash': 4.17.13
       '@types/lodash-es': 4.17.12
       '@vueuse/core': 9.13.0(vue@3.4.31(typescript@5.5.3))
       async-validator: 4.2.5

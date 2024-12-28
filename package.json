@@ -7,7 +7,7 @@
     "dev": "vite --port 8000 --host",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "docs:dev": "vitepress dev docs --port 9001",
+    "docs:dev": "vitepress dev docs --port 9001 --host",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
@@ -21,11 +21,13 @@
     "color": "^4.2.3",
     "element-plus": "^2.7.7",
     "hammerjs": "^2.0.8",
+    "lodash": "^4.17.21",
     "mp4box": "^0.5.2",
     "pixi.js": "^8.3.2",
     "vue": "^3.4.31"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.13",
     "@types/node": "^22.5.2",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",

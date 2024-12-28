@@ -9,9 +9,8 @@
 <!--  -->
 // #region script
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, nextTick } from 'vue'
 import { useOperateTransform } from './hooks/useOperateTransform'
-import { isMobile } from '@/utils/platform'
 
 const stateText = ref<string>('')
 
@@ -33,70 +32,29 @@ const pointStyle = computed(() => {
 })
 
 const { operateBoxRef } = useOperateTransform(originRect, undefined, {
-  onTap: (e) => {
+  onMouseEvent: (e, button) => {
     Object.assign(currentPoint, {
       x: e.x,
       y: e.y
     })
-    stateText.value = '单击'
-    console.log('单击', e)
+
+    if (button) {
+      stateText.value =
+        button === 'left' ? '左键' : button === 'right' ? '右键' : button === 'middle' ? '鼠标中键' : '未按下键'
+    }
+
+    console.log(stateText.value, e)
   },
-  onTap2: (e) => {
-    e &&
-      Object.assign(currentPoint, {
-        x: e.x,
-        y: e.y
-      })
-    stateText.value = '双指单击'
-    console.log('双指单击', e)
-  },
-  onDoubleTap: (e) => {
+  onMouseWheel(e, deltaY) {
     Object.assign(currentPoint, {
       x: e.x,
       y: e.y
     })
-    stateText.value = '单指双击'
-    console.log('单指双击', e)
-  },
-  onPanMove: (e) => {
-    Object.assign(currentPoint, {
-      x: e.current.x,
-      y: e.current.y
+    nextTick(() => {
+      stateText.value = `滚动：deltaY:${deltaY}`
     })
-    stateText.value = '单指滑动'
-    console.log('单指滑动', e)
-  },
-  onPanEnd: (e) => {
-    Object.assign(currentPoint, {
-      x: e.current.x,
-      y: e.current.y
-    })
-    stateText.value = '单指滑动结束'
-    console.log('单指滑动结束', e)
-  },
-  onPan2Start: (e) => {
-    Object.assign(currentPoint, {
-      x: e.start.x,
-      y: e.start.y
-    })
-    stateText.value = '双指滑动开始'
-    console.log('双指滑动开始', e)
-  },
-  onPan2Move: (e) => {
-    Object.assign(currentPoint, {
-      x: isMobile ? e.current.x : e.start.x,
-      y: isMobile ? e.current.y : e.start.y
-    })
-    stateText.value = '双指滑动'
-    console.log('双指滑动', e)
-  },
-  onPan2End: (e) => {
-    Object.assign(currentPoint, {
-      x: isMobile ? e.current.x : e.start.x,
-      y: isMobile ? e.current.y : e.start.y
-    })
-    stateText.value = '双指滑动结束'
-    console.log('双指滑动结束', e)
+
+    console.log(stateText.value, e)
   }
 })
 </script>
