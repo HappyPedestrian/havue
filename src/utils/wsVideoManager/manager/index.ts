@@ -1,4 +1,4 @@
-import EventBus from '@/utils/EventBus'
+import EventBus from '@/utils/eventBus'
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
 import type { RenderConstructorOptionType, VideoInfo } from '../render'
 import { WebSocketLoader } from '../loader'

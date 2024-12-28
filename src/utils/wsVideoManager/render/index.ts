@@ -1,5 +1,5 @@
 import MP4Box from 'mp4box'
-import EventBus from '@/utils/EventBus'
+import EventBus from '@/utils/eventBus'
 
 export type RenderConstructorOptionType = {
   /** 当前播放currentTime和最新视频时长最多相差 秒数，默认0.3s */
