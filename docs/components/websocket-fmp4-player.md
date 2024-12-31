@@ -50,6 +50,8 @@ export type ParamsOptions = {
   target?: MaybeRef<HTMLCanvasElement | undefined>
   /** 是否自动更新canvas width和height属性的配置， 默认为 DEFAULT_RESIZE_OPTIONS */
   canvasResize?: MaybeRef<CanvasResizeOption | undefined>
+  /** 视口中元素不可见时断开连接， 默认为true */
+  closeOnHidden?: MaybeRef<boolean>
 }
 
 // canvasResize 默认值
@@ -60,15 +62,21 @@ export const DEFAULT_RESIZE_OPTIONS = Object.freeze({
   maxHeight: 1080
 })
 
-type ReturnType {
+export type ReturnType = {
   /** canvas引用 */
   canvasRef: Ref<HTMLCanvasElement | undefined>
   /** 是否静音 */
   isMuted: Ref<boolean>
   /** 是否暂停 */
   isPaused: Ref<boolean>
+  /** 视频信息 */
+  videoInfo: Ref<VideoInfo>
   /** 已经连接的WebSocket地址列表 */
   linkedWsUrlList: Ref<string[]>
+  /** 视频流地址是否已添加 */
+  isLinked: Ref<boolean>
+  /** 是否达到websocket拉流数最大值 */
+  isReachConnectLimit: Ref<boolean>
   /** 暂停其他WebSocket视频流的音频播放 */
   pauseOtherAudio: () => void
   /** 设置当前WebSocket视频流的音频是否暂停 */
@@ -133,6 +141,7 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 | wsVideoPlayerIns     | WsVideoManager实例   | `WsVideoManager`     |   `WsVideoManager()`  |
 | target               |    canvas元素, 不传会自动生成一个ref供外部使用  | `HTMLCanvasElement \| Ref<HTMLCanvasElement>`     |   —   |
 | autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height | `CanvasResizeOption \| Ref<CanvasResizeOption>` | `false` |
+| closeOnHidden        | 视口中元素不可见时断开连接 | `boolean`  | `true` |
 
 ## WsVideoManager
 
@@ -178,6 +187,8 @@ type RenderConstructorOptionType = {
 }
 
 export type WsVideoManaCstorOptionType = {
+  /** 预监流连接数量限制, 默认10个 */
+  connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
   /** Render 实例配置 */
@@ -193,6 +204,8 @@ class WsVideoManager {
 
 |       参数名           |        说明                   |      类型      |
 | :-------------------- | :---------------------------- | :-------------|
+| linkedUrlList         | 已连接的websocket地址列表      | `string[]` |
+| connectLimit          | 当前实例限制的WebSocket连接数量 | `number`   |
 | addCanvas             | 添加WebSocket地址以及需要绘制的cannvas元素  | `(canvas: HTMLCanvasElement, url: string) => void`       |
 | removeCanvas          | 移除需要绘制cannvas元素        | `(canvas: HTMLCanvasElement) => void`       |
 | isCanvasExist         | 判断canvas是否存在             | `(canvas: HTMLCanvasElement) => boolean`       |
@@ -217,6 +230,8 @@ class WsVideoManager {
 | `WsVideoManagerEventEnums.WS_URL_CHANGE`      | 已经添加的WebSocket连接地址列表更新 | `(urls: string[]) => void` |
 | `WsVideoManagerEventEnums.AUDIO_STATE_CHANGE` | 视频静音状态更改  | `(url: string, state: AudioState) => void`  |
 | `WsVideoManagerEventEnums.VIDEO_STATE_CHANGE` | 视频播放状态更改  | `(url: string, state: VideoState) => void`  |
+| `WsVideoManagerEventEnums.SOCKET_CLOSE` | WebSocket连接断开  | `(url: string) => void`  |
+| `WsVideoManagerEventEnums.CONNECT_LIMIT` | WebSocket连接数量超过限制  | `() => void`  |
 
 ```ts
 export enum AudioState {
