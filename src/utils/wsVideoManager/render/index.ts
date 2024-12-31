@@ -45,7 +45,7 @@ export type RenderEvents = {
 
 // 调试代码
 // let id = 0
-// const curPosX = 0
+// let curPosX = 0
 // let curPosY = 0
 
 export class Render extends EventBus<RenderEvents> {
@@ -67,7 +67,7 @@ export class Render extends EventBus<RenderEvents> {
   private _paused: boolean = false
   private _options: RenderConstructorOptionType
 
-  private _catchAnimationID: number | undefined = undefined
+  private _cacheAnimationID: number | undefined = undefined
 
   // 调试代码
   // private divID = ''
@@ -133,7 +133,9 @@ export class Render extends EventBus<RenderEvents> {
         }
       }
     }
-    this._catch()
+    this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
+    this._cacheAnimationID = undefined
+    this._cache()
   }
 
   /**
@@ -238,6 +240,10 @@ export class Render extends EventBus<RenderEvents> {
     // div.style.left = `${curPosX}px`
     // div.style.top = `${curPosY}px`
     // curPosY += 100
+    // if (curPosY >= 400) {
+    //   curPosY = 0
+    //   curPosX += 200
+    // }
     // div.style.zIndex = '99999'
     // document.body.appendChild(div)
   }
@@ -304,19 +310,20 @@ export class Render extends EventBus<RenderEvents> {
               this._videoEl.currentTime = sourceBuffer.buffered.start(bufferedLen - 1)
             }
 
-            for (let i = 0; i < bufferedLen; i++) {
-              const curStart = sourceBuffer.buffered.start(i)
+            for (let i = bufferedLen - 1; i > 0; i--) {
               const curEnd = sourceBuffer.buffered.end(i)
 
               if (!this._sourceBuffer!.updating && currentTime > curEnd) {
-                this._sourceBuffer?.remove(curStart, curEnd)
-                continue
+                this._sourceBuffer?.remove(0, curEnd)
+                break
               }
             }
           }
 
           // 调试代码
-          // innerHTML += ` - start:${sourceBuffer.buffered.start(sourceBuffer.buffered.length - 1)} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
+          // innerHTML += ` - start:${sourceBuffer.buffered.start(
+          //   sourceBuffer.buffered.length - 1
+          // )} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
           // innerHTML += ` - currentTime: ${currentTime}`
           // div && (div.innerHTML = innerHTML)
 
@@ -350,7 +357,7 @@ export class Render extends EventBus<RenderEvents> {
    * 将_bufsQueue中的数据添加到SourceBuffer中
    * @returns
    */
-  private _catch() {
+  private _cache() {
     if (!this._videoEl) {
       return
     }
@@ -361,16 +368,16 @@ export class Render extends EventBus<RenderEvents> {
       !this._bufsQueue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      this._catchAnimationID === undefined && (this._catchAnimationID = requestAnimationFrame(() => this._catch()))
+      this._cacheAnimationID === undefined && (this._cacheAnimationID = requestAnimationFrame(() => this._cache()))
       return
     }
     if (this._videoEl.error) {
       this._setupMSE()
       return (
-        this._catchAnimationID === undefined && (this._catchAnimationID = requestAnimationFrame(() => this._catch()))
+        this._cacheAnimationID === undefined && (this._cacheAnimationID = requestAnimationFrame(() => this._cache()))
       )
     }
-    this._catchAnimationID = undefined
+    this._cacheAnimationID = undefined
     let frame: ArrayBuffer
     if (this._bufsQueue.length > 1) {
       const freeBuffer = this._bufsQueue.splice(0, this._bufsQueue.length)
@@ -438,7 +445,8 @@ export class Render extends EventBus<RenderEvents> {
 
     this._mimeType = ''
 
-    this._catchAnimationID && cancelAnimationFrame(this._catchAnimationID)
+    this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
+    this._cacheAnimationID = undefined
 
     this.destroyMediaSource()
   }

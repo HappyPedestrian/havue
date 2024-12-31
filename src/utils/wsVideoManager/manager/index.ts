@@ -58,7 +58,6 @@ export class WsVideoManager extends EventBus<Events> {
   constructor(options?: WsVideoManaCstorOptionType) {
     super()
     this._option = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
-    this._setAnimate()
   }
 
   get linkedUrlList() {
@@ -70,6 +69,7 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   private _setAnimate() {
+    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
     const render = () => {
       this._wsInfoMap.forEach((item) => {
         const { render, canvasSet } = item
@@ -177,6 +177,12 @@ export class WsVideoManager extends EventBus<Events> {
 
   private _emitWsUrlListChange() {
     this.emit(EventEnums.WS_URL_CHANGE, [...this._wsInfoMap.keys()])
+    if (this._wsInfoMap.size) {
+      !this._reqAnimationID && this._setAnimate()
+    } else {
+      this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+      this._reqAnimationID = null
+    }
   }
 
   /**
