@@ -33,8 +33,7 @@ const cloneNodePosition = reactive({
 
 const cloneNodeStyle = computed(() => {
   return {
-    top: `${cloneNodePosition.y}px`,
-    left: `${cloneNodePosition.x}px`
+    transform: `translate(${cloneNodePosition.x}px, ${cloneNodePosition.y}px) translate(-50%, -50%)`
   }
 })
 
@@ -70,16 +69,20 @@ DnDManagerInstance.on('end', () => {
 .draggable-area {
   width: fit-content;
   cursor: grab;
+
   &.disabled {
     cursor: not-allowed;
   }
 }
 
 .draggable-clone-item {
-  cursor: grabbing;
-  width: fit-content;
   position: fixed;
-  transform: translate(-50%, -50%);
   z-index: 99999;
+  top: 0;
+  left: 0;
+  width: fit-content;
+  opacity: 0.8;
+  cursor: grabbing;
+  will-change: transform;
 }
 </style>
