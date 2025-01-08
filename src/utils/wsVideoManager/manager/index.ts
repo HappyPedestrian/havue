@@ -9,6 +9,8 @@ export type WsVideoManaCstorOptionType = {
   connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
+  /** websocket重连时，重新解析视频编码方式 */
+  reparseMimeOnReconnect?: boolean
   /** Render 实例配置 */
   renderOptions?: Partial<RenderConstructorOptionType>
 }
@@ -18,6 +20,7 @@ const DEFAULT_OPTIONS: Required<WsVideoManaCstorOptionType> = Object.freeze({
   wsOptions: {
     binaryType: 'arraybuffer' as WebSocket['binaryType']
   },
+  reparseMimeOnReconnect: true,
   renderOptions: RENDER_DEFAULT_OPTIONS
 })
 
@@ -111,10 +114,6 @@ export class WsVideoManager extends EventBus<Events> {
     }
     const socket = new WebSocketLoader(url, this._option.wsOptions)
 
-    socket.on('close', () => {
-      this.emit(EventEnums.SOCKET_CLOSE, url)
-    })
-
     const render = new Render(this._option.renderOptions)
     const wsInfo: WsInfoType = {
       socket,
@@ -126,7 +125,7 @@ export class WsVideoManager extends EventBus<Events> {
     this._emitWsUrlListChange()
 
     this._bindRenderEvent(url, render)
-    this._bindSocketEvent(socket, render)
+    this._bindSocketEvent(socket, render, url)
 
     socket.open()
   }
@@ -169,7 +168,16 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url 连接地址
    * @param socket WebSocketLoader实例
    */
-  private _bindSocketEvent(socket: WebSocketLoader, render: Render) {
+  private _bindSocketEvent(socket: WebSocketLoader, render: Render, url: string) {
+    socket.on('close', () => {
+      this._option.reparseMimeOnReconnect && render.resetMimeType()
+      this.emit(EventEnums.SOCKET_CLOSE, url)
+    })
+
+    socket.on('reconnect', () => {
+      this._option.reparseMimeOnReconnect && render.resetMimeType()
+    })
+
     socket.on('message', (event: WebSocketEventMap['message']) => {
       render.appendMediaBuffer([event.data])
     })

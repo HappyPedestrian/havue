@@ -409,6 +409,15 @@ export class Render extends EventBus<RenderEvents> {
     }
   }
 
+  /** 重置解析的视频mime type */
+  public resetMimeType() {
+    this.destroyMediaSource()
+    this._videoEl && (this._videoEl.src = '')
+    this._mp4box = MP4Box.createFile()
+    this._mp4box.onReady = this._onMp4boxReady.bind(this)
+    this._bufsQueue.length = 0
+  }
+
   private destroyMediaSource() {
     if (this._mediaSource) {
       if (this._videoEl) {

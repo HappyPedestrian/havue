@@ -22,6 +22,7 @@ type EventType = {
   message: MessageEvent
   close: CloseEvent
   error: Event
+  reconnect: undefined
 }
 
 const defaultOptions: Required<WebSocketOptionsType> = {
@@ -172,6 +173,7 @@ class WebSocketLoader {
     this._ws = this._protocols ? new WebSocket(this._url, this._protocols) : new WebSocket(this._url)
     this._ws.binaryType = this._binaryType
     this.bindWebSocketEvents(this._ws)
+    this.triggerEvents('reconnect', undefined)
   }
 
   public open() {
