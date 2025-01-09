@@ -72,5 +72,5 @@ module.exports = ({ env }) => {
 ### 在项目入口 main.ts 中使用
 
 ```ts
-  useScreenAdapt(Number(import.meta.env.VITE_UI_DESIGN_WIDTH), Number(import.meta.env.VITE_UI_DESIGN_HEIGHT))
+  useScreenAdapt(Number(import.meta.env.VITE_UI_DESIGN_WIDTH), Number(import.meta.env.VITE_UI_DESIGN_HEIGHT), Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16)
 ```

@@ -2,11 +2,15 @@
  * 根据UI设计尺寸，以及当前屏幕尺寸，计算合适的根元素字体大小
  * @param uiWidth UI设计宽度
  * @param uiHeight UI设计高度
+ * @param pxtoremRootValue postcss-pxtorem的rootValue值
  * @param stopOnInput 在input聚焦时，停止计算根元素字体大小，固定页面尺寸
  */
-export function useScreenAdapt(uiWidth: number, uiHeight: number, stopOnInput: boolean = false) {
-  /** 打包后转换为rem单位的基准值 */
-  const pxtoremRootValue = Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16
+export function useScreenAdapt(
+  uiWidth: number,
+  uiHeight: number,
+  pxtoremRootValue: number = 16,
+  stopOnInput: boolean = false
+) {
   const docEl = document.documentElement
 
   let isStopAdapt: boolean = false
@@ -80,9 +84,8 @@ export function stopAdaptOnInputFocused(onFocus: (e?: FocusEvent) => void, onBlu
       if (target.tagName === 'INPUT') {
         onFocus()
         const { clientWidth, clientHeight } = docEl
-        const { width, height } = window.getComputedStyle(docEl)
-        oldBodyWidth = width
-        oldBodyHeight = height
+        oldBodyWidth = docEl.style.width
+        oldBodyHeight = docEl.style.height
 
         docEl.style.width = `${clientWidth}px`
         docEl.style.height = `${clientHeight}px`
