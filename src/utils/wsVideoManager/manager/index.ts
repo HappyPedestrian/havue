@@ -104,8 +104,9 @@ export class WsVideoManager extends EventBus<Events> {
    * @param url socket地址
    * @returns
    */
-  private _addSocket(url: string) {
+  private _addSocket(url: string, renderOptions?: Partial<RenderConstructorOptionType>) {
     if (this._isSocketExist(url)) {
+      this.updateRenderOptions(url, renderOptions)
       return
     }
     if (this._wsInfoMap.size >= this._option.connectLimit) {
@@ -207,8 +208,8 @@ export class WsVideoManager extends EventBus<Events> {
    * @param canvas canvas元素
    * @param url socket url地址
    */
-  public addCanvas(canvas: HTMLCanvasElement, url: string) {
-    this._addSocket(url)
+  public addCanvas(canvas: HTMLCanvasElement, url: string, renderOptions?: Partial<RenderConstructorOptionType>) {
+    this._addSocket(url, renderOptions)
     if (this.isCanvasExist(canvas)) {
       throw new Error('the canvas allready exsist! please remove it before add')
     }
@@ -277,6 +278,14 @@ export class WsVideoManager extends EventBus<Events> {
     this._wsInfoMap.forEach((wsInfo) => {
       wsInfo.render.muted = muted
     })
+  }
+
+  /** 更新单个render实例的配置 */
+  public updateRenderOptions(url: string, options?: Partial<RenderConstructorOptionType>) {
+    if (options) {
+      const wsInfo = this._wsInfoMap.get(url)
+      wsInfo?.render.updateOptions(options)
+    }
   }
 
   /**

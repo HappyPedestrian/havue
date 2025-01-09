@@ -1,5 +1,5 @@
 import type { Ref, MaybeRef } from 'vue'
-import type { VideoInfo } from '../render'
+import type { RenderConstructorOptionType, VideoInfo } from '../render'
 import { WsVideoManagerEventEnums, type WsVideoManager } from '../manager'
 import { ref, computed, onBeforeUnmount, toValue, isRef, watch } from 'vue'
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
@@ -34,6 +34,8 @@ export type ParamsOptions = {
   canvasResize?: MaybeRef<CanvasResizeOption | undefined>
   /** 视口中元素不可见时断开连接， 默认为true */
   closeOnHidden?: MaybeRef<boolean>
+  /** 自定义Render配置 */
+  renderOptions?: MaybeRef<Partial<RenderConstructorOptionType>>
 }
 
 // canvasResize 默认值
@@ -81,7 +83,15 @@ export type ReturnType = {
 export function useVideoPlay(options: ParamsOptions): ReturnType {
   let canvasRef: Ref<HTMLCanvasElement | undefined> = ref<HTMLCanvasElement>()
 
-  const { wsUrl, isReady, target, wsVideoPlayerIns = wsVideoPlayer, canvasResize, closeOnHidden } = options
+  const {
+    wsUrl,
+    isReady,
+    target,
+    wsVideoPlayerIns = wsVideoPlayer,
+    canvasResize,
+    closeOnHidden,
+    renderOptions
+  } = options
 
   if (target) {
     canvasRef = computed<HTMLCanvasElement | undefined>(() => {
@@ -108,13 +118,15 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     return opt
   })
 
-  const needResizeCanvas = computed(() => {
-    return _canvasResizeOpt.value.enable
-  })
-
   const _closeOnHidden = computed<boolean>(() => {
     const closeOpt = isRef(closeOnHidden) ? toValue(closeOnHidden) : closeOnHidden
     return closeOpt === undefined ? true : closeOpt
+  })
+
+  const _renderOptions = computed<Partial<RenderConstructorOptionType> | undefined>(() => {
+    const renderOpt = isRef(renderOptions) ? toValue(renderOptions) : renderOptions || undefined
+
+    return renderOpt
   })
 
   /** 是否静音 */
@@ -174,10 +186,10 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
   let stopResizeObserver: () => void = () => {}
 
   watch(
-    needResizeCanvas,
+    _canvasResizeOpt,
     (val) => {
       stopResizeObserver && stopResizeObserver()
-      if (val) {
+      if (val.enable) {
         /** 监听尺寸变化，更新canvas width/height */
         const { stop } = useResizeObserver(canvasRef, (entries) => {
           if (!canvasRef.value) {
@@ -211,7 +223,20 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
       }
     },
     {
-      immediate: true
+      immediate: true,
+      deep: true
+    }
+  )
+
+  watch(
+    _renderOptions,
+    () => {
+      if (_renderOptions.value && isLinked.value) {
+        wsVideoPlayerIns.updateRenderOptions(previewWsUrl.value, _renderOptions.value)
+      }
+    },
+    {
+      deep: true
     }
   )
 
@@ -246,7 +271,7 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
 
       if (!wsVideoPlayerIns.isCanvasExist(canvasRef.value)) {
         // 新增canvas
-        wsVideoPlayerIns.addCanvas(canvasRef.value, previewWsUrl.value)
+        wsVideoPlayerIns.addCanvas(canvasRef.value, previewWsUrl.value, _renderOptions.value)
         lastPreviewUrl.value = previewWsUrl.value
       }
     } else {

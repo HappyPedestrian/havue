@@ -104,6 +104,13 @@ export class Render extends EventBus<RenderEvents> {
     return this._videoEl
   }
 
+  /** 更新实例配置 */
+  public updateOptions(option: Partial<RenderConstructorOptionType> = {}) {
+    Object.assign(this._options, {
+      ...option
+    })
+  }
+
   /**
    * 添加视频流buffer数据
    * @param buf
