@@ -52,6 +52,8 @@ export type ParamsOptions = {
   canvasResize?: MaybeRef<CanvasResizeOption | undefined>
   /** 视口中元素不可见时断开连接， 默认为true */
   closeOnHidden?: MaybeRef<boolean>
+  /** 自定义Render配置 */
+  renderOptions?: MaybeRef<Partial<RenderConstructorOptionType>>
 }
 
 // canvasResize 默认值
@@ -142,6 +144,7 @@ import Demo from '@/components/VideoPlayer/Demo.vue'
 | target               |    canvas元素, 不传会自动生成一个ref供外部使用  | `HTMLCanvasElement \| Ref<HTMLCanvasElement>`     |   —   |
 | autoResizeCanvas     | 是否自动监听canvas尺寸更改，更新canvas width和height | `CanvasResizeOption \| Ref<CanvasResizeOption>` | `false` |
 | closeOnHidden        | 视口中元素不可见时断开连接 | `boolean`  | `true` |
+| renderOptions        | Render类实例配置 | `Partial<RenderConstructorOptionType> \| undefined`  | `undefined` |
 
 ## WsVideoManager
 
@@ -191,6 +194,8 @@ export type WsVideoManaCstorOptionType = {
   connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
+  /** websocket重连时，重新解析视频编码方式 */
+  reparseMimeOnReconnect?: boolean
   /** Render 实例配置 */
   renderOptions?: Partial<RenderConstructorOptionType>
 }
@@ -209,6 +214,7 @@ class WsVideoManager {
 | addCanvas             | 添加WebSocket地址以及需要绘制的cannvas元素  | `(canvas: HTMLCanvasElement, url: string) => void`       |
 | removeCanvas          | 移除需要绘制cannvas元素        | `(canvas: HTMLCanvasElement) => void`       |
 | isCanvasExist         | 判断canvas是否存在             | `(canvas: HTMLCanvasElement) => boolean`       |
+| updateRenderOptions   | 更新render实例配置           | `(url: string, options?: Partial<RenderConstructorOptionType>) => void`|
 | setAllVideoMutedState  | 设置所有视频静音状态           | `(muted: boolean) => void`       |
 | setOneMutedState      | 设置单个视频静音状态            | `(url: string, muted: boolean) => void`     |
 | getOneMutedState      | 获取单个视频静音状态            | `(url: string) => void`       |
@@ -242,5 +248,23 @@ export enum AudioState {
 export enum VideoState {
   PLAY = 'play',
   PAUSE = 'pause'
+}
+
+export type RenderConstructorOptionType = {
+  /** 当前播放currentTime和最新视频时长最多相差 秒数，
+   * 默认0.3s，
+   * 可更加实际流每次传递的时长情况进行调整，
+   * 设置太小可能会导致卡顿 
+   */
+  liveMaxLatency: number
+  /** 最多缓存ws传输的未处理的buffer数据大小, 
+   * 默认200kb
+   */
+  maxCacheBufByte: number
+  /** 最多存储的时间，
+   * 用于清除在currentTime之前x秒时间节点前的buffer数据, 
+   * 默认10s 
+   */
+  maxCache: number
 }
 ```
