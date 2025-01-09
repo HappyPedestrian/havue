@@ -14,7 +14,7 @@ export type CanvasResizeOption = {
    * 放大是为了画面更清晰
    * 默认 1
    */
-  scale: number
+  scale?: number
   /** 限制canvas width最大值，默认1920 */
   maxWidth?: number
   /** 限制canvas height最大值，默认1080 */
@@ -180,7 +180,7 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
       if (val) {
         /** 监听尺寸变化，更新canvas width/height */
         const { stop } = useResizeObserver(canvasRef, (entries) => {
-          if (!canvasRef.value || !previewWsUrl.value) {
+          if (!canvasRef.value) {
             return
           }
           const [entry] = entries
