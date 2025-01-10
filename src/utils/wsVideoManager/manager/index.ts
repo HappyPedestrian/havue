@@ -115,7 +115,7 @@ export class WsVideoManager extends EventBus<Events> {
     }
     const socket = new WebSocketLoader(url, this._option.wsOptions)
 
-    const render = new Render(this._option.renderOptions)
+    const render = new Render(Object.assign({}, this._option.renderOptions, renderOptions))
     const wsInfo: WsInfoType = {
       socket,
       canvasSet: new Set(),
