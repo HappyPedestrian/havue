@@ -1,11 +1,12 @@
 import EventBus from '@/utils/eventBus'
+import { isMobile } from '@/utils/platform'
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
 import type { RenderConstructorOptionType, VideoInfo } from '../render'
 import { WebSocketLoader } from '../loader'
 import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS, RenderEventsEnum, AudioState, VideoState } from '../render'
 
 export type WsVideoManaCstorOptionType = {
-  /** 预监流连接数量限制, 默认10个 */
+  /** 预监流连接数量限制, 移动端默认10个，pc端默认32个 */
   connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
@@ -16,7 +17,7 @@ export type WsVideoManaCstorOptionType = {
 }
 
 const DEFAULT_OPTIONS: Required<WsVideoManaCstorOptionType> = Object.freeze({
-  connectLimit: 10,
+  connectLimit: isMobile ? 10 : 32,
   wsOptions: {
     binaryType: 'arraybuffer' as WebSocket['binaryType']
   },

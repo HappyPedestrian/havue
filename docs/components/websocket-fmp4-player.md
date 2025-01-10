@@ -190,7 +190,7 @@ type RenderConstructorOptionType = {
 }
 
 export type WsVideoManaCstorOptionType = {
-  /** 预监流连接数量限制, 默认10个 */
+  /** 预监流连接数量限制, 移动端默认10个，pc端默认32个 */
   connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
