@@ -154,31 +154,39 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     return linkedWsUrlList.value.length >= connectLimit
   })
 
-  wsVideoPlayer.on(WsVideoManagerEventEnums.WS_URL_CHANGE, (urls) => {
+  function handleWsUrlChange(urls: string[]) {
     linkedWsUrlList.value = [...urls]
-  })
+  }
 
-  wsVideoPlayer.on(WsVideoManagerEventEnums.AUDIO_STATE_CHANGE, (url, state) => {
+  function handleAudioStateChange(url: string, state: AudioState) {
     if (url === previewWsUrl.value) {
       console.log('音频状态更改', url, state)
       isMuted.value = state === AudioState.MUTED
     }
-  })
+  }
 
-  wsVideoPlayer.on(WsVideoManagerEventEnums.VIDEO_STATE_CHANGE, (url, state) => {
+  function handleVideoStateChange(url: string, state: VideoState) {
     if (url === previewWsUrl.value) {
       console.log('视频状态更改', url, state)
       isPaused.value = state === VideoState.PAUSE
     }
-  })
+  }
 
-  wsVideoPlayer.on(WsVideoManagerEventEnums.VIDEO_INFO_UPDATE, (url, info) => {
+  function handleVideoInfoUpdate(url: string, info: VideoInfo) {
     if (url === previewWsUrl.value) {
       videoInfo.value = {
         ...info
       }
     }
-  })
+  }
+
+  wsVideoPlayer.on(WsVideoManagerEventEnums.WS_URL_CHANGE, handleWsUrlChange)
+
+  wsVideoPlayer.on(WsVideoManagerEventEnums.AUDIO_STATE_CHANGE, handleAudioStateChange)
+
+  wsVideoPlayer.on(WsVideoManagerEventEnums.VIDEO_STATE_CHANGE, handleVideoStateChange)
+
+  wsVideoPlayer.on(WsVideoManagerEventEnums.VIDEO_INFO_UPDATE, handleVideoInfoUpdate)
 
   /** canvas在视口中 */
   const canvasIsVisible = useElementVisibility(canvasRef)
@@ -242,6 +250,13 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
 
   onBeforeUnmount(() => {
     stopResizeObserver()
+    wsVideoPlayer.off(WsVideoManagerEventEnums.WS_URL_CHANGE, handleWsUrlChange)
+
+    wsVideoPlayer.off(WsVideoManagerEventEnums.AUDIO_STATE_CHANGE, handleAudioStateChange)
+
+    wsVideoPlayer.off(WsVideoManagerEventEnums.VIDEO_STATE_CHANGE, handleVideoStateChange)
+
+    wsVideoPlayer.off(WsVideoManagerEventEnums.VIDEO_INFO_UPDATE, handleVideoInfoUpdate)
     if (!canvasRef.value) return
     // 删除收集的 canvas
     wsVideoPlayerIns.removeCanvas(canvasRef.value)
