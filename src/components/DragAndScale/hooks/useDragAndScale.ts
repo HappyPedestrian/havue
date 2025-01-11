@@ -224,7 +224,9 @@ export function useDragAndScale(
     if (!touchEl) {
       return
     }
-    const sides = (touchEl.dataset['scaleSide'] || '').split(',')
+    // 四个边和角、中心操作区域元素都添加了data-scale-side属性
+    // 用于判断往那个方向拖动
+    const sides = (touchEl.dataset['scaleSide'] || '').split(',').filter((item) => !!item)
     if (!sides.length) {
       return
     }
@@ -290,6 +292,7 @@ export function useDragAndScale(
     const minElHeight = minHeight / realRateEl_h
 
     if (effectDirection.center) {
+      // 位置改变
       const containerWidth = containerElSize.width
       const containerHeight = containerElSize.height
       // 避免超出边界
@@ -300,6 +303,7 @@ export function useDragAndScale(
       dX = distanceX
       dY = distanceY
     } else {
+      // 缩放
       const { leftSide, rightSide, topSide, bottomSide } = effectDirection
       if (leftSide) {
         // 避免超出左边界
@@ -355,7 +359,7 @@ export function useDragAndScale(
           (dwR < dhR && _keepRatio.value.scaleCase === KeepRatioCaseEnum.MIN) ||
           (dwR > dhR && _keepRatio.value.scaleCase === KeepRatioCaseEnum.MAX)
         ) {
-          //  （使用x,y改变最小值）宽度改变较少
+          //当（使用x,y改变最小值）宽度改变较少
           //或（使用x,y改变最大值）高度改变较少
           dH = dwR * elHeight
           // 最小高度限制
@@ -366,6 +370,7 @@ export function useDragAndScale(
             dX = dX * (dW / originDw)
           }
 
+          // 拖动了上边，使用dH计算dY
           if (effectDirection.topSide) {
             dY = -dH
           }
@@ -373,7 +378,8 @@ export function useDragAndScale(
           (dhR < dwR && _keepRatio.value.scaleCase === KeepRatioCaseEnum.MIN) ||
           (dhR > dwR && _keepRatio.value.scaleCase === KeepRatioCaseEnum.MAX)
         ) {
-          // 高度改变较少
+          //当（使用x,y改变最小值）高度改变较少
+          //或（使用x,y改变最大值）宽度改变较少
           dW = dhR * elWidth
           // 最小宽度限制
           if (elWidth + dW < minElWidth) {
@@ -383,6 +389,7 @@ export function useDragAndScale(
             dY = dY * (dH / originDh)
           }
 
+          // 拖动了左边，使用dW计算dX
           if (effectDirection.leftSide) {
             dX = -dW
           }
@@ -399,10 +406,11 @@ export function useDragAndScale(
           currentElX + currentElW > containerElSize.width ||
           currentElY + currentElH > containerElSize.height
         ) {
-          // 容器内 区域 左上角点
+          // 拖动元素超出了父级容器
+          // 拖动元素 在父级容器内的 区域 的左上角点
           let clipX = currentElX < 0 ? 0 : currentElX
           let clipY = currentElY < 0 ? 0 : currentElY
-          // 容器内 区域 宽高
+          // 拖动元素 在父级容器内的 区域 的宽高
           let clipW =
             currentElX + currentElW > containerElSize.width
               ? containerElSize.width - clipX
@@ -412,7 +420,7 @@ export function useDragAndScale(
               ? containerElSize.height - clipY
               : currentElY + currentElH - clipY
 
-          // 容器内 区域 右下角点
+          // 拖动元素 在父级容器内的 区域 的右下角点
           const clipX2 = clipX + clipW
           const clipY2 = clipY + clipH
 

@@ -21,6 +21,25 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 
 :::
 
+如果想禁用缩放功能，只保留拖动功能，可添加样式实现
+
+```css
+  .drag-and-scale-box {
+    --scale-area-width: 0px;
+    border: none;
+  }
+```
+
+反之，如果想只保留拖动功能，禁用缩放功能，可添加以下样式实现
+
+```scss
+  .drag-and-scale-box {
+    .center-box {
+      pointer-events: none;
+    }
+  }
+```
+
 ## 配置
 
 :::tip
