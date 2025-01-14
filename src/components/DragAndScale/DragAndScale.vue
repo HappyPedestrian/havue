@@ -72,21 +72,29 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
 <style lang="scss" scoped>
 .drag-and-scale-box {
   --drag-box-border-width: 1px;
+
   // 周围响应拖放操作区域宽度
   --scale-area-width: 30px;
+
   // 缩放标志与内容的距离
   --scale-mark-gap: 2px;
+
   // 缩放标志 边框的宽度
   --scale-mark-width: 3px;
+
   // 缩放边框图标区域inset
   --scale-mark-inset: calc(0px - (var(--scale-mark-width) + var(--scale-mark-gap) + var(--drag-box-border-width)));
+
   // 缩放边框图标 边框长度
   --scale-mark-line-width: calc(var(--scale-area-width) / 2);
+
   // 缩放操作区域inset
   --scale-area-inset: calc(0px - var(--scale-area-width) / 2 + var(--scale-mark-width) + var(--scale-mark-gap));
+
   position: relative;
-  border: var(--drag-box-border-width) dashed #fff;
   box-sizing: border-box;
+  border: var(--drag-box-border-width) dashed #fff;
+
   .zoom-mark-box {
     position: absolute;
     inset: var(--scale-mark-inset);
@@ -124,6 +132,26 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       flex-direction: column;
       box-sizing: border-box;
 
+      .block {
+        display: flex;
+        box-sizing: border-box;
+        width: 100%;
+
+        .left-box,
+        .right-box {
+          box-sizing: border-box;
+          width: var(--scale-area-width);
+          max-width: 33.3333%;
+          height: 100%;
+        }
+
+        .center-box {
+          flex: 1;
+          box-sizing: border-box;
+          height: 100%;
+        }
+      }
+
       &.disabled {
         .block {
           * {
@@ -132,31 +160,15 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
         }
       }
 
-      .block {
-        width: 100%;
-        box-sizing: border-box;
-        display: flex;
-
-        .left-box,
-        .right-box {
-          box-sizing: border-box;
-          width: var(--scale-area-width);
-          max-width: 33.333333%;
-          height: 100%;
-        }
-        .center-box {
-          flex: 1;
-          height: 100%;
-          box-sizing: border-box;
-        }
-      }
-
       .middle-box {
         flex: 1;
+
         .left-box,
         .right-box {
           height: 100%;
+          cursor: ew-resize;
         }
+
         .center-box {
           flex: 1;
           height: 100%;
@@ -168,27 +180,21 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       .bottom-box .right-box {
         cursor: nw-resize;
       }
+
       .top-box .right-box,
       .bottom-box .left-box {
         cursor: ne-resize;
       }
-      .top-box,
-      .bottom-box {
-        .center-box {
-          cursor: ns-resize;
-        }
-      }
-      .middle-box {
-        .left-box,
-        .right-box {
-          cursor: ew-resize;
-        }
-      }
+
       .top-box,
       .bottom-box {
         box-sizing: border-box;
         height: var(--scale-area-width);
-        max-height: 33.333333%;
+        max-height: 33.3333%;
+
+        .center-box {
+          cursor: ns-resize;
+        }
       }
     }
   }

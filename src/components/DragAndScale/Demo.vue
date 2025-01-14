@@ -13,7 +13,33 @@
       class="drag-box"
       @change="handleChange"
       :style="dragStyle"
-    ></DragAndScale>
+    >
+      <div class="inner-box">
+        <div>min: 64*64</div>
+        <div>keepRatio: true</div>
+        <div>inContaienr: true</div>
+      </div>
+    </DragAndScale>
+    <DragAndScale
+      :container="containerRef"
+      :containerRealSize="containerRealSize"
+      :keepRatio="{
+        enable: false,
+        scaleCase: 'min'
+      }"
+      :limit="{ inContainer: false, minWidth: 128, minHeight: 128, maxWidth: 512, maxHeight: 300 }"
+      :disabled="false"
+      class="drag-box"
+      @change="handleChange2"
+      :style="dragStyle2"
+    >
+      <div class="inner-box">
+        <div>min: 128*128</div>
+        <div>max: 512*300</div>
+        <div>keepRatio: false</div>
+        <div>inContaienr: false</div>
+      </div>
+    </DragAndScale>
   </div>
 </template>
 // #endregion template
@@ -32,6 +58,13 @@ const dragPosition = ref({
   height: 50
 })
 
+const dragPosition2 = ref({
+  x: 230,
+  y: 50,
+  width: 100,
+  height: 50
+})
+
 const containerRealSize = ref({ width: 1920, height: 1080 })
 
 const dragStyle = computed(() => {
@@ -43,8 +76,28 @@ const dragStyle = computed(() => {
   }
 })
 
+const dragStyle2 = computed(() => {
+  return {
+    top: `${dragPosition2.value.y}px`,
+    left: `${dragPosition2.value.x}px`,
+    width: `${dragPosition2.value.width}px`,
+    height: `${dragPosition2.value.height}px`,
+    background: 'gray'
+  }
+})
+
 function handleChange(params: ChangeResultType) {
   Object.assign(dragPosition.value, {
+    x: params.elX,
+    y: params.elY,
+    width: params.elWidth,
+    height: params.elHeight
+  })
+  console.log(params)
+}
+
+function handleChange2(params: ChangeResultType) {
+  Object.assign(dragPosition2.value, {
     x: params.elX,
     y: params.elY,
     width: params.elWidth,
@@ -63,9 +116,17 @@ function handleChange(params: ChangeResultType) {
   width: 100%;
   height: 400px;
   background-color: rgb(71, 121, 105);
+  overflow: hidden;
   .drag-box {
     position: absolute;
     background-color: rgb(26, 24, 24);
+    .inner-box {
+      height: 100%;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      user-select: none;
+    }
   }
 }
 </style>

@@ -4,6 +4,12 @@
 
 ## 示例
 
+设置容器实际尺寸为1920*1080。
+
+第一个黑色元素限制最小尺寸64*64，保持宽高比，限制在容器中移动。
+
+第二个灰色元素限制最小尺寸128\*128，最大尺寸512\*300。
+
 <script setup lang="ts">
 import Demo from '@/components/DragAndScale/Demo.vue'
 
@@ -56,8 +62,11 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 | keepRatio.enable         | 是否保持宽高比        | `boolean`       | `false`       |
 | keepRatio.scaleCase      | 缩放时使用最大改动值还是最小改动值      | `'min' \| 'max'`  |     `'min'`     |
 | limit?                   | 限制缩放的尺寸        | `object`        |  —          |
+| limit.inContainer        | 限制缩放在父元素内部   | `boolean`      |  `true`      |
 | limit.minWidth           | 限制缩放的最小宽度     | `number`       | `0`           |
 | limit.minHeight          | 限制缩放的最小高度     | `number`       | `0`           |
+| limit.maxWidth           | 限制缩放的最大宽度     | `number`       | `Infinity`           |
+| limit.maxHeight          | 限制缩放的最大高度     | `number`       | `Infinity`           |
 | disabled?                | 是否禁用              | `boolean`       | `false`           |
 
 ## 事件
@@ -69,6 +78,12 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 
 ```ts
 type ChangeParamsType {
+  /** 操作类型 */
+  type: 'move' | 'scale'
+  /** 相比上一次change事件，横向移动的距离 */
+  deltaX: number
+  /** 相比上一次change事件，纵向移动的距离 */
+  deltaY: number
   /** 拖动元素位于 container中的 x */
   elX: number
   /** 拖动元素位于 container中的 y */
@@ -87,3 +102,9 @@ type ChangeParamsType {
   realHeight: number
 }
 ```
+
+## 插槽
+
+|   名称       |        说明          |
+| :----------- | :------------------ |
+| default      | 默认内容             |

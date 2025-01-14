@@ -11,8 +11,11 @@ export type UseDragAndScaleOptions = {
   scaleAreaWidth?: number
   keepRatio?: boolean | KeepRatioType
   limit?: {
-    minWidth: number
-    minHeight: number
+    inContainer?: boolean
+    minWidth?: number
+    minHeight?: number
+    maxWidth?: number
+    maxHeight?: number
   }
   disabled?: boolean
   onChange?: (p: ChangeResultType) => void
@@ -42,6 +45,9 @@ type TargetAreaType = {
 }
 
 export type ChangeResultType = TargetAreaType & {
+  type: 'move' | 'scale'
+  deltaX: number
+  deltaY: number
   realX: number
   realY: number
   realWidth: number
@@ -76,7 +82,6 @@ export function useDragAndScale(
         ? { enable: _options.value.keepRatio, scaleCase: KeepRatioCaseEnum.MIN }
         : _options.value.keepRatio
     return Object.assign(
-      {},
       {
         scaleCase: KeepRatioCaseEnum.MIN,
         enable: false
@@ -87,13 +92,23 @@ export function useDragAndScale(
 
   /** 限制缩放最小值 */
   const _limit = computed(() => {
-    return Object.assign(
+    const limitOpt = Object.assign(
       {
+        inContainer: true,
         minWidth: 0,
-        minHeight: 0
+        minHeight: 0,
+        maxWidth: Infinity,
+        maxHeight: Infinity
       },
       _options.value.limit || {}
     )
+    if (limitOpt.minWidth > limitOpt.maxWidth) {
+      limitOpt.maxWidth = limitOpt.minWidth
+    }
+    if (limitOpt.minHeight > limitOpt.maxHeight) {
+      limitOpt.maxHeight = limitOpt.minHeight
+    }
+    return limitOpt
   })
 
   /** 是否禁用 */
@@ -117,6 +132,18 @@ export function useDragAndScale(
 
   /** 拖动缩放起始点 */
   let startPoint: Point = {
+    x: 0,
+    y: 0
+  }
+
+  /** 上次鼠标或者触点操作位置 */
+  let lastOperatePoint: Point = {
+    x: 0,
+    y: 0
+  }
+
+  /** 当前鼠标或者触点操作位置 */
+  let curOperatePoint: Point = {
     x: 0,
     y: 0
   }
@@ -145,6 +172,7 @@ export function useDragAndScale(
   }
 
   let isOperateStart = false
+  let isMoved = false
 
   let realRateEl_w = 1
   let realRateEl_h = 1
@@ -166,6 +194,7 @@ export function useDragAndScale(
     }
     // 存储拖动缩放起始点
     startPoint = point
+    curOperatePoint = point
 
     if (!_containerEl.value || !_targetEl.value) {
       return
@@ -194,30 +223,13 @@ export function useDragAndScale(
     }
     const { x: targetX, y: targetY, width: targetW, height: targetH } = _targetEl.value.getBoundingClientRect()
 
-    const {
-      x: operateElX,
-      y: operateElY,
-      width: operateElW,
-      height: operateElH
-    } = _operateEl.value.getBoundingClientRect()
-
     const { x: startX, y: startY } = point
-    if (
-      !(
-        startX >= operateElX &&
-        startX <= operateElX + operateElW &&
-        startY >= operateElY &&
-        startY <= operateElY + operateElH
-      )
-    ) {
-      return
-    }
 
     Object.assign(startArea, {
-      elX: Math.round(targetX - containerX),
-      elY: Math.round(targetY - containerY),
-      elWidth: Math.round(targetW),
-      elHeight: Math.round(targetH)
+      elX: targetX - containerX,
+      elY: targetY - containerY,
+      elWidth: targetW,
+      elHeight: targetH
     })
 
     const touchEl = document.elementFromPoint(startX, startY) as HTMLElement
@@ -276,8 +288,13 @@ export function useDragAndScale(
 
   function onMove(point: Point) {
     if (_disabled.value || isOperateStart !== true) {
+      isOperateStart = false
       return
     }
+
+    isMoved = true
+    lastOperatePoint = curOperatePoint
+    curOperatePoint = point
     const deltaX = point.x - startPoint.x
     const deltaY = point.y - startPoint.y
     let dX = 0
@@ -286,32 +303,46 @@ export function useDragAndScale(
     let dH = 0
 
     const { elX, elY, elWidth, elHeight } = startArea
-    const { minWidth, minHeight } = _limit.value
+    const { minWidth, minHeight, maxWidth, maxHeight } = _limit.value
 
     const minElWidth = minWidth / realRateEl_w
     const minElHeight = minHeight / realRateEl_h
+    const maxElWidth = maxWidth / realRateEl_w
+    const maxElHeight = maxHeight / realRateEl_h
 
     if (effectDirection.center) {
       // 位置改变
       const containerWidth = containerElSize.width
       const containerHeight = containerElSize.height
       // 避免超出边界
-      const distanceX =
-        elX + deltaX < 0 ? -elX : elX + elWidth + deltaX > containerWidth ? containerWidth - elWidth - elX : deltaX
-      const distanceY =
-        elY + deltaY < 0 ? -elY : elY + elHeight + deltaY > containerHeight ? containerHeight - elHeight - elY : deltaY
-      dX = distanceX
-      dY = distanceY
+      if (_limit.value.inContainer) {
+        const distanceX =
+          elX + deltaX < 0 ? -elX : elX + elWidth + deltaX > containerWidth ? containerWidth - elWidth - elX : deltaX
+        const distanceY =
+          elY + deltaY < 0
+            ? -elY
+            : elY + elHeight + deltaY > containerHeight
+              ? containerHeight - elHeight - elY
+              : deltaY
+        dX = distanceX
+        dY = distanceY
+      } else {
+        dX = deltaX
+        dY = deltaY
+      }
     } else {
       // 缩放
       const { leftSide, rightSide, topSide, bottomSide } = effectDirection
       if (leftSide) {
         // 避免超出左边界
-        let distance = elX + deltaX < 0 ? -elX : deltaX
+        let distance = _limit.value.inContainer && elX + deltaX < 0 ? -elX : deltaX
 
         // 宽高限制
         if (elWidth - distance < minElWidth) {
           distance = elWidth - minElWidth
+        }
+        if (elWidth - distance > maxElWidth) {
+          distance = elWidth - maxElWidth
         }
         dX = distance
         dW = -distance
@@ -319,21 +350,28 @@ export function useDragAndScale(
       if (rightSide) {
         const containerWidth = containerElSize.width
         // 避免超出右边界
-        let distance = elX + elWidth + deltaX > containerWidth ? containerWidth - elWidth - elX : deltaX
+        let distance =
+          _limit.value.inContainer && elX + elWidth + deltaX > containerWidth ? containerWidth - elWidth - elX : deltaX
 
         // 宽高限制
         if (elWidth + distance < minElWidth) {
           distance = minElWidth - elWidth
         }
+        if (elWidth + distance > maxElWidth) {
+          distance = maxElWidth - elWidth
+        }
         dW = distance
       }
       if (topSide) {
         // 避免超出上边界
-        let distance = elY + deltaY < 0 ? -elY : deltaY
+        let distance = _limit.value.inContainer && elY + deltaY < 0 ? -elY : deltaY
 
         // 宽高限制
         if (elHeight - distance < minElHeight) {
           distance = elHeight - minElHeight
+        }
+        if (elHeight - distance > maxElHeight) {
+          distance = elHeight - maxElHeight
         }
         dY = distance
         dH = -distance
@@ -341,11 +379,17 @@ export function useDragAndScale(
       if (bottomSide) {
         const containerHeight = containerElSize.height
         // 避免超出下边界
-        let distance = elY + elHeight + deltaY > containerHeight ? containerHeight - elHeight - elY : deltaY
+        let distance =
+          _limit.value.inContainer && elY + elHeight + deltaY > containerHeight
+            ? containerHeight - elHeight - elY
+            : deltaY
 
         // 宽高限制
         if (elHeight + distance < minElHeight) {
           distance = minElHeight - elHeight
+        }
+        if (elHeight + distance > maxElHeight) {
+          distance = maxElHeight - elHeight
         }
         dH = distance
       }
@@ -369,6 +413,12 @@ export function useDragAndScale(
             dW = (dH / elHeight) * elWidth
             dX = dX * (dW / originDw)
           }
+          if (elHeight + dH > maxElHeight) {
+            const originDw = dW
+            dH = maxElHeight - elHeight
+            dW = (dH / elHeight) * elWidth
+            dX = dX * (dW / originDw)
+          }
 
           // 拖动了上边，使用dH计算dY
           if (effectDirection.topSide) {
@@ -388,6 +438,12 @@ export function useDragAndScale(
             dH = (dW / elWidth) * elHeight
             dY = dY * (dH / originDh)
           }
+          if (elWidth + dW > maxElWidth) {
+            const originDh = dH
+            dW = maxElWidth - elWidth
+            dH = (dW / elWidth) * elHeight
+            dY = dY * (dH / originDh)
+          }
 
           // 拖动了左边，使用dW计算dX
           if (effectDirection.leftSide) {
@@ -401,10 +457,11 @@ export function useDragAndScale(
         const currentElW = elWidth + dW
         const currentElH = elHeight + dH
         if (
-          currentElX < 0 ||
-          currentElY < 0 ||
-          currentElX + currentElW > containerElSize.width ||
-          currentElY + currentElH > containerElSize.height
+          _limit.value.inContainer &&
+          (currentElX < 0 ||
+            currentElY < 0 ||
+            currentElX + currentElW > containerElSize.width ||
+            currentElY + currentElH > containerElSize.height)
         ) {
           // 拖动元素超出了父级容器
           // 拖动元素 在父级容器内的 区域 的左上角点
@@ -451,13 +508,16 @@ export function useDragAndScale(
       }
     }
 
-    const currentElX = Math.round(elX + dX)
-    const currentElY = Math.round(elY + dY)
-    const currentElW = Math.round(elWidth + dW)
-    const currentElH = Math.round(elHeight + dH)
+    const currentElX = elX + dX
+    const currentElY = elY + dY
+    const currentElW = elWidth + dW
+    const currentElH = elHeight + dH
 
     _options.value.onChange &&
       _options.value.onChange({
+        type: effectDirection.center ? 'move' : 'scale',
+        deltaX: curOperatePoint.x - lastOperatePoint.x,
+        deltaY: curOperatePoint.y - lastOperatePoint.y,
         elX: currentElX,
         elY: currentElY,
         elWidth: currentElW,
@@ -470,7 +530,21 @@ export function useDragAndScale(
   }
 
   function onEnd() {
+    lastOperatePoint = {
+      x: 0,
+      y: 0
+    }
+    curOperatePoint = {
+      x: 0,
+      y: 0
+    }
+    if (_disabled.value || isOperateStart !== true || !isMoved) {
+      isOperateStart = false
+      isMoved = false
+      return
+    }
     isOperateStart = false
+    isMoved = false
     _options.value.onFinish && _options.value.onFinish()
   }
 
@@ -485,15 +559,28 @@ export function useDragAndScale(
       x: clientX,
       y: clientY
     })
+    document.body.addEventListener('touchcancel', onTouchEnd, { capture: true })
+    document.body.addEventListener('touchmove', onTouchMove, { capture: true })
+    document.body.addEventListener('touchend', onTouchEnd, { capture: true })
   }
 
   function onTouchMove(e: TouchEvent) {
+    if (_disabled.value || isOperateStart !== true) {
+      isOperateStart = false
+      return
+    }
     e.preventDefault()
     e.stopPropagation()
     if (e.touches.length > 1) {
+      onEnd()
       return
     }
     const { clientX, clientY } = e.touches[0]
+
+    // 和起始点相同，不调用onMove
+    if (clientX === startPoint.x && clientY === startPoint.y) {
+      return
+    }
 
     onMove({
       x: clientX,
@@ -502,13 +589,21 @@ export function useDragAndScale(
   }
 
   function onTouchEnd() {
+    document.body.removeEventListener('touchmove', onTouchMove)
+    document.body.removeEventListener('touchend', onTouchEnd)
+    document.body.removeEventListener('touchcancel', onTouchEnd)
+    if (_disabled.value || isOperateStart !== true) {
+      isOperateStart = false
+      isMoved = false
+      return
+    }
     onEnd()
   }
 
   function onMouseDown(e: MouseEvent) {
     e.preventDefault()
     // 非左键按下
-    if (e.buttons !== 1) {
+    if ((e.buttons & 1) === 0) {
       return
     }
     const { clientX, clientY } = e
@@ -517,12 +612,18 @@ export function useDragAndScale(
       x: clientX,
       y: clientY
     })
+    document.body.addEventListener('mousemove', onMouseMove, { capture: true })
+    document.body.addEventListener('mouseup', onMouseUp, { capture: true })
   }
 
   function onMouseMove(e: MouseEvent) {
+    if (_disabled.value || isOperateStart !== true) {
+      isOperateStart = false
+      return
+    }
     e.preventDefault()
     // 非左键按下
-    if (e.buttons !== 1) {
+    if ((e.buttons & 1) === 0) {
       onEnd()
       return
     }
@@ -535,6 +636,12 @@ export function useDragAndScale(
   }
 
   function onMouseUp() {
+    document.body.removeEventListener('mousemove', onMouseMove)
+    document.body.removeEventListener('mouseup', onMouseUp)
+    if (_disabled.value || isOperateStart !== true) {
+      isOperateStart = false
+      return
+    }
     onEnd()
   }
 
@@ -542,13 +649,8 @@ export function useDragAndScale(
     removeEvent()
     if (isMobile) {
       _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
-      document.body.addEventListener('touchcancel', onTouchEnd, { capture: true })
-      document.body.addEventListener('touchmove', onTouchMove, { capture: true })
-      document.body.addEventListener('touchend', onTouchEnd, { capture: true })
     } else {
       _operateEl.value.addEventListener('mousedown', onMouseDown)
-      document.body.addEventListener('mousemove', onMouseMove, { capture: true })
-      document.body.addEventListener('mouseup', onMouseUp, { capture: true })
     }
   }
 
