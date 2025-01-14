@@ -39,6 +39,12 @@ import Demo from '@/components/DragAndDrop/Demo.vue'
 DragType: string | number | symbol
 ```
 
+## Draggable 插槽
+
+|   名称       |        说明          |
+| :----------- | :------------------ |
+| default      | 默认内容             |
+
 ## Droppable 属性
 
 |  属性名   |        说明         |      类型      |    默认值     |
@@ -62,3 +68,9 @@ Point: {
   y: string
 }
 ```
+
+## Droppable 插槽
+
+|   名称       |        说明          |
+| :----------- | :------------------ |
+| default      | 默认内容             |
