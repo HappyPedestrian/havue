@@ -71,7 +71,7 @@ export type ReturnType = {
   setOneVideoPausedState: (paused: boolean) => void
   /** 设置所有WebSocket视频流的视频是否暂停 */
   setAllVideoPausedState: (paused: boolean) => void
-  /** 刷新当前WebSocket视频流的时间 */
+  /** 刷新当前WebSocket视频流的时间，如果连接断开会进行重连 */
   refresh: () => void
 }
 

@@ -89,7 +89,7 @@ export type ReturnType = {
   setOneVideoPausedState: (paused: boolean) => void
   /** 设置所有WebSocket视频流的视频是否暂停 */
   setAllVideoPausedState: (paused: boolean) => void
-  /** 刷新当前WebSocket视频流的时间 */
+  /** 刷新当前WebSocket视频流的时间，如果连接断开会进行重连 */
   refresh: () => void
 }
 
@@ -180,12 +180,21 @@ type WebSocketOptionsType = {
   interrupt?: InterruptConfigType
 }
 
-type RenderConstructorOptionType = {
-  /** 当前播放currentTime和最新视频时长最多相差 秒数，默认0.3s */
+export type RenderConstructorOptionType = {
+  /** 当前播放currentTime和最新视频时长最多相差 秒数，
+   * 默认0.3s，
+   * 可更加实际流每次传递的时长情况进行调整，
+   * 设置太小可能会导致卡顿 
+   */
   liveMaxLatency: number
-  /** 最多缓存ws传输的未处理的buffer数据大小, 默认40kb */
+  /** 最多缓存ws传输的未处理的buffer数据大小, 
+   * 默认200kb
+   */
   maxCacheBufByte: number
-  /** 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据, 默认10s */
+  /** 最多存储的时间，
+   * 用于清除在currentTime之前x秒时间节点前的buffer数据, 
+   * 默认10s 
+   */
   maxCache: number
 }
 
@@ -211,7 +220,7 @@ class WsVideoManager {
 | :-------------------- | :---------------------------- | :-------------|
 | linkedUrlList         | 已连接的websocket地址列表      | `string[]` |
 | connectLimit          | 当前实例限制的WebSocket连接数量 | `number`   |
-| addCanvas             | 添加WebSocket地址以及需要绘制的cannvas元素  | `(canvas: HTMLCanvasElement, url: string) => void`       |
+| addCanvas             | 添加WebSocket地址以及需要绘制的cannvas元素  | `(canvas: HTMLCanvasElement, url: string, renderOptions?: Partial<RenderConstructorOptionType>) => void`       |
 | removeCanvas          | 移除需要绘制cannvas元素        | `(canvas: HTMLCanvasElement) => void`       |
 | isCanvasExist         | 判断canvas是否存在             | `(canvas: HTMLCanvasElement) => boolean`       |
 | updateRenderOptions   | 更新render实例配置           | `(url: string, options?: Partial<RenderConstructorOptionType>) => void`|
@@ -233,11 +242,12 @@ class WsVideoManager {
 
 |      事件                                     |        说明       |      类型      |
 | :-------------------------------------------- | :--------------- | :-------------|
-| `WsVideoManagerEventEnums.WS_URL_CHANGE`      | 已经添加的WebSocket连接地址列表更新 | `(urls: string[]) => void` |
-| `WsVideoManagerEventEnums.AUDIO_STATE_CHANGE` | 视频静音状态更改  | `(url: string, state: AudioState) => void`  |
-| `WsVideoManagerEventEnums.VIDEO_STATE_CHANGE` | 视频播放状态更改  | `(url: string, state: VideoState) => void`  |
-| `WsVideoManagerEventEnums.SOCKET_CLOSE` | WebSocket连接断开  | `(url: string) => void`  |
-| `WsVideoManagerEventEnums.CONNECT_LIMIT` | WebSocket连接数量超过限制  | `() => void`  |
+| `wsUrlChange`      | 已经添加的WebSocket连接地址列表更新 | `(urls: string[]) => void` |
+| `audioStateChange` | 视频静音状态更改  | `(url: string, state: AudioState) => void`  |
+| `videoStateChange` | 视频播放状态更改  | `(url: string, state: VideoState) => void`  |
+| `videoInfoUpdate`  | 视频尺寸信息更新  | `(url: string, state: VideoInfo) => void`  |
+| `socketClose`      | WebSocket连接断开  | `(url: string) => void`  |
+| `connectLimit`     | WebSocket连接数量超过限制  | `() => void`  |
 
 ```ts
 export enum AudioState {
@@ -250,21 +260,8 @@ export enum VideoState {
   PAUSE = 'pause'
 }
 
-export type RenderConstructorOptionType = {
-  /** 当前播放currentTime和最新视频时长最多相差 秒数，
-   * 默认0.3s，
-   * 可更加实际流每次传递的时长情况进行调整，
-   * 设置太小可能会导致卡顿 
-   */
-  liveMaxLatency: number
-  /** 最多缓存ws传输的未处理的buffer数据大小, 
-   * 默认200kb
-   */
-  maxCacheBufByte: number
-  /** 最多存储的时间，
-   * 用于清除在currentTime之前x秒时间节点前的buffer数据, 
-   * 默认10s 
-   */
-  maxCache: number
+export type VideoInfo = {
+  width: number
+  height: number
 }
 ```
