@@ -3,13 +3,13 @@ import { computed, isRef, watch, toValue, onBeforeUnmount } from 'vue'
 import { isMobile } from '@/utils/platform'
 
 export type UseDragAndScaleOptions = {
-  container: HTMLElement
+  container: HTMLElement | undefined | null
   containerRealSize?: {
     width: number
     height: number
   }
   scaleAreaWidth?: number
-  keepRatio?: boolean | KeepRatioType
+  keepRatio?: boolean | Partial<KeepRatioType>
   limit?: {
     inContainer?: boolean
     minWidth?: number
@@ -208,8 +208,8 @@ export function useDragAndScale(
     } = _containerEl.value.getBoundingClientRect()
 
     Object.assign(containerElSize, {
-      width: Math.round(containerWidth),
-      height: Math.round(containerHeight)
+      width: containerWidth,
+      height: containerHeight
     })
     // 是否需要转换 为真实大小
     if (_containerRealSize.value) {

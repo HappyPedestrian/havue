@@ -60,13 +60,13 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 | containerRealSize.height | 容器现实实际高        | `number`        | —           |
 | keepRatio?                | 保持宽高比配置        | `object`        | —           |
 | keepRatio.enable         | 是否保持宽高比        | `boolean`       | `false`       |
-| keepRatio.scaleCase      | 缩放时使用最大改动值还是最小改动值      | `'min' \| 'max'`  |     `'min'`     |
+| keepRatio?.scaleCase      | 缩放时使用最大改动值还是最小改动值      | `'min' \| 'max'`  |     `'min'`     |
 | limit?                   | 限制缩放的尺寸        | `object`        |  —          |
-| limit.inContainer        | 限制缩放在父元素内部   | `boolean`      |  `true`      |
-| limit.minWidth           | 限制缩放的最小宽度     | `number`       | `0`           |
-| limit.minHeight          | 限制缩放的最小高度     | `number`       | `0`           |
-| limit.maxWidth           | 限制缩放的最大宽度     | `number`       | `Infinity`           |
-| limit.maxHeight          | 限制缩放的最大高度     | `number`       | `Infinity`           |
+| limit?.inContainer        | 限制缩放在父元素内部   | `boolean`      |  `true`      |
+| limit?.minWidth           | 限制缩放的最小宽度     | `number`       | `0`           |
+| limit?.minHeight          | 限制缩放的最小高度     | `number`       | `0`           |
+| limit?.maxWidth           | 限制缩放的最大宽度     | `number`       | `Infinity`           |
+| limit?.maxHeight          | 限制缩放的最大高度     | `number`       | `Infinity`           |
 | disabled?                | 是否禁用              | `boolean`       | `false`           |
 
 ## 事件
