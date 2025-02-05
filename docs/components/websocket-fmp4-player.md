@@ -203,10 +203,18 @@ export type WsVideoManaCstorOptionType = {
   connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
-  /** websocket重连时，重新解析视频编码方式 */
+  /**
+   * websocket重连时，重新解析视频编码方式，
+   * 默认 true
+   */
   reparseMimeOnReconnect?: boolean
   /** Render 实例配置 */
   renderOptions?: Partial<RenderConstructorOptionType>
+  /**
+   * 是否使用WebGL，
+   * 默认 false，
+   * WebGL在不同游览器，以及受限于显存，不能同时创建过多WebGL上下文，一般8-16个 */
+  useWebgl?: boolean
 }
 
 class WsVideoManager {

@@ -4,16 +4,25 @@ import type { WebSocketOptionsType } from '../loader/websocket-loader'
 import type { RenderConstructorOptionType, VideoInfo } from '../render'
 import { WebSocketLoader } from '../loader'
 import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS, RenderEventsEnum, AudioState, VideoState } from '../render'
+import { CanvasDrawer } from '../render/drawer'
 
 export type WsVideoManaCstorOptionType = {
   /** 预监流连接数量限制, 移动端默认10个，pc端默认32个 */
   connectLimit?: number
   /** WebSocketLoader 实例配置 */
   wsOptions?: WebSocketOptionsType
-  /** websocket重连时，重新解析视频编码方式 */
+  /**
+   * websocket重连时，重新解析视频编码方式，
+   * 默认 true
+   */
   reparseMimeOnReconnect?: boolean
   /** Render 实例配置 */
   renderOptions?: Partial<RenderConstructorOptionType>
+  /**
+   * 是否使用WebGL，
+   * 默认 false，
+   * WebGL在不同游览器，以及受限于显存，不能同时创建过多WebGL上下文，一般8-16个 */
+  useWebgl?: boolean
 }
 
 const DEFAULT_OPTIONS: Required<WsVideoManaCstorOptionType> = Object.freeze({
@@ -22,12 +31,13 @@ const DEFAULT_OPTIONS: Required<WsVideoManaCstorOptionType> = Object.freeze({
     binaryType: 'arraybuffer' as WebSocket['binaryType']
   },
   reparseMimeOnReconnect: true,
-  renderOptions: RENDER_DEFAULT_OPTIONS
+  renderOptions: RENDER_DEFAULT_OPTIONS,
+  useWebgl: false
 })
 
 type WsInfoType = {
   /** 需要绘制的canvas列表 */
-  canvasSet: Set<HTMLCanvasElement>
+  canvasMap: Map<HTMLCanvasElement, CanvasDrawer>
   /** WebSocketLoader 实例 */
   socket: WebSocketLoader
   /** socket连接渲染render实例 */
@@ -76,21 +86,16 @@ export class WsVideoManager extends EventBus<Events> {
     this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
     const render = () => {
       this._wsInfoMap.forEach((item) => {
-        const { render, canvasSet } = item
+        const { render, canvasMap } = item
 
         if (!render) {
           return
         }
         const { videoEl, paused } = render
-        if (videoEl && !paused && canvasSet.size) {
-          ;[...canvasSet].forEach((canvas) => {
-            const ctx = canvas.getContext('2d')
-            if (!ctx) {
-              return
-            }
-            ctx.fillStyle = 'black'
-            ctx.fillRect(0, 0, canvas.width, canvas.height)
-            ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height)
+        if (videoEl && !paused && canvasMap.size) {
+          const values = canvasMap.values()
+          ;[...values].forEach((drawer) => {
+            drawer.draw(videoEl)
           })
         }
       })
@@ -119,7 +124,7 @@ export class WsVideoManager extends EventBus<Events> {
     const render = new Render(Object.assign({}, this._option.renderOptions, renderOptions))
     const wsInfo: WsInfoType = {
       socket,
-      canvasSet: new Set(),
+      canvasMap: new Map(),
       render: render
     }
 
@@ -218,14 +223,14 @@ export class WsVideoManager extends EventBus<Events> {
     if (!wsInfo) {
       return
     }
-    const { canvasSet } = wsInfo
-    if (!canvasSet) {
-      wsInfo.canvasSet = new Set([canvas])
+    const { canvasMap } = wsInfo
+    if (!canvasMap) {
+      wsInfo.canvasMap = new Map([[canvas, new CanvasDrawer(canvas, this._option.useWebgl)]])
     } else {
-      canvasSet.add(canvas)
+      canvasMap.set(canvas, new CanvasDrawer(canvas, this._option.useWebgl))
     }
 
-    this._setupCanvas(canvas)
+    // this._setupCanvas(canvas)
   }
 
   /**
@@ -233,14 +238,14 @@ export class WsVideoManager extends EventBus<Events> {
    * @param canvas canvas元素
    * @returns
    */
-  private _setupCanvas(canvas: HTMLCanvasElement) {
-    const ctx = canvas.getContext('2d')
-    if (!ctx) {
-      return
-    }
-    ctx.fillStyle = 'black'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-  }
+  // private _setupCanvas(canvas: HTMLCanvasElement) {
+  //   const ctx = canvas.getContext('2d')
+  //   if (!ctx) {
+  //     return
+  //   }
+  //   ctx.fillStyle = 'black'
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height)
+  // }
 
   /**
    * 删除canvas元素
@@ -250,10 +255,11 @@ export class WsVideoManager extends EventBus<Events> {
     const entries = this._wsInfoMap.entries()
     const entriesList = [...entries]
     entriesList.some(([url, wsInfo]) => {
-      const { canvasSet } = wsInfo
-      if (canvasSet.has(canvas)) {
-        canvasSet.delete(canvas)
-        if (canvasSet.size === 0) {
+      const { canvasMap } = wsInfo
+      if (canvasMap.has(canvas)) {
+        canvasMap.get(canvas)?.destroy()
+        canvasMap.delete(canvas)
+        if (canvasMap.size === 0) {
           this._removeSocket(url)
         }
         return true
@@ -267,10 +273,9 @@ export class WsVideoManager extends EventBus<Events> {
    * @returns boolean
    */
   public isCanvasExist(canvas: HTMLCanvasElement): boolean {
-    const entries = this._wsInfoMap.entries()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return [...entries].some(([_, info]) => {
-      return info.canvasSet.has(canvas)
+    const values = this._wsInfoMap.values()
+    return [...values].some((info) => {
+      return info.canvasMap.has(canvas)
     })
   }
 
@@ -390,10 +395,15 @@ export class WsVideoManager extends EventBus<Events> {
    */
   public destroy() {
     this._wsInfoMap.forEach((wsInfo) => {
-      const { socket, render } = wsInfo
+      const { socket, render, canvasMap } = wsInfo
       socket.close()
       socket.destroy()
       render.destroy()
+
+      canvasMap.forEach((drawer) => {
+        drawer.destroy()
+      })
+      canvasMap.clear()
     })
     this._wsInfoMap.clear()
     this._emitWsUrlListChange()
