@@ -84,7 +84,9 @@ export class Render extends EventBus<RenderEvents> {
   }
 
   set muted(val: boolean) {
-    this._videoEl && (this._videoEl.muted = val)
+    if (this._videoEl) {
+      this._videoEl.muted = val
+    }
   }
 
   set paused(paused: boolean) {
@@ -140,7 +142,9 @@ export class Render extends EventBus<RenderEvents> {
         }
       }
     }
-    this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
+    if (this._cacheAnimationID) {
+      cancelAnimationFrame(this._cacheAnimationID)
+    }
     this._cacheAnimationID = undefined
     this._cache()
   }
@@ -375,7 +379,9 @@ export class Render extends EventBus<RenderEvents> {
       !this._bufsQueue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      this._cacheAnimationID === undefined && (this._cacheAnimationID = requestAnimationFrame(() => this._cache()))
+      if (this._cacheAnimationID === undefined) {
+        this._cacheAnimationID = requestAnimationFrame(() => this._cache())
+      }
       return
     }
     if (this._videoEl.error) {
@@ -419,7 +425,9 @@ export class Render extends EventBus<RenderEvents> {
   /** 重置解析的视频mime type */
   public resetMimeType() {
     this.destroyMediaSource()
-    this._videoEl && (this._videoEl.src = '')
+    if (this._videoEl) {
+      this._videoEl.src = ''
+    }
     this._mp4box = MP4Box.createFile()
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
     this._bufsQueue.length = 0
@@ -432,9 +440,10 @@ export class Render extends EventBus<RenderEvents> {
         this._videoEl.src = ''
       }
       if (this._mediaSource.readyState === 'open') {
-        this._sourceBuffer && this._sourceBuffer.abort()
-
-        this._sourceBuffer && this._mediaSource.removeSourceBuffer(this._sourceBuffer)
+        if (this._sourceBuffer) {
+          this._sourceBuffer.abort()
+          this._mediaSource.removeSourceBuffer(this._sourceBuffer)
+        }
         this._mediaSource.endOfStream()
       }
 
@@ -461,7 +470,9 @@ export class Render extends EventBus<RenderEvents> {
 
     this._mimeType = ''
 
-    this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
+    if (this._cacheAnimationID) {
+      cancelAnimationFrame(this._cacheAnimationID)
+    }
     this._cacheAnimationID = undefined
 
     this.destroyMediaSource()

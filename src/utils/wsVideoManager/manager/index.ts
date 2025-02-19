@@ -83,7 +83,9 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   private _setAnimate() {
-    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+    if (this._reqAnimationID) {
+      cancelAnimationFrame(this._reqAnimationID)
+    }
     const render = () => {
       this._wsInfoMap.forEach((item) => {
         const { render, canvasMap } = item
@@ -177,12 +179,16 @@ export class WsVideoManager extends EventBus<Events> {
    */
   private _bindSocketEvent(socket: WebSocketLoader, render: Render, url: string) {
     socket.on('close', () => {
-      this._option.reparseMimeOnReconnect && render.resetMimeType()
+      if (this._option.reparseMimeOnReconnect) {
+        render.resetMimeType()
+      }
       this.emit(EventEnums.SOCKET_CLOSE, url)
     })
 
     socket.on('reconnect', () => {
-      this._option.reparseMimeOnReconnect && render.resetMimeType()
+      if (this._option.reparseMimeOnReconnect) {
+        render.resetMimeType()
+      }
     })
 
     socket.on('message', (event: WebSocketEventMap['message']) => {
@@ -193,10 +199,14 @@ export class WsVideoManager extends EventBus<Events> {
   private _emitWsUrlListChange() {
     this.emit(EventEnums.WS_URL_CHANGE, [...this._wsInfoMap.keys()])
     if (this._wsInfoMap.size) {
-      !this._reqAnimationID && this._setAnimate()
+      if (!this._reqAnimationID) {
+        this._setAnimate()
+      }
     } else {
-      this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
-      this._reqAnimationID = null
+      if (this._reqAnimationID) {
+        cancelAnimationFrame(this._reqAnimationID)
+        this._reqAnimationID = null
+      }
     }
   }
 
@@ -407,7 +417,9 @@ export class WsVideoManager extends EventBus<Events> {
     })
     this._wsInfoMap.clear()
     this._emitWsUrlListChange()
-    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
-    this._reqAnimationID = null
+    if (this._reqAnimationID) {
+      cancelAnimationFrame(this._reqAnimationID)
+      this._reqAnimationID = null
+    }
   }
 }
