@@ -28,3 +28,6 @@ components.d.ts
 auto-imports.d.ts
 
 docs/.vitepress/cache/*
+
+# Optional eslint cache
+.eslintcache
