@@ -9,7 +9,9 @@ Droppable表示一个可放置拖动元素的区域
 
 ## 示例
 
-左侧标签块为Draggalbe元素，文本显示其类型和大小，右侧有两个Droppable区域，green标签块只能拖放到green区域，yellow标签块只能拖放到yellow区域
+左侧标签块为Draggalbe元素，文本显示其类型和大小，灰色Draggalbe元素设置了`immediate="right"`,可向右立即拖动，
+
+右侧有两个Droppable区域，green标签块只能拖放到green区域，yellow标签块只能拖放到yellow区域,
 
 <script setup lang="ts">
 import Demo from '@/components/DragAndDrop/Demo.vue'
@@ -32,11 +34,14 @@ import Demo from '@/components/DragAndDrop/Demo.vue'
 |  属性名   |        说明         |      类型      |    默认值     |
 | :------- | :------------------ | :-------------| :----------- |
 | type     | 拖拽元素类型         | `DragType`      | -            |
-| disabled | 是否禁用             | `any`          | -            |
-| data     | 拖拽元素相关数据，供Droppable使用  | `any`    | -      |
+| immediate? | 拖拽元素立即响应拖动的方向，默认需要长按拖动   | `ImmediateType \| ImmediateType[]`      | -            |
+| disabled? | 是否禁用             | `boolean`          | -            |
+| data?     | 拖拽元素相关数据，供Droppable使用  | `any`    | -      |
 
 ```ts
-DragType: string | number | symbol
+type DragType: string | number | symbol
+
+type ImmediateType = 'left' | 'right' | 'top' | 'bottom' | 'all' | undefined
 ```
 
 ## Draggable 插槽

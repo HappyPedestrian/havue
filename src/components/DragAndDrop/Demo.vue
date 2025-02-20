@@ -4,8 +4,8 @@
     <div class="left-box">
       <p>下列卡片可拖动：</p>
       <div class="top-drag-list-box">
-        <Draggable :type="item.type" v-for="item in DragItems" :data="item">
-          <div class="drag-box">{{ item.type }}: {{ `${item.width} * ${item.height}` }}</div>
+        <Draggable :type="item.type" v-for="(item, i) in DragItems" :data="item" :key="i" :immediate="item.immediate">
+          <div class="drag-box" :style="item.style">{{ item.type }}: {{ `${item.width} * ${item.height}` }}</div>
         </Draggable>
       </div>
     </div>
@@ -102,13 +102,17 @@ const previewData = ref()
 const DragItems = reactive(
   Array(40)
     .fill(0)
-    .map(() => {
+    .map((_, i) => {
       let random1 = Math.round(Math.random() * 50)
       let random2 = Math.round(Math.random() * 50)
       return {
         type: random1 % 2 === 0 ? 'green' : 'yellow',
         width: random1 + 150,
-        height: random2 + 50
+        height: random2 + 50,
+        immediate: i % 2 == 0 ? ('right' as const) : undefined,
+        style: {
+          background: i % 2 == 0 ? 'gray' : ''
+        }
       }
     })
 )

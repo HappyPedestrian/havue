@@ -9,6 +9,8 @@ export type Point = {
 export type DragType = string | number | symbol
 
 type Events = {
+  down: (p: Point) => void
+  'first-move': (p: Point, e: MouseEvent | TouchEvent) => void
   start: (p: Point) => void
   move: (params: { type: DragType; data: any; point: Point }) => void
   end: (params: { type: DragType; data: any; point: Point }) => void
@@ -23,6 +25,8 @@ export class DnDManager extends EventBus<Events> {
    * 供Droppable使用
    */
   public dragData: any
+
+  private isSendFirstMovePos = false
 
   /** 移动端长按一定时间才触发 onStart */
   private touchStartPressTime = 300
@@ -47,6 +51,29 @@ export class DnDManager extends EventBus<Events> {
     this.isDragStart = true
     this.dragType = type
     this.dragData = data
+
+    this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
+    this.emitTouchStartTimer = undefined
+  }
+
+  /**
+   * 通知 Draggable 开始点击
+   * @param point
+   */
+  private onDown(point: Point) {
+    this.emit('down', point)
+  }
+
+  /**
+   * 通知 Draggable 拖拽开始
+   * @param point
+   */
+  private onFirstMove(point: Point, e: MouseEvent | TouchEvent) {
+    if (this.isDragStart) {
+      return
+    }
+    this.isSendFirstMovePos = true
+    this.emit('first-move', point, e)
   }
 
   /**
@@ -54,6 +81,9 @@ export class DnDManager extends EventBus<Events> {
    * @param point
    */
   private onStart(point: Point) {
+    if (this.isDragStart) {
+      return
+    }
     this.emit('start', point)
   }
 
@@ -81,6 +111,7 @@ export class DnDManager extends EventBus<Events> {
   private onEnd() {
     this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
     this.emitTouchStartTimer = undefined
+    this.isSendFirstMovePos = false
     if (!this.isDragStart || !this.dragType) {
       return
     }
@@ -107,7 +138,10 @@ export class DnDManager extends EventBus<Events> {
 
     this.touchStartTime = Date.now()
     this.touchStartPosition = position
+
     this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
+
+    this.onDown(position)
     // 300ms后调用onStart（如果在此期间没有移动超过30px）
     this.emitTouchStartTimer = window.setTimeout(() => {
       this.onStart(position)
@@ -135,6 +169,15 @@ export class DnDManager extends EventBus<Events> {
         y: clientY
       })
     } else {
+      if (!this.isSendFirstMovePos) {
+        this.onFirstMove(
+          {
+            x: clientX,
+            y: clientY
+          },
+          e
+        )
+      }
       // touch 300ms内移动了超过30px，认为不是拖拽
       const { x, y } = this.touchStartPosition
       const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
@@ -165,6 +208,7 @@ export class DnDManager extends EventBus<Events> {
     }
     this.touchStartTime = Date.now()
     this.touchStartPosition = position
+    this.onDown(position)
     // 300ms后调用onStart（如果在此期间没有移动超过30px）
     this.emitTouchStartTimer = window.setTimeout(() => {
       this.onStart(position)
@@ -184,6 +228,15 @@ export class DnDManager extends EventBus<Events> {
         y: clientY
       })
     } else {
+      if (!this.isSendFirstMovePos) {
+        this.onFirstMove(
+          {
+            x: clientX,
+            y: clientY
+          },
+          e
+        )
+      }
       // touch 300ms内移动了超过30px，认为不是拖拽
       const { x, y } = this.touchStartPosition
       const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
