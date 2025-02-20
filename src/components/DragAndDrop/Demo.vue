@@ -235,6 +235,7 @@ function onDrop(type: DragType, point: Point, data: any) {
         width: 130px;
         height: 50px;
         color: white;
+        user-select: none;
         background-color: black;
       }
     }

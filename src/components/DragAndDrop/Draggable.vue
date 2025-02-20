@@ -79,7 +79,9 @@ DnDManagerInstance.on('down', (params) => {
 
 DnDManagerInstance.on('first-move', (params, event) => {
   const { x, y } = params
-  if (isDownThis.value && !props.disabled) {
+  const directions = immediateDirections.value.filter((item) => item !== ImmediateEnumType.ALL)
+
+  if (isDownThis.value && !props.disabled && directions.length) {
     const distanceH = x - downPosition.x
     const distanceHAbs = Math.abs(distanceH)
     const distanceV = y - downPosition.y
@@ -90,12 +92,22 @@ DnDManagerInstance.on('first-move', (params, event) => {
     const isMaxH = distanceHAbs === max
     const isMaxV = distanceVAbs === max
 
-    const directions = immediateDirections.value
-    const isLeft = directions.includes(ImmediateEnumType.LEFT) && isMaxH && distanceH < 0
-    const isRight = directions.includes(ImmediateEnumType.RIGHT) && isMaxH && distanceH > 0
-    const isTop = directions.includes(ImmediateEnumType.TOP) && isMaxV && distanceV < 0
-    const isBottom = directions.includes(ImmediateEnumType.BOTTOM) && isMaxV && distanceV > 0
-    if (isLeft || isRight || isTop || isBottom) {
+    /** 是否立即响应拖动 */
+    let isImmediate = false
+
+    if (isMaxH) {
+      isImmediate =
+        (directions.includes(ImmediateEnumType.LEFT) && distanceH < 0) ||
+        (directions.includes(ImmediateEnumType.RIGHT) && distanceH > 0)
+    }
+
+    if (isMaxV && !isImmediate) {
+      isImmediate =
+        (directions.includes(ImmediateEnumType.TOP) && distanceV < 0) ||
+        (directions.includes(ImmediateEnumType.BOTTOM) && distanceV > 0)
+    }
+
+    if (isImmediate) {
       event.preventDefault()
       event.stopPropagation()
       handleStart(downPosition)
