@@ -37,25 +37,30 @@ useVideoPlay({
 .form-box {
   padding: 15px;
   background: #25465845;
+
   .form-item {
     margin-bottom: 5px;
+
     .label {
-      margin-right: 20px;
       display: inline-block;
       width: 120px;
+      margin-right: 20px;
       text-align: right;
     }
+
     input {
       padding: 1px 8px;
       border: 1px solid gray;
     }
   }
 }
+
 .video-player {
   background: #578895;
+
   canvas {
-    height: 100%;
     width: 100%;
+    height: 100%;
   }
 }
 </style>

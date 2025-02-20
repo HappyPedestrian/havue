@@ -164,27 +164,34 @@ function handleHsvColorChange() {
 <style lang="scss" scoped>
 .color-form {
   gap: 12px;
+
   .mb-12 {
     margin-bottom: 12px;
   }
+
   :deep(.el-input) {
     --el-input-border-color: #30343b;
+
     .el-input__wrapper {
-      padding-left: 10px;
       padding-right: 10px;
+      padding-left: 10px;
       background-color: #101114;
       border-radius: 2px;
+
       .el-input__inner {
         text-align: left;
       }
     }
   }
+
   .form-group {
     display: flex;
     align-items: center;
+
     .label {
       width: 72px;
     }
+
     :deep(.el-input) {
       flex: 1;
     }

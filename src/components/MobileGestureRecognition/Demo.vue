@@ -66,15 +66,15 @@ const { operateBoxRef } = useOperateTransform(originRect, undefined, {
   position: relative;
   width: 480px;
   height: 270px;
-  background-color: rgb(41, 109, 86);
   overflow: hidden;
+  background-color: rgb(41 109 86);
 
   .point {
+    position: absolute;
     width: 10px;
     height: 10px;
-    border-radius: 50%;
     background-color: #fff;
-    position: absolute;
+    border-radius: 50%;
     transform: translate(-50%, -50%);
   }
 }

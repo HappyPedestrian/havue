@@ -207,53 +207,62 @@ function onDrop(type: DragType, point: Point, data: any) {
 // #region style
 <style lang="scss" scoped>
 .dnd-demo {
+  display: flex;
   width: 100%;
   height: 700px;
-  background-color: rgba(20, 177, 177, 0.416);
   overflow: auto;
-  display: flex;
+  background-color: rgb(20 177 177 / 41.6%);
+
   p {
     margin: 5px;
   }
+
   .left-box {
-    background-color: rgba(162, 101, 22, 0.694);
     width: 30%;
     height: 100%;
     margin-right: 15px;
     overflow: auto;
+    background-color: rgb(162 101 22 / 69.4%);
+
     .top-drag-list-box {
-      padding: 10px;
       display: flex;
-      justify-content: flex-start;
       flex-wrap: wrap;
       gap: 20px;
+      justify-content: flex-start;
+      padding: 10px;
+
       .drag-box {
-        height: 50px;
         width: 130px;
+        height: 50px;
         color: white;
         background-color: black;
       }
     }
   }
+
   .right-box {
     flex: 1;
+
     .drop-box {
       position: relative;
       width: 400px;
       height: 300px;
-      background-color: rgb(11, 104, 28);
       overflow: hidden;
+      background-color: rgb(11 104 28);
+
       &.yellow {
-        background-color: rgb(188, 149, 21);
+        background-color: rgb(188 149 21);
       }
+
       .preview-box {
         position: absolute;
-        background-color: rgba(127, 255, 212, 0.3);
+        background-color: rgb(127 255 212 / 30%);
         transform: translate(-50%, -50%);
       }
+
       .inner-box-item {
         position: absolute;
-        background-color: rgba(143, 10, 65, 0.466);
+        background-color: rgb(143 10 65 / 46.6%);
       }
     }
   }

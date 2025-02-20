@@ -115,16 +115,18 @@ function handleChange2(params: ChangeResultType) {
   box-sizing: border-box;
   width: 100%;
   height: 400px;
-  background-color: rgb(71, 121, 105);
   overflow: hidden;
+  background-color: rgb(71 121 105);
+
   .drag-box {
     position: absolute;
-    background-color: rgb(26, 24, 24);
+    background-color: rgb(26 24 24);
+
     .inner-box {
-      height: 100%;
       width: 100%;
-      white-space: nowrap;
+      height: 100%;
       overflow: hidden;
+      white-space: nowrap;
       user-select: none;
     }
   }

@@ -158,12 +158,12 @@ function handleMove(point: Point) {
 
 .draggable-clone-item {
   position: fixed;
-  z-index: 99999;
   top: 0;
   left: 0;
+  z-index: 99999;
   width: fit-content;
-  opacity: 0.8;
   cursor: grabbing;
+  opacity: 0.8;
   will-change: transform;
 }
 </style>

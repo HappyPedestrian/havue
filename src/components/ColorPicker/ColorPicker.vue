@@ -134,46 +134,50 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .color-picker {
+  box-sizing: border-box;
   width: 264px;
   padding: 12px;
-  color: #fff;
   font-size: 12px;
+  color: #fff;
   background-color: #212326;
   border: 1px solid #353d46;
   border-radius: 4px;
-  box-shadow: 0px 12px 24px 0px #00000080;
-  box-sizing: border-box;
+  box-shadow: 0 12px 24px 0 #00000080;
+
   .title {
-    font-weight: bold;
     margin-bottom: 12px;
+    font-weight: bold;
   }
+
   .color-area__wrapper {
     width: auto;
     border: 5px solid #000;
     border-radius: 3px;
+
     .color-area {
       position: relative;
-
       width: auto;
       height: 168px;
-      background-color: #000;
       overflow: hidden;
+      background-color: #000;
+
       canvas {
-        height: 100%;
         width: 100%;
+        height: 100%;
       }
+
       .cur-color-circle {
-        box-sizing: border-box;
         position: absolute;
-        height: 18px;
+        box-sizing: border-box;
         width: 18px;
+        height: 18px;
         border: 3px solid #dcdcdc;
         border-radius: 50%;
-        transform: translate(-50%, -50%);
         box-shadow:
-          0px 2px 4px -1px #0000001f,
-          0px 4px 5px 0px #00000014,
-          0px 1px 10px 0px #0000000d;
+          0 2px 4px -1px #0000001f,
+          0 4px 5px 0 #00000014,
+          0 1px 10px 0 #0000000d;
+        transform: translate(-50%, -50%);
       }
     }
   }
@@ -183,34 +187,40 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .origin-color {
-      margin-left: 12px;
       width: 18px;
       height: 18px;
+      margin-left: 12px;
       border-radius: 2px;
     }
   }
+
   :deep(.el-slider) {
     box-sizing: border-box;
+
     .el-slider__runway {
       width: 210px;
       height: 8px;
       background: var(--el-slider-runway-bg-color);
+
       .el-slider__bar {
         background-color: transparent;
       }
+
       .el-slider__button-wrapper {
         .el-slider__button {
           box-sizing: border-box;
-          height: 18px;
           width: 18px;
+          height: 18px;
+          background-color: var(--el-slider-main-bg-color);
           border-color: #fff;
           border-width: 3px;
-          background-color: var(--el-slider-main-bg-color);
         }
       }
     }
   }
+
   .color-form {
     width: 100%;
     overflow: hidden;

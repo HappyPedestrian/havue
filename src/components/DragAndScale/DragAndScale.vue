@@ -128,13 +128,13 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
     .zoom-operate-box {
       position: absolute;
       inset: var(--scale-area-inset);
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      box-sizing: border-box;
 
       .block {
-        display: flex;
         box-sizing: border-box;
+        display: flex;
         width: 100%;
 
         .left-box,
@@ -146,8 +146,8 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
         }
 
         .center-box {
-          flex: 1;
           box-sizing: border-box;
+          flex: 1;
           height: 100%;
         }
       }
