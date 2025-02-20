@@ -196,9 +196,7 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
   watch(
     _canvasResizeOpt,
     (val) => {
-      if (stopResizeObserver) {
-        stopResizeObserver()
-      }
+      stopResizeObserver && stopResizeObserver()
       if (val.enable) {
         /** 监听尺寸变化，更新canvas width/height */
         const { stop } = useResizeObserver(canvasRef, (entries) => {

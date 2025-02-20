@@ -83,9 +83,7 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   private _setAnimate() {
-    if (this._reqAnimationID) {
-      cancelAnimationFrame(this._reqAnimationID)
-    }
+    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
     const render = () => {
       this._wsInfoMap.forEach((item) => {
         const { render, canvasMap } = item
@@ -203,10 +201,8 @@ export class WsVideoManager extends EventBus<Events> {
         this._setAnimate()
       }
     } else {
-      if (this._reqAnimationID) {
-        cancelAnimationFrame(this._reqAnimationID)
-        this._reqAnimationID = null
-      }
+      this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+      this._reqAnimationID = null
     }
   }
 
@@ -417,9 +413,7 @@ export class WsVideoManager extends EventBus<Events> {
     })
     this._wsInfoMap.clear()
     this._emitWsUrlListChange()
-    if (this._reqAnimationID) {
-      cancelAnimationFrame(this._reqAnimationID)
-      this._reqAnimationID = null
-    }
+    this._reqAnimationID && cancelAnimationFrame(this._reqAnimationID)
+    this._reqAnimationID = null
   }
 }

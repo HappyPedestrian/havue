@@ -142,9 +142,7 @@ export class Render extends EventBus<RenderEvents> {
         }
       }
     }
-    if (this._cacheAnimationID) {
-      cancelAnimationFrame(this._cacheAnimationID)
-    }
+    this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
     this._cacheAnimationID = undefined
     this._cache()
   }
@@ -379,9 +377,7 @@ export class Render extends EventBus<RenderEvents> {
       !this._bufsQueue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      if (this._cacheAnimationID === undefined) {
-        this._cacheAnimationID = requestAnimationFrame(() => this._cache())
-      }
+      this._cacheAnimationID === undefined && (this._cacheAnimationID = requestAnimationFrame(() => this._cache()))
       return
     }
     if (this._videoEl.error) {
@@ -470,9 +466,7 @@ export class Render extends EventBus<RenderEvents> {
 
     this._mimeType = ''
 
-    if (this._cacheAnimationID) {
-      cancelAnimationFrame(this._cacheAnimationID)
-    }
+    this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
     this._cacheAnimationID = undefined
 
     this.destroyMediaSource()
