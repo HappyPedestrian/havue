@@ -270,7 +270,7 @@ export function useVideoPlay(options: ParamsOptions): ReturnType {
     return _isReady.value && previewWsUrl.value
   })
 
-  watch([canvasRef, canPreview, linkedWsUrlList], () => {
+  watch([canvasRef, canPreview, linkedWsUrlList, previewWsUrl], () => {
     if (!canvasRef.value) {
       return
     }
