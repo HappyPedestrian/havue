@@ -290,20 +290,19 @@ export class Render extends EventBus<RenderEvents> {
       const sourceBuffer = (this._sourceBuffer = this._mediaSource!.addSourceBuffer(this._mimeType))
       sourceBuffer.mode = 'sequence'
       sourceBuffer.onupdateend = () => {
-        if (!this._videoEl) {
-          return
-        }
-        const currentTime = this._videoEl.currentTime
         if (
+          !this._videoEl ||
           !sourceBuffer ||
           this._mediaSource?.readyState !== 'open' ||
           ![...this._mediaSource.sourceBuffers].includes(sourceBuffer)
         ) {
           return
         }
+        const currentTime = this._videoEl.currentTime
         // 调试代码
         // const div = document.getElementById(this.divID)
         // let innerHTML = `len:${sourceBuffer.buffered.length}`
+
         if (sourceBuffer.buffered.length > 0) {
           let bufferedLen = sourceBuffer.buffered.length
           /** 是否需要删除sourceBuffer中的buffer段 */
@@ -315,17 +314,14 @@ export class Render extends EventBus<RenderEvents> {
            * 使用最新的视频buffer进行播放
            */
           if (needDelBuf && currentTime) {
-            if (currentTime < sourceBuffer.buffered.start(bufferedLen - 1)) {
-              this._videoEl.currentTime = sourceBuffer.buffered.start(bufferedLen - 1)
+            const lastIndex = bufferedLen - 1
+            if (currentTime < sourceBuffer.buffered.start(lastIndex)) {
+              this._videoEl.currentTime = sourceBuffer.buffered.start(lastIndex)
             }
 
-            for (let i = bufferedLen - 1; i > 0; i--) {
-              const curEnd = sourceBuffer.buffered.end(i)
-
-              if (!this._sourceBuffer!.updating && currentTime > curEnd) {
-                this._sourceBuffer?.remove(0, curEnd)
-                break
-              }
+            const delBufEnd = sourceBuffer.buffered.end(lastIndex - 1)
+            if (!this._sourceBuffer!.updating && currentTime > delBufEnd) {
+              this._sourceBuffer?.remove(0, delBufEnd)
             }
           }
 
@@ -387,7 +383,7 @@ export class Render extends EventBus<RenderEvents> {
       )
     }
     this._cacheAnimationID = undefined
-    let frame: ArrayBuffer
+    let frame: Uint8Array
     if (this._bufsQueue.length > 1) {
       const freeBuffer = this._bufsQueue.splice(0, this._bufsQueue.length)
       const length = freeBuffer.map((e) => e.byteLength).reduce((a, b) => a + b, 0)
@@ -400,7 +396,7 @@ export class Render extends EventBus<RenderEvents> {
       }
       frame = buffer
     } else {
-      frame = this._bufsQueue.shift() as ArrayBuffer
+      frame = new Uint8Array(this._bufsQueue.shift() || [])
     }
 
     if (frame) {
