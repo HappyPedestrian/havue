@@ -5,7 +5,11 @@
       <p>下列卡片可拖动：</p>
       <div class="top-drag-list-box">
         <Draggable :type="item.type" v-for="(item, i) in DragItems" :data="item" :key="i" :immediate="item.immediate">
-          <div class="drag-box" :style="item.style">{{ item.type }}: {{ `${item.width} * ${item.height}` }}</div>
+          <div class="drag-box" :style="item.style">
+            {{ item.type }}: {{ `${item.width} * ${item.height}` }}
+            <br />
+            {{ item.immediate ? 'immediate: ' + item.immediate : '' }}
+          </div>
         </Draggable>
       </div>
     </div>

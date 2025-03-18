@@ -49,6 +49,7 @@ type ImmediateType = 'left' | 'right' | 'top' | 'bottom' | 'all' | undefined
 |   名称       |        说明          |
 | :----------- | :------------------ |
 | default      | 默认内容             |
+| drag-item    | 拖动展示元素         |
 
 ## Droppable 属性
 
