@@ -26,7 +26,7 @@
 可复制当前页面地址，通过其他标签页打开，进行通信。
 
 <script setup lang="ts">
-import Demo from '@/solutions/broadcast-channel-connect/Demo.vue'
+import Demo from '@/solutions/bc-connect/index.vue'
 </script>
 
 <Demo></Demo>
@@ -34,16 +34,16 @@ import Demo from '@/solutions/broadcast-channel-connect/Demo.vue'
 ::: details 点我看代码
 ::: code-group
 
-<<< ../../src/solutions/broadcast-channel-connect/Demo.vue#template{vue:line-numbers} [template]
+<<< ../../demos/solutions/bc-connect/index.vue#template{vue:line-numbers} [template]
 
-<<< ../../src/solutions/broadcast-channel-connect/Demo.vue#script{ts:line-numbers} [script]
+<<< ../../demos/solutions/bc-connect/index.vue#script{ts:line-numbers} [script]
 
-<<< ../../src/solutions/broadcast-channel-connect/Demo.vue#style{scss:line-numbers} [style]
+<<< ../../demos/solutions/bc-connect/index.vue#style{scss:line-numbers} [style]
 :::
 
 ::: details 源码
 ::: code-group
-<<< ../../src/solutions/broadcast-channel-connect/manager.ts{ts:line-numbers} [manager.ts]
+<<< ../../packages/solutions/bc-connect/src/manager.ts{ts:line-numbers} [manager.ts]
 :::
 
 ## BroadcastChannelManager类介绍
@@ -72,4 +72,4 @@ import Demo from '@/solutions/broadcast-channel-connect/Demo.vue'
 
 ### 类型定义
 
-<<< ../../src/solutions/broadcast-channel-connect/manager.ts#typedefine{ts:line-numbers}
+<<< ../../packages/solutions/bc-connect/src/manager.ts#typedefine{ts:line-numbers}

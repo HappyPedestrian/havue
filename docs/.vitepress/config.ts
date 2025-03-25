@@ -3,6 +3,9 @@ import { resolve } from 'node:path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { getAlias } from '../../packages/build/src/vite-config/alias'
+
+const aliasList = getAlias()
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -15,7 +18,9 @@ export default defineConfig({
     },
     nav: [
       { text: '组件', link: '/components/' },
-      { text: '解决方案', link: '/solutions/' }
+      { text: '解决方案', link: '/solutions/' },
+      { text: '指令', link: '/directives/' },
+      { text: '工具函数', link: '/tools/' }
     ],
 
     sidebar: {
@@ -26,9 +31,7 @@ export default defineConfig({
             { text: '开始', link: '/components/' },
             { text: '颜色选择器', link: '/components/color-picker' },
             { text: '拖动缩放', link: '/components/drag-and-scale' },
-            { text: '拖拽', link: '/components/drag-and-drop' },
-            { text: '移动端手势识别', link: '/components/mobile-gesture-recognition' },
-            { text: 'WebSocket视频播放器', link: '/components/websocket-fmp4-player' }
+            { text: '拖拽', link: '/components/drag-and-drop' }
           ]
         }
       ],
@@ -38,7 +41,33 @@ export default defineConfig({
           items: [
             { text: '开始', link: '/solutions/' },
             { text: '全屏页面适配', link: '/solutions/full-screen-adapt' },
-            { text: 'BroadcastChannel广播消息', link: '/solutions/broadcast-channel-connect' }
+            { text: '移动端手势识别', link: '/solutions/gesture-2-mouse' },
+            { text: 'BroadcastChannel广播消息', link: '/solutions/broadcast-channel-connect' },
+            { text: 'WebSocket视频播放器', link: '/solutions/use-ws-video' }
+          ]
+        }
+      ],
+      '/directives': [
+        {
+          text: '自定义指令',
+          items: [
+            { text: '开始', link: '/directives/' },
+            {
+              text: '右键点击事件',
+              link: '/directives/right-click'
+            }
+          ]
+        }
+      ],
+      '/tools': [
+        {
+          text: '工具函数',
+          items: [
+            { text: '开始', link: '/tools/' },
+            {
+              text: '字符串',
+              link: '/tools/string'
+            }
           ]
         }
       ]
@@ -48,10 +77,13 @@ export default defineConfig({
   },
   vite: {
     resolve: {
-      alias: {
-        '@': resolve('./src'),
-        '#': resolve('./src/types')
-      }
+      alias: [
+        {
+          find: /^@\/(.*)/,
+          replacement: resolve(__dirname, '..', '..', 'demos', '$1')
+        },
+        ...aliasList
+      ]
     },
     plugins: [
       AutoImport({

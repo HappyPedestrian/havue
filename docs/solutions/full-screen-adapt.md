@@ -67,7 +67,7 @@ module.exports = ({ env }) => {
 
 创建 useScreenAdapt.ts 文件
 
-<<< ../../src/solutions/full-screen-adapt/useScreenAdapt.ts
+<<< ../../packages/hooks/use-full-screen-adapt/src/index.ts
 
 ### 在项目入口 main.ts 中使用
 

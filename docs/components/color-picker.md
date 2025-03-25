@@ -3,13 +3,13 @@
 ## 示例
 
 <script setup>
-import Demo from '@/components/ColorPicker/Demo.vue'
+import Demo from '@/components/color-picker/index.vue'
 </script>
 
 <Demo></Demo>
 
 ::: details 点我看代码
-<<< ../../src/components/ColorPicker/Demo.vue{ts:line-numbers}
+<<< ../../demos/components/color-picker/index.vue{ts:line-numbers}
 :::
 
 ## 配置

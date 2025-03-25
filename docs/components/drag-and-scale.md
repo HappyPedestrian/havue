@@ -11,7 +11,7 @@
 第二个灰色元素限制最小尺寸128\*128，最大尺寸512\*300。
 
 <script setup lang="ts">
-import Demo from '@/components/DragAndScale/Demo.vue'
+import Demo from '@/components/drag-and-scale/index.vue'
 
 </script>
 
@@ -19,11 +19,11 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 ::: details 点我看代码
 ::: code-group
 
-<<< ../../src/components/DragAndScale/Demo.vue#template{vue:line-numbers} [template]
+<<< ../../demos/components/drag-and-scale/index.vue#template{vue:line-numbers} [template]
 
-<<< ../../src/components/DragAndScale/Demo.vue#script{ts:line-numbers} [script]
+<<< ../../demos/components/drag-and-scale/index.vue#script{ts:line-numbers} [script]
 
-<<< ../../src/components/DragAndScale/Demo.vue#style{scss:line-numbers} [style]
+<<< ../../demos/components/drag-and-scale/index.vue#style{scss:line-numbers} [style]
 
 :::
 
@@ -73,11 +73,11 @@ import Demo from '@/components/DragAndScale/Demo.vue'
 
 |   事件     |        说明          |            参数类型                |
 | :-------  | :------------------ | :-------------------------------   |
-| change     | 拖动或者缩放时触发    | `(params: ChangeParamsType) => void`    |
+| change     | 拖动或者缩放时触发    | `(params: DragAndScaleChangeResultType) => void`    |
 | finish  | 拖动或者缩放结束时触发    | `() => void`                     |
 
 ```ts
-type ChangeParamsType {
+type DragAndScaleChangeResultType {
   /** 操作类型 */
   type: 'move' | 'scale'
   /** 相比上一次change事件，横向移动的距离 */

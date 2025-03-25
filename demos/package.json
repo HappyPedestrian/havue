@@ -1,0 +1,7 @@
+{
+  "name": "@pedy/demo",
+  "private": true,
+  "dependencies": {
+    "@pedy/components": "workspace:*"
+  }
+}
