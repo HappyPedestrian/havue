@@ -1,0 +1,23 @@
+{
+  "name": "@pedy/directives",
+  "scripts": {
+    "build:package": "vite build --mode package",
+    "build:full": "vite build --mode full",
+    "build:full-min": "vite build --mode full-min",
+    "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "main": "./dist/directives.js",
+  "module": "./dist/directives.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/directives.js",
+      "import": "./dist/directives.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

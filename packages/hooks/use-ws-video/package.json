@@ -1,0 +1,22 @@
+{
+  "name": "@pedy/use-ws-video",
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {
+    "@pedy/ws-video-manager": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "main": "./dist/use-ws-video.js",
+  "module": "./dist/use-ws-video.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/use-ws-video.js",
+      "import": "./dist/use-ws-video.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

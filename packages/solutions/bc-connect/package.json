@@ -1,0 +1,17 @@
+{
+  "name": "@pedy/bc-connect",
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {},
+  "main": "./dist/bc-connect.js",
+  "module": "./dist/bc-connect.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/bc-connect.js",
+      "import": "./dist/bc-connect.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@pedy/components",
+  "scripts": {
+    "build:package": "vite build --mode package",
+    "build:full": "vite build --mode full",
+    "build:full-min": "vite build --mode full-min",
+    "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
+  },
+  "dependencies": {
+    "@pedy/shared": "workspace:*",
+    "@pedy/color-picker": "workspace:*"
+  },
+  "main": "./dist/components.js",
+  "module": "./dist/components.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/components.js",
+      "import": "./dist/components.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

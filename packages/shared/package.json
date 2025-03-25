@@ -1,0 +1,16 @@
+{
+  "name": "@pedy/shared",
+  "scripts": {
+    "build": "vite build"
+  },
+  "main": "./dist/shared.js",
+  "module": "./dist/shared.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/shared.js",
+      "import": "./dist/shared.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  },
+  "types": "./dist/types/src/index.d.ts"
+}

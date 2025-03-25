@@ -1,0 +1,20 @@
+{
+  "name": "@pedy/use-gesture-2-mouse",
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "main": "./dist/use-gesture-2-mouse.js",
+  "module": "./dist/use-gesture-2-mouse.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/use-gesture-2-mouse.js",
+      "import": "./dist/use-gesture-2-mouse.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@pedy/color-picker",
+  "main": "./dist/color-picker.js",
+  "module": "./dist/color-picker.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/color-picker.js",
+      "import": "./dist/color-picker.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {
+    "@pedy/shared": "workspace:*",
+    "@types/color": "^3.0.6",
+    "color": "^4.2.3",
+    "element-plus": "^2.7.7"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "types": "./dist/types/src/index.d.ts"
+}

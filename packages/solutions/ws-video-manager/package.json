@@ -1,0 +1,20 @@
+{
+  "name": "@pedy/ws-video-manager",
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {
+    "@pedy/shared": "workspace:*",
+    "@vueuse/core": "^11.0.3"
+  },
+  "main": "./dist/ws-video-manager.js",
+  "module": "./dist/ws-video-manager.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/ws-video-manager.js",
+      "import": "./dist/ws-video-manager.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

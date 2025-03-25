@@ -1,0 +1,22 @@
+{
+  "name": "@pedy/drag-and-scale",
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {
+    "@pedy/shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "main": "./dist/drag-and-scale.js",
+  "module": "./dist/drag-and-scale.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/drag-and-scale.js",
+      "import": "./dist/drag-and-scale.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

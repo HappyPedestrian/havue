@@ -1,0 +1,22 @@
+{
+  "name": "@pedy/drag-and-drop",
+  "scripts": {
+    "build": "vite build --mode package"
+  },
+  "dependencies": {
+    "@pedy/shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "main": "./dist/drag-and-drop.js",
+  "module": "./dist/drag-and-drop.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/drag-and-drop.js",
+      "import": "./dist/drag-and-drop.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

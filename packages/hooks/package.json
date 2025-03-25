@@ -1,0 +1,29 @@
+{
+  "name": "@pedy/hooks",
+  "scripts": {
+    "build:package": "vite build --mode package",
+    "build:full": "vite build --mode full",
+    "build:full-min": "vite build --mode full-min",
+    "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
+  },
+  "dependencies": {
+    "@pedy/shared": "workspace:*",
+    "@pedy/use-full-screen-adapt": "workspace:*",
+    "@pedy/use-gesture-2-mouse": "workspace:*",
+    "@pedy/use-ws-video": "workspace:*",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "main": "./dist/hooks.js",
+  "module": "./dist/hooks.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/hooks.js",
+      "import": "./dist/hooks.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}
