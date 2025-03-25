@@ -1,13 +1,16 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "lib": ["ESNext"],
+    "types": ["node"],
     "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "strict": true,
-    "noEmit": true
+    "paths": {
+      "@pedy/build": ["../packages/build/src"]
+    }
   },
-  "include": ["vite.config.ts"]
+  "include": ["**/*.config.*", "packages/build", ".lintstagedrc.js", ".commitlintrc.cjs"],
+  "exclude": ["**/dist", "**/node_modules", "eslint.config.js"]
 }

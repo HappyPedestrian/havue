@@ -23,17 +23,18 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'off',
       // 允许使用 ts 注释
       '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/no-unused-expressions': {
-        error: {
-          // 允许短路运算
+      '@typescript-eslint/no-unused-expressions': [
+        {
           allowShortCircuit: true,
-          // 允许类似短路运算的三元运算符
           allowTernary: true
-        }
-      },
+        },
+        'error'
+      ],
 
       // vue 检查规则
       'vue/multi-word-component-names': 'off'
     }
   }
 ]
+
+// export default tseslint.config(pluginJs.configs.recommended, tseslint.configs.recommended)

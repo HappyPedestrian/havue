@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+  - packages/components/*
+  - packages/hooks/*
+  - packages/solutions/*
+  - docs

@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "preserve",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    // 路径别名设置
+    "paths": {
+      "@pedy/*": [
+        "./packages/*/src",
+        "./packages/components/*/src",
+        "./packages/hooks/*/src",
+        "./packages/solutions/*/src"
+      ]
+    }
+  },
+  "include": ["packages/**/src", "docs/**/*", "demos/**/*", "typings/env.d.ts"],
+  "exclude": ["node_modules", "**/dist", "packages/build"]
+}
