@@ -6,11 +6,15 @@
     "types": ["node"],
     "skipLibCheck": true,
     "allowJs": true,
-    "strict": true,
-    "paths": {
-      "@pedy/build": ["../packages/build/src"]
-    }
+    "strict": true
   },
-  "include": ["**/*.config.*", "packages/build", ".lintstagedrc.js", ".commitlintrc.cjs"],
+  "include": [
+    "**/*.config.*",
+    "internal/build",
+    ".lintstagedrc.js",
+    ".commitlintrc.cjs",
+    "scripts/**/*",
+    "packages/pedy/package.json"
+  ],
   "exclude": ["**/dist", "**/node_modules", "eslint.config.js"]
 }
