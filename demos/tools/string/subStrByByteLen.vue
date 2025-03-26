@@ -33,4 +33,4 @@ const result = computed(() => {
   }
 }
 </style>
-// #endregion template
+// #endregion style

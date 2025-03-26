@@ -3,7 +3,7 @@
   <div class="brdCnl-box">
     <div class="left-box">
       <div class="title">其他标签页实例id 列表</div>
-      <div class="friend-item" v-for="friend in friendList">{{ friend }}</div>
+      <div class="friend-item" v-for="friend in friendList" :key="friend">{{ friend }}</div>
     </div>
     <div class="right-box">
       <div class="current-info">当前标签页实例 id: {{ currentBcId }}</div>
@@ -29,7 +29,8 @@
 <script setup lang="ts">
 import type { BcConnectSendMessageType } from '@pedy/bc-connect'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@pedy/bc-connect'
+// import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@pedy/bc-connect'
+import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@pedy/solutions'
 
 let bcManager: BroadcastChannelManager | null = null
 
