@@ -4,7 +4,13 @@ import type { RenderConstructorOptionType, VideoInfo } from '../render'
 // #endregion typeimport
 import { EventBus, isMobile } from '@pedy/shared'
 import { WebSocketLoader } from '../loader'
-import { Render, DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS, RenderEventsEnum, AudioState, VideoState } from '../render'
+import {
+  Render,
+  WS_VIDEO_RENDER_DEFAULT_OPTIONS as RENDER_DEFAULT_OPTIONS,
+  RenderEventsEnum,
+  AudioState,
+  VideoState
+} from '../render'
 import { CanvasDrawer } from '../render/drawer'
 
 // #region typedefine

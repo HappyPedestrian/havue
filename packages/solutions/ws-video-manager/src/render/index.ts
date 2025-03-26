@@ -11,7 +11,7 @@ export type RenderConstructorOptionType = {
   maxCache: number
 }
 
-export const DEFAULT_OPTIONS = Object.freeze({
+export const WS_VIDEO_RENDER_DEFAULT_OPTIONS = Object.freeze({
   liveMaxLatency: 0.3,
   maxCacheBufByte: 200 * 1024,
   maxCache: 10
@@ -77,7 +77,9 @@ export class Render extends EventBus<RenderEvents> {
 
   constructor(options: Partial<RenderConstructorOptionType> = {}) {
     super()
-    this._options = options ? Object.assign({}, DEFAULT_OPTIONS, options) : DEFAULT_OPTIONS
+    this._options = options
+      ? Object.assign({}, WS_VIDEO_RENDER_DEFAULT_OPTIONS, options)
+      : WS_VIDEO_RENDER_DEFAULT_OPTIONS
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
     this._setupVideo()
   }
