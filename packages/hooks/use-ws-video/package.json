@@ -4,7 +4,8 @@
     "build": "vite build --mode package"
   },
   "dependencies": {
-    "@pedy/ws-video-manager": "workspace:*"
+    "@pedy/ws-video-manager": "workspace:*",
+    "@vueuse/core": "^11.0.3"
   },
   "peerDependencies": {
     "vue": "^3.3.0"
@@ -18,5 +19,6 @@
       "import": "./dist/use-ws-video.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  }
+  },
+  "version": "1.0.0"
 }

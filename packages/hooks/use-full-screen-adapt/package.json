@@ -16,5 +16,6 @@
       "import": "./dist/use-full-screen-adapt.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  }
+  },
+  "version": "1.0.0"
 }
