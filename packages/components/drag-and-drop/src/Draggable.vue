@@ -13,6 +13,10 @@ import type { DragAndDropDragType, DragAndDropPoint } from './manager'
 
 import { DnDManagerInstance } from './manager'
 
+defineOptions({
+  name: 'PdDraggable'
+})
+
 const ImmediateEnumType = {
   LEFT: 'left',
   RIGHT: 'right',

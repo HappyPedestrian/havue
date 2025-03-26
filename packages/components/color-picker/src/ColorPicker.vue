@@ -28,7 +28,7 @@ import ColorForm from './children/ColorForm/ColorForm.vue'
 import PresetColors from './children/PresetColors/PresetColors.vue'
 
 defineOptions({
-  name: 'ColorPicker'
+  name: 'PdColorPicker'
 })
 
 const DEFAULT_COLOR = '#ffffff'

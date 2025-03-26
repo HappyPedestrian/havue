@@ -9,6 +9,10 @@ import type { DragAndDropDragType, DragAndDropPoint } from './manager'
 import { computed, ref } from 'vue'
 import { DnDManagerInstance } from './manager'
 
+defineOptions({
+  name: 'PdDroppable'
+})
+
 const emits = defineEmits<{
   (name: 'enter', type: DragAndDropDragType, point: DragAndDropPoint, data: any): void
   (name: 'move', type: DragAndDropDragType, point: DragAndDropPoint, data: any): void

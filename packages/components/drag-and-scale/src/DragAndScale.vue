@@ -30,6 +30,10 @@ import type { DragAndScaleChangeResultType, DragAndScaleOptions } from './hooks/
 import { ref, computed } from 'vue'
 import { useDragAndScale } from './hooks/useDragAndScale'
 
+defineOptions({
+  name: 'PdDragAndScale'
+})
+
 const emits = defineEmits<{
   (name: 'change', params: DragAndScaleChangeResultType): void
   (name: 'finish'): void
