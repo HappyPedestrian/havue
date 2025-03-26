@@ -32,3 +32,5 @@ docs/.vitepress/cache/*
 
 # Optional eslint cache
 .eslintcache
+
+packages/pedy/src/version.ts
