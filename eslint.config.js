@@ -24,11 +24,11 @@ export default [
       // 允许使用 ts 注释
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-expressions': [
+        'error',
         {
           allowShortCircuit: true,
           allowTernary: true
-        },
-        'error'
+        }
       ],
 
       // vue 检查规则
