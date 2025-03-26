@@ -10,6 +10,42 @@ Droppable表示一个可放置拖动元素的区域。
 
 Droppalbe只接受`type`在其`acceptDragType`中的Draggalbe
 
+## 安装
+
+::: info
+如何还需要使用其他组件，请参考[全量组件安装](./index.md)
+:::
+
+如果仅需要使用当前组件，执行以下命令单独安装
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/drag-and-drop --save
+```
+
+```shell [yarn]
+yarn add @pedy/drag-and-drop
+```
+
+```shell [pnpm]
+pnpm install @pedy/drag-and-drop
+```
+
+:::
+
+## 引入
+
+```vue
+<script>
+import { PdDraggable, PdDroppable } from 'pedy'
+// or 
+import { PdCoPdDraggable, PdDroppablelorPicker } from '@pedy/components'
+// or
+import { PdDraggable, PdDroppable } from '@pedy/drag-and-drop'
+</script>
+```
+
 ## 示例
 
 左侧标签块为Draggalbe元素，文本显示其类型和大小，灰色Draggalbe元素设置了`immediate="right"`,可向右立即拖动，

@@ -1,5 +1,41 @@
 # 颜色选择器
 
+## 安装
+
+::: info
+如何还需要使用其他组件，请参考[全量组件安装](./index.md)
+:::
+
+如果仅需要使用颜色选择器，执行以下命令单独安装
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/color-picker --save
+```
+
+```shell [yarn]
+yarn add @pedy/color-picker
+```
+
+```shell [pnpm]
+pnpm install @pedy/color-picker
+```
+
+:::
+
+## 引入
+
+```vue
+<script>
+import { PdColorPicker } from 'pedy'
+// or 
+import { PdColorPicker } from '@pedy/components'
+// or
+import { PdColorPicker } from '@pedy/color-picker'
+</script>
+```
+
 ## 示例
 
 <script setup>

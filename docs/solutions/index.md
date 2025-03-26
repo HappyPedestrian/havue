@@ -1,1 +1,58 @@
+# 介绍
+
 一些特殊场景的解决方案，搜集在此分类中。
+
+其中以下三个分类都提供hooks方式使用
+
+* [全屏页面适配](/solutions/full-screen-adapt)
+* [移动端手势识别]((/solutions/gesture-2-mouse))
+* [WebSocket适配播放器](/solutions/use-ws-video)
+
+以下两个分类提供javascript类使用
+
+* [BoradcastChannle广播消息](/solutions/broadcast-channel-connect)
+* [WebSocket适配播放器](/solutions/use-ws-video)
+
+## 仅安装hooks
+
+::: info
+如果需要安装全量库，请参考[指南](/guide/)。
+:::
+
+如果只需要通过hooks的方式使用：
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/hooks --save
+```
+
+```shell [yarn]
+yarn add @pedy/hooks
+```
+
+```shell [pnpm]
+pnpm install @pedy/hooks
+```
+
+## 仅安装对应javascript类
+
+::: info
+如果需要安装全量库，请参考[指南](/guide/)。
+:::
+
+如果不需要通过hooks的方式使用：
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/solutions --save
+```
+
+```shell [yarn]
+yarn add @pedy/solutions
+```
+
+```shell [pnpm]
+pnpm install @pedy/solutions
+```

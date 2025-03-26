@@ -1,5 +1,7 @@
 # 使用BroadcastChannel建立较为可靠的连接
 
+如需安装所有解决方案，请参考[安装](./index.md)
+
 使用BroadcastChannel，同源的不同标签页之间可以相互通信，有的时候，一些操作需要在一个标签页面执行，然后广播给其他标签页。
 
 比如：
@@ -20,6 +22,32 @@
 9. 所有监听此广播通道的标签页，收到主节点广播信息的回复信息后，将其对应id添加到id列表信息中（`friendChannelIdSet`）。
 10. 其他监听此广播通道的非主节点标签页，每次收到主节点心跳广播信息，会设置一个超时时间，如果超时了没收到主节点信息，则认为主节点不在了，然后广播申请为主节点，一定时间内，如果收到其他标签页的拒绝信息，则不成为主节点，如果没收到拒绝信息，则成为主节点。
 11. 其他收到申请为主节点的消息后，根据自己的id，回复其是否可以为主节点。
+
+## 单独安装此javascript类
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/bc-connect --save
+```
+
+```shell [yarn]
+yarn add @pedy/bc-connect
+```
+
+```shell [pnpm]
+pnpm install @pedy/bc-connect
+```
+
+## 使用
+
+引入
+
+```ts
+import { BroadcastChannelManager } from 'pedy'
+// or
+import { BroadcastChannelManager } from '@pedy/solutions'
+```
 
 ## 示例
 

@@ -2,6 +2,42 @@
 
 操作元素在父级容器元素内部移动，以及缩放。
 
+## 安装
+
+::: info
+如何还需要使用其他组件，请参考[全量组件安装](./index.md)
+:::
+
+如果仅需要使用当前组件，执行以下命令单独安装
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/drag-and-scale --save
+```
+
+```shell [yarn]
+yarn add @pedy/drag-and-scale
+```
+
+```shell [pnpm]
+pnpm install @pedy/drag-and-scale
+```
+
+:::
+
+## 引入
+
+```vue
+<script>
+import { PdDragAndScale } from 'pedy'
+// or 
+import { PdDragAndScale } from '@pedy/components'
+// or
+import { PdDragAndScale } from '@pedy/color-picker'
+</script>
+```
+
 ## 示例
 
 设置容器实际尺寸为1920*1080。
@@ -36,7 +72,7 @@ import Demo from '@/components/drag-and-scale/index.vue'
   }
 ```
 
-反之，如果想只保留拖动功能，禁用缩放功能，可添加以下样式实现
+反之，如果想只保留缩放功能，禁用拖动功能，可添加以下样式实现
 
 ```scss
   .drag-and-scale-box {

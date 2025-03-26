@@ -1,5 +1,9 @@
 # 字符串相关
 
+::: info
+安装请参考[工具函数安装](/tools/)。
+:::
+
 <script setup>
 import StringSortFnDemo from '@/tools/string/stringSortFn.vue'
 import GetPinyinInitialDemo from '@/tools/string/getPinyinInitial.vue'
@@ -16,6 +20,14 @@ import SubStrByByteLenDemo from '@/tools/string/subStrByByteLen.vue'
 *
 * 例子：1abc>3abc>aabc>阿abc>babc>菜菜菜菜111>！2abc
 
+### 引入
+
+```ts
+import { stringSortFn  } from 'pedy'
+// or
+import { stringSortFn  } from '@pedy/tools'
+```
+
 示例：
 
 <StringSortFnDemo></StringSortFnDemo>
@@ -31,6 +43,14 @@ import SubStrByByteLenDemo from '@/tools/string/subStrByByteLen.vue'
 
 传入中文字符，返回其拼音首字母
 
+### 引入
+
+```ts
+import { getPinyinInitial  } from 'pedy'
+// or
+import { getPinyinInitial  } from '@pedy/tools'
+```
+
 示例：
 
 <GetPinyinInitialDemo></GetPinyinInitialDemo>
@@ -45,6 +65,14 @@ import SubStrByByteLenDemo from '@/tools/string/subStrByByteLen.vue'
 ## 按byte长度裁剪字符串
 
 一个中文占2个byte长度，有时需要根据byte长度裁剪字符，此方法提供这个功能。
+
+### 引入
+
+```ts
+import { subStrByByteLen  } from 'pedy'
+// or
+import { subStrByByteLen  } from '@pedy/tools'
+```
 
 示例：
 

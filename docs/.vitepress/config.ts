@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { getAlias } from '../../packages/build/src/vite-config/alias'
+import { getAlias } from '@pedy/build'
 
 const aliasList = getAlias()
 
@@ -17,13 +17,23 @@ export default defineConfig({
       provider: 'local'
     },
     nav: [
+      { text: '指南', link: '/guide/' },
       { text: '组件', link: '/components/' },
-      { text: '解决方案', link: '/solutions/' },
       { text: '指令', link: '/directives/' },
+      { text: '解决方案', link: '/solutions/' },
       { text: '工具函数', link: '/tools/' }
     ],
 
     sidebar: {
+      '/guide/': [
+        {
+          text: '指南',
+          items: [
+            { text: '介绍', link: '/guide/' },
+            { text: '快速开始', link: '/guide/quickstart' }
+          ]
+        }
+      ],
       '/components/': [
         {
           text: '组件',

@@ -1,1 +1,27 @@
-开发过程中遇到一些比较特殊的组件，是其他组件库所没有的，实现较为麻烦，且通用的一些组件，收集在此分类中，如果其他项目也需要使用时，可直接拿来使用，避免重复编码。
+# 介绍
+
+此分类为一些基于Vue ^(3.3.0) 封装的组件。
+
+## 安装
+
+::: info
+如果需要安装全量库，请参考[指南](/guide/)。
+:::
+
+如果只需要使用组件，可通过以下命令安装：
+
+::: code-group
+
+```shell
+npm install @pedy/components --save
+```
+
+```shell
+yarn add @pedy/components
+```
+
+```shell
+pnpm install @pedy/components
+```
+
+:::

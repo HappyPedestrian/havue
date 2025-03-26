@@ -1,5 +1,7 @@
 # 全屏页面适配
 
+如需安装所有解决方案，请参考[安装](./index.md)
+
 ## 适用场景
 
 页面大小为屏幕可视区域大小，项目页面需要完整的显示在屏幕中，且保持UI设计的尺寸比例。
@@ -10,6 +12,24 @@
 
 :::tip
 注意：页面部分区域需要自适应剩余区域的，需要自行调整样式。
+:::
+
+## 单独安装此hook
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/use-full-screen-adapt --save
+```
+
+```shell [yarn]
+yarn add @pedy/use-full-screen-adapt
+```
+
+```shell [pnpm]
+pnpm install @pedy/use-full-screen-adapt
+```
+
 :::
 
 ## 步骤
@@ -65,12 +85,24 @@ module.exports = ({ env }) => {
 
 ### 编写动态更新根元素字体大小的代码
 
-创建 useScreenAdapt.ts 文件
+::: code-group
 
-<<< ../../packages/hooks/use-full-screen-adapt/src/index.ts
+```ts  [安装]
+import { useFullScreenAdapt } from 'pedy'
+// or
+import { useFullScreenAdapt } from '@pedy/hooks'
+// or
+import { useFullScreenAdapt } from '@pedy/use-full-screen-adapt'
+```
+
+<<< ../../packages/hooks/use-full-screen-adapt/src/index.ts [手动编写]
+
+:::
+
+如果已通过安装，则不需要编写代码
 
 ### 在项目入口 main.ts 中使用
 
 ```ts
-  useScreenAdapt(Number(import.meta.env.VITE_UI_DESIGN_WIDTH), Number(import.meta.env.VITE_UI_DESIGN_HEIGHT), Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16)
+  useFullScreenAdapt(Number(import.meta.env.VITE_UI_DESIGN_WIDTH), Number(import.meta.env.VITE_UI_DESIGN_HEIGHT), Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16)
 ```

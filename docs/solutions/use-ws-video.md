@@ -1,5 +1,7 @@
 # 播放使用WebSocket传输的fmp4视频流
 
+安装所有解决方案，请参考[安装](./index.md)
+
 实现原理
 
 1. 接收WebSocket传入的数据。
@@ -9,14 +11,62 @@
 5. 将MediaSouce实例传递给video标签使用。
 6. 将video绘制到canvas上。
 
+## 单独安装此hooks
+
+如果通过hook的方式使用，执行以下安装即可
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/use-ws-video --save
+```
+
+```shell [yarn]
+yarn add @pedy/use-ws-video
+```
+
+```shell [pnpm]
+pnpm install @pedy/use-ws-video
+```
+
+## 单独安装此javascript类
+
+如果不通过hook的方式使用：
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/ws-video-manager --save
+```
+
+```shell [yarn]
+yarn add @pedy/ws-video-manager
+```
+
+```shell [pnpm]
+pnpm install @pedy/ws-video-manager
+```
+
 ## 使用
 
-引入useVideoPlay
+引入useVideoPlay hook
 
 ```ts
-import { useWsVideo } from '@pedy/use-ws-video'
+import { useWsVideo } from 'pedy'
 // or
 import { useWsVideo } from '@pedy/hooks'
+// or
+import { useWsVideo } from '@pedy/use-ws-video'
+```
+
+引入 javascript manager 类使用
+
+```ts
+import { WsVideoManager } from 'pedy'
+// or
+import { WsVideoManager } from '@pedy/solutions'
+// or
+import { WsVideoManager } from '@pedy/ws-video-manager'
 ```
 
 ## 函数声明

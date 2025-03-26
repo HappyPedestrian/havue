@@ -1,15 +1,35 @@
 # 移动端手势识别
 
+如需安装所有解决方案，请参考[安装](./index.md)
+
 监听移动端的特殊手势操作转换为pc端操作（单击、双击、拖动、双指滑动/鼠标滚轮、双指单击/鼠标右键等事件）
+
+## 单独安装此hook
+
+::: code-group
+
+```shell [npm]
+npm install @pedy/use-gesture-2-mouse --save
+```
+
+```shell [yarn]
+yarn add @pedy/use-gesture-2-mouse
+```
+
+```shell [pnpm]
+pnpm install @pedy/use-gesture-2-mouse
+```
 
 ## 使用
 
 引入
 
 ```ts
-import { useOperateTransform } from '@pedy/gesture-2-mouse'
+import { useGestrue2Mouse } from 'pedy'
 // or
-import { useOperateTransform } from '@pedy/hooks'
+import { useGestrue2Mouse } from '@pedy/hooks'
+// or
+import { useGestrue2Mouse } from '@pedy/gesture-2-mouse'
 ```
 
 ## 示例
