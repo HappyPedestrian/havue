@@ -1,7 +1,6 @@
 import { PluginOption } from 'vite'
 import { cp } from 'node:fs/promises'
-import { absCwd } from '../utils'
-import { pkgRoot, souceTypeRoot, outTypeDir } from '../utils/paths'
+import { pkgRoot, souceTypeRoot, outTypeDir, absCwd } from '@pedy/build-utils'
 
 /** 自定义插件，将 ts类型定义移动到子包目录 */
 export function pluginTypeDefine(): PluginOption {

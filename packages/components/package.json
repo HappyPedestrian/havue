@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "@pedy/shared": "workspace:*",
-    "@pedy/color-picker": "workspace:*"
+    "@pedy/color-picker": "workspace:*",
+    "@pedy/drag-and-drop": "workspace:*",
+    "@pedy/drag-and-scale": "workspace:*"
   },
   "main": "./dist/components.js",
   "module": "./dist/components.mjs",
@@ -19,5 +21,6 @@
       "import": "./dist/components.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  }
+  },
+  "version": "1.0.0"
 }

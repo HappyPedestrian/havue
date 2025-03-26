@@ -2,7 +2,7 @@ import type { Alias } from 'vite'
 import type { PackageJson } from 'type-fest'
 import fg from 'fast-glob'
 import { resolve, dirname } from 'node:path'
-import { readJsonFileSync, pkgRoot } from '../utils'
+import { pkgRoot, readJsonFileSync } from '@pedy/build-utils'
 
 export function getAlias(): Alias[] {
   const pkgPaths = fg.sync('**/package.json', {

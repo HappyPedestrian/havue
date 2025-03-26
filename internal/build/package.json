@@ -1,0 +1,33 @@
+{
+  "name": "@pedy/build",
+  "private": true,
+  "version": "0.0.1",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "unbuild",
+    "dev": "pnpm run stub",
+    "stub": "unbuild --stub"
+  },
+  "peerDependencies": {
+    "vite": ">=5.0.0",
+    "vue": ">=3.3.0"
+  },
+  "dependencies": {
+    "@pedy/build-utils": "workspace:*",
+    "@rollup/plugin-replace": "^6.0.2",
+    "rollup-plugin-visualizer": "^5.14.0",
+    "type-fest": "^4.37.0",
+    "vite-plugin-inspect": "^11.0.0",
+    "vite-plugin-libcss": "^1.1.1"
+  },
+  "devDependencies": {}
+}

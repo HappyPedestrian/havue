@@ -1,13 +1,15 @@
 import type { UserConfig, LibraryFormats } from 'vite'
 import type { PackageJson } from 'type-fest'
+import { readJsonFile } from '@pedy/build-utils'
 import type { ModeType } from '../types'
 import { getExternal } from './external'
 import { getPlugins } from './plugins'
 import { getAlias } from './alias'
+import { kebabCase } from '../utils'
+
+import { absCwd, outDir, entryPath } from '@pedy/build-utils'
 
 const aliasList = getAlias()
-
-import { absCwd, readJsonFile, kebabCase, outDir, entryPath } from '../utils'
 
 export async function getViteConfig(mode: ModeType = 'package'): Promise<UserConfig> {
   const packageJson = await readJsonFile<PackageJson>(absCwd('package.json'))

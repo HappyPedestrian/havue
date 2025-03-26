@@ -1,5 +1,5 @@
+import type { PackageJson } from 'type-fest'
 import type { ModeType } from '../types'
-import { PackageJson } from 'type-fest'
 
 /**
  * 获取 build.rollupOptions.external 依赖外部化相关的配置

@@ -1,9 +1,19 @@
 import type { ModeType } from '../types'
+import type { PackageJson } from 'type-fest'
 import { PluginOption } from 'vite'
-import { PackageJson } from 'type-fest'
-import { isObjectLike, absCwd, relCwd, kebabCase, writeJsonFile, readJsonFile } from '../utils'
+import {
+  entryPath,
+  outDir,
+  outTypeDir,
+  normalizePath,
+  absCwd,
+  relCwd,
+  writeJsonFile,
+  readJsonFile
+} from '@pedy/build-utils'
+import { isObjectLike, kebabCase } from '../utils'
 import { getOutFileName } from '../utils/name'
-import { entryPath, outDir, outTypeDir } from '../utils/paths'
+
 /**
  * 自定义插件，实现对 package.json 内容的修改与回写。
  * @param packageJson package.json 文件内容
@@ -15,7 +25,7 @@ export async function pluginSetPackageJson(mode: ModeType = 'package'): Promise<
     return null
   }
 
-  const finalName = kebabCase(packageJson.name?.split('\/').pop() || '')
+  const finalName = kebabCase(packageJson.name?.split('/').pop() || '')
 
   return {
     name: 'set-package-json',
@@ -28,17 +38,19 @@ export async function pluginSetPackageJson(mode: ModeType = 'package'): Promise<
       const exportsData: Record<string, any> = {}
 
       // 获取并设置 cjs 产物的路径
-      const cjs = relCwd(absCwd(outDir, getOutFileName(finalName, 'cjs', mode)), false)
+      const absCjsPath = absCwd(outDir, getOutFileName(finalName, 'cjs', mode))
+      const cjs = normalizePath(relCwd(absCjsPath))
       packageJsonObj.main = cjs
       exportsData.require = cjs
 
       // 获取并设置 es 产物的路径
-      const es = relCwd(absCwd(outDir, getOutFileName(finalName, 'es', mode)), false)
+      const esAbsPath = absCwd(outDir, getOutFileName(finalName, 'es', mode))
+      const es = normalizePath(relCwd(esAbsPath))
       packageJsonObj.module = es
       exportsData.import = es
 
       // 获取并设置 d.ts 产物的路径
-      const dtsEntry = getDtsPath()
+      const dtsEntry = normalizePath(getDtsPath())
       packageJsonObj.types = dtsEntry
       exportsData.types = dtsEntry
 
@@ -55,5 +67,5 @@ export async function pluginSetPackageJson(mode: ModeType = 'package'): Promise<
 
 /** 根据源码入口和产物目录，计算出 d.ts 类型声明的入口的相对地址 */
 function getDtsPath() {
-  return relCwd(absCwd(outTypeDir, entryPath.replace(/\.[^\.]*$/, '.d.ts') || 'index.d.ts'), false)
+  return relCwd(absCwd(outTypeDir, entryPath.replace(/\.[^.]*$/, '.d.ts') || 'index.d.ts'))
 }
