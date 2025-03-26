@@ -1,4 +1,5 @@
 import type { App, Plugin } from 'vue'
+import { version } from './version'
 
 const INSTALLED_KEY = Symbol('INSTALLED_KEY')
 
@@ -11,7 +12,7 @@ export const makeInstaller = (components: Plugin[] = []) => {
   }
 
   return {
-    // version,
+    version,
     install
   }
 }
