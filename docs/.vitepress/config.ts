@@ -70,8 +70,8 @@ const toolsItems = [
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'My Awesome Components',
-  description: 'A Components list site',
+  title: 'Havue',
+  description: 'A Components and Utils list site',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     search: {
