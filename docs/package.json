@@ -4,12 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev . --port 9001 --host",
-    "build": "NODE_ENV=production && vitepress build .",
-    "serve": "NODE_ENV=production vitepress serve . --port 9001"
+    "build": "vitepress build .",
+    "serve": "vitepress serve . --port 9001"
   },
-  "dependencies": {},
   "devDependencies": {
     "@havue/build": "workspace:*",
+    "@havue/build-utils": "workspace:*",
     "vitepress": "^1.2.3"
   }
 }
