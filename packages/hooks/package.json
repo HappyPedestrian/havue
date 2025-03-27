@@ -1,5 +1,6 @@
 {
   "name": "@havue/hooks",
+  "version": "1.0.0",
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",
@@ -13,8 +14,15 @@
     "@havue/use-ws-video": "workspace:*",
     "lodash": "^4.17.21"
   },
+  "devDependencies": {
+    "vue": "^3.3.0"
+  },
   "peerDependencies": {
     "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "main": "./dist/hooks.js",
   "module": "./dist/hooks.mjs",
@@ -25,6 +33,5 @@
       "import": "./dist/hooks.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  },
-  "version": "1.0.0"
+  }
 }

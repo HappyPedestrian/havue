@@ -4,6 +4,9 @@
     "build": "vite build --mode package"
   },
   "dependencies": {},
+  "devDependencies": {
+    "vue": "^3.3.0"
+  },
   "peerDependencies": {
     "vue": "^3.3.0"
   },

@@ -7,6 +7,9 @@
     "@havue/ws-video-manager": "workspace:*",
     "@vueuse/core": "^11.0.3"
   },
+  "devDependencies": {
+    "vue": "^3.3.0"
+  },
   "peerDependencies": {
     "vue": "^3.3.0"
   },

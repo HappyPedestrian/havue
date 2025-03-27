@@ -1,5 +1,13 @@
 {
   "name": "@havue/color-picker",
+  "version": "1.0.0",
+  "description": "Color picker for Vue3",
+  "keywords": [
+    "color picker",
+    "color",
+    "components",
+    "vue3"
+  ],
   "main": "./dist/color-picker.js",
   "module": "./dist/color-picker.mjs",
   "exports": {
@@ -18,9 +26,15 @@
     "color": "^4.2.3",
     "element-plus": "^2.7.7"
   },
+  "devDependencies": {
+    "vue": "^3.3.0"
+  },
   "peerDependencies": {
     "vue": "^3.3.0"
   },
-  "types": "./dist/types/src/index.d.ts",
-  "version": "1.0.0"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "types": "./dist/types/src/index.d.ts"
 }
