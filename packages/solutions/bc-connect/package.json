@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/bc-connect",
+  "name": "@havue/bc-connect",
   "scripts": {
     "build": "vite build --mode package"
   },

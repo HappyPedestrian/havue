@@ -1,6 +1,6 @@
 # 快速开始
 
-本节将介绍如何在项目中使用 pedy。
+本节将介绍如何在项目中使用 havue。
 
 ## 用法
 
@@ -8,12 +8,12 @@
 
 ```ts
 import { createApp } from 'vue'
-import Pedy from 'pedy'
+import Havue from 'havue'
 import App from './App.vue'
 
 const app = createApp(App)
 
-app.use(Pedy)
+app.use(Havue)
 app.mount('#app')
 ```
 
@@ -29,7 +29,7 @@ app.mount('#app')
 </template>
 
 <script>
-import { PdColorPicker } from 'pedy'
+import { PdColorPicker } from 'havue'
 export default {
   components: { PdColorPicker },
 }

@@ -1,0 +1,47 @@
+{
+  "name": "havue",
+  "version": "1.0.0",
+  "description": "Some components for Vue 3, and some tools",
+  "keywords": [
+    "havue",
+    "components",
+    "directives",
+    "tools",
+    "solutions",
+    "vue"
+  ],
+  "scripts": {
+    "build:package": "vite build --mode package",
+    "build:full": "vite build --mode full",
+    "build:full-min": "vite build --mode full-min",
+    "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
+  },
+  "dependencies": {
+    "@havue/shared": "workspace:*",
+    "@havue/components": "workspace:*",
+    "@havue/hooks": "workspace:*",
+    "@havue/directives": "workspace:*",
+    "@havue/solutions": "workspace:*",
+    "@havue/tools": "workspace:*"
+  },
+  "devDependencies": {
+    "vue": "^3.3.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "./dist/havue.js",
+  "module": "./dist/havue.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/havue.js",
+      "import": "./dist/havue.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
+}

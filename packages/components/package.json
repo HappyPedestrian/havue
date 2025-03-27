@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/components",
+  "name": "@havue/components",
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",
@@ -7,10 +7,10 @@
     "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
   },
   "dependencies": {
-    "@pedy/shared": "workspace:*",
-    "@pedy/color-picker": "workspace:*",
-    "@pedy/drag-and-drop": "workspace:*",
-    "@pedy/drag-and-scale": "workspace:*"
+    "@havue/shared": "workspace:*",
+    "@havue/color-picker": "workspace:*",
+    "@havue/drag-and-drop": "workspace:*",
+    "@havue/drag-and-scale": "workspace:*"
   },
   "main": "./dist/components.js",
   "module": "./dist/components.mjs",

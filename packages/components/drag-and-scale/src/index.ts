@@ -1,5 +1,5 @@
-import type { SFCWithInstall } from '@pedy/utils'
-import { withInstall } from '@pedy/utils'
+import type { SFCWithInstall } from '@havue/utils'
+import { withInstall } from '@havue/utils'
 import DragAndScale from './DragAndScale.vue'
 
 export const PdDragAndScale: SFCWithInstall<typeof DragAndScale> = withInstall(DragAndScale)

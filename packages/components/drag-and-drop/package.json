@@ -1,10 +1,10 @@
 {
-  "name": "@pedy/drag-and-drop",
+  "name": "@havue/drag-and-drop",
   "scripts": {
     "build": "vite build --mode package"
   },
   "dependencies": {
-    "@pedy/shared": "workspace:*"
+    "@havue/shared": "workspace:*"
   },
   "peerDependencies": {
     "vue": "^3.3.0"

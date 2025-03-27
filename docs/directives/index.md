@@ -13,15 +13,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/directives --save
+npm install @havue/directives --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/directives
+yarn add @havue/directives
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/directives
+pnpm install @havue/directives
 ```
 
 :::

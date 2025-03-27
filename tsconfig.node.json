@@ -14,7 +14,7 @@
     ".lintstagedrc.js",
     ".commitlintrc.cjs",
     "scripts/**/*",
-    "packages/pedy/package.json"
+    "packages/havue/package.json"
   ],
   "exclude": ["**/dist", "**/node_modules", "eslint.config.js"]
 }

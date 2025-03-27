@@ -23,9 +23,9 @@ import SubStrByByteLenDemo from '@/tools/string/subStrByByteLen.vue'
 ### 引入
 
 ```ts
-import { stringSortFn  } from 'pedy'
+import { stringSortFn  } from 'havue'
 // or
-import { stringSortFn  } from '@pedy/tools'
+import { stringSortFn  } from '@havue/tools'
 ```
 
 示例：
@@ -46,9 +46,9 @@ import { stringSortFn  } from '@pedy/tools'
 ### 引入
 
 ```ts
-import { getPinyinInitial  } from 'pedy'
+import { getPinyinInitial  } from 'havue'
 // or
-import { getPinyinInitial  } from '@pedy/tools'
+import { getPinyinInitial  } from '@havue/tools'
 ```
 
 示例：
@@ -69,9 +69,9 @@ import { getPinyinInitial  } from '@pedy/tools'
 ### 引入
 
 ```ts
-import { subStrByByteLen  } from 'pedy'
+import { subStrByByteLen  } from 'havue'
 // or
-import { subStrByByteLen  } from '@pedy/tools'
+import { subStrByByteLen  } from '@havue/tools'
 ```
 
 示例：

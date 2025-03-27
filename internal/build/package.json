@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/build",
+  "name": "@havue/build",
   "private": true,
   "version": "0.0.1",
   "main": "./dist/index.cjs",
@@ -22,7 +22,7 @@
     "vue": ">=3.3.0"
   },
   "dependencies": {
-    "@pedy/build-utils": "workspace:*",
+    "@havue/build-utils": "workspace:*",
     "@rollup/plugin-replace": "^6.0.2",
     "rollup-plugin-visualizer": "^5.14.0",
     "type-fest": "^4.37.0",

@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/docs",
+  "name": "@havue/docs",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@pedy/build": "workspace:*",
+    "@havue/build": "workspace:*",
     "vitepress": "^1.2.3"
   }
 }

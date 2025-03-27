@@ -2,7 +2,7 @@ import type { UserConfig } from 'vite'
 import type { ModeType } from '../types'
 import { getComponentConfig } from './components'
 import { getJsLibConfig } from './jsLib'
-import { compRoot, absCwd } from '@pedy/build-utils'
+import { compRoot, absCwd } from '@havue/build-utils'
 
 export * from './components'
 export * from './jsLib'

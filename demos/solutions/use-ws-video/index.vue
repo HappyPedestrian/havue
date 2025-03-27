@@ -16,8 +16,8 @@
 // #region script
 <script setup lang="ts">
 import { ref } from 'vue'
-// import { useWsVideo } from '@pedy/use-ws-video'
-import { useWsVideo } from '@pedy/hooks'
+// import { useWsVideo } from '@havue/use-ws-video'
+import { useWsVideo } from '@havue/hooks'
 
 const url = ref('')
 const width = ref(640)

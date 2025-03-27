@@ -1,2 +1,2 @@
-export * from '@pedy/bc-connect'
-export * from '@pedy/ws-video-manager'
+export * from '@havue/bc-connect'
+export * from '@havue/ws-video-manager'

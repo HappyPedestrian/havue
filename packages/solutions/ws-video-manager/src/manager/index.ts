@@ -2,7 +2,7 @@
 import type { WebSocketOptionsType } from '../loader/websocket-loader'
 import type { RenderConstructorOptionType, VideoInfo } from '../render'
 // #endregion typeimport
-import { EventBus, isMobile } from '@pedy/shared'
+import { EventBus, isMobile } from '@havue/shared'
 import { WebSocketLoader } from '../loader'
 import {
   Render,

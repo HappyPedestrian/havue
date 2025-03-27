@@ -1,10 +1,10 @@
 // #region typeimport
 import type { Ref, MaybeRef } from 'vue'
-import type { RenderConstructorOptionType, VideoInfo, WsVideoManager } from '@pedy/ws-video-manager'
+import type { RenderConstructorOptionType, VideoInfo, WsVideoManager } from '@havue/ws-video-manager'
 // #endregion typeimport
 import { ref, computed, onBeforeUnmount, toValue, isRef, watch } from 'vue'
 import { useElementVisibility, useResizeObserver } from '@vueuse/core'
-import wsVideoPlayer, { WsVideoManagerEventEnums, AudioState, VideoState } from '@pedy/ws-video-manager'
+import wsVideoPlayer, { WsVideoManagerEventEnums, AudioState, VideoState } from '@havue/ws-video-manager'
 
 // #region typedefine
 export type UseWsVideoCanvasResizeOption = {

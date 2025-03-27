@@ -11,15 +11,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/color-picker --save
+npm install @havue/color-picker --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/color-picker
+yarn add @havue/color-picker
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/color-picker
+pnpm install @havue/color-picker
 ```
 
 :::
@@ -28,11 +28,11 @@ pnpm install @pedy/color-picker
 
 ```vue
 <script>
-import { PdColorPicker } from 'pedy'
+import { PdColorPicker } from 'havue'
 // or 
-import { PdColorPicker } from '@pedy/components'
+import { PdColorPicker } from '@havue/components'
 // or
-import { PdColorPicker } from '@pedy/color-picker'
+import { PdColorPicker } from '@havue/color-picker'
 </script>
 ```
 

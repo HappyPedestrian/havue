@@ -28,15 +28,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/bc-connect --save
+npm install @havue/bc-connect --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/bc-connect
+yarn add @havue/bc-connect
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/bc-connect
+pnpm install @havue/bc-connect
 ```
 
 ## 使用
@@ -44,9 +44,9 @@ pnpm install @pedy/bc-connect
 引入
 
 ```ts
-import { BroadcastChannelManager } from 'pedy'
+import { BroadcastChannelManager } from 'havue'
 // or
-import { BroadcastChannelManager } from '@pedy/solutions'
+import { BroadcastChannelManager } from '@havue/solutions'
 ```
 
 ## 示例

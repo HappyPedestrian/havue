@@ -1,4 +1,4 @@
-import { EventBus, isMobile } from '@pedy/shared'
+import { EventBus, isMobile } from '@havue/shared'
 
 export type DragAndDropPoint = {
   x: number

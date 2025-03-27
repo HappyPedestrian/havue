@@ -24,15 +24,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/hooks --save
+npm install @havue/hooks --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/hooks
+yarn add @havue/hooks
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/hooks
+pnpm install @havue/hooks
 ```
 
 ## 仅安装对应javascript类
@@ -46,13 +46,13 @@ pnpm install @pedy/hooks
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/solutions --save
+npm install @havue/solutions --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/solutions
+yarn add @havue/solutions
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/solutions
+pnpm install @havue/solutions
 ```

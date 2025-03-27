@@ -1,6 +1,6 @@
 import type { MaybeRef } from 'vue'
 import { ref, computed, watch, isRef, toValue, onBeforeUnmount } from 'vue'
-import { isMobile } from '@pedy/shared'
+import { isMobile } from '@havue/shared'
 import throttle from 'lodash/throttle'
 
 // #region typedefine

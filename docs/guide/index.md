@@ -15,15 +15,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install pedy --save
+npm install havue --save
 ```
 
 ```shell [yarn]
-yarn add pedy
+yarn add havue
 ```
 
 ```shell [pnpm]
-pnpm install pedy
+pnpm install havue
 ```
 
 :::

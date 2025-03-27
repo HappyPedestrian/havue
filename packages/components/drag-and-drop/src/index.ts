@@ -1,5 +1,5 @@
-import type { SFCWithInstall } from '@pedy/utils'
-import { withInstall } from '@pedy/utils'
+import type { SFCWithInstall } from '@havue/utils'
+import { withInstall } from '@havue/utils'
 import Draggable from './Draggable.vue'
 import Droppable from './Droppable.vue'
 

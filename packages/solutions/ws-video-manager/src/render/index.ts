@@ -1,5 +1,5 @@
 import MP4Box from 'mp4box'
-import { EventBus } from '@pedy/shared'
+import { EventBus } from '@havue/shared'
 
 // #region typedefine
 export type RenderConstructorOptionType = {

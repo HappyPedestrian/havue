@@ -3,8 +3,8 @@ import { writeFile } from 'fs/promises'
 import path, { resolve } from 'path'
 import { consola } from 'consola'
 import fg from 'fast-glob'
-import { pkgRoot, pdRoot, readJsonFile, writeJsonFile } from '@pedy/build-utils'
-import pkg from '../packages/pedy/package.json' // need to be checked
+import { pkgRoot, hvRoot, readJsonFile, writeJsonFile } from '@havue/build-utils'
+import pkg from '../packages/havue/package.json' // need to be checked
 
 function getVersion() {
   const tagVer = process.env.TAG_VERSION
@@ -19,11 +19,11 @@ const version = getVersion()
 
 async function main() {
   consola.info(`Version: ${version}`)
-  await writeFile(path.resolve(pdRoot, 'src', 'version.ts'), `export const version = '${version}'\n`)
+  await writeFile(path.resolve(hvRoot, 'src', 'version.ts'), `export const version = '${version}'\n`)
 
   const pkgPaths = fg.sync('**/package.json', {
     cwd: pkgRoot,
-    ignore: ['**/node_modules', 'dist', 'pedy']
+    ignore: ['**/node_modules', 'dist', 'havue']
   })
 
   const task: Array<Promise<void>> = []

@@ -1,10 +1,10 @@
 {
-  "name": "@pedy/build-utils",
+  "name": "@havue/build-utils",
   "version": "0.0.1",
   "private": true,
-  "description": "Build utils for Pedy",
+  "description": "Build utils for havue",
   "keywords": [
-    "pedy"
+    "havue"
   ],
   "license": "MIT",
   "main": "./dist/index.cjs",

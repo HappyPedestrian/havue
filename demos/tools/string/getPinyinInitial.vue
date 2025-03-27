@@ -10,7 +10,7 @@
 // #region script
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { getPinyinInitial } from '@pedy/tools'
+import { getPinyinInitial } from '@havue/tools'
 
 const inputValue = ref('')
 

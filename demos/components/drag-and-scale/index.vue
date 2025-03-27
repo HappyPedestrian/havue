@@ -46,10 +46,10 @@
 <!--  -->
 // #region script
 <script setup lang="ts">
-import type { DragAndScaleChangeResultType } from '@pedy/drag-and-scale'
+import type { DragAndScaleChangeResultType } from '@havue/drag-and-scale'
 import { ref, computed } from 'vue'
-// import { PdDragAndScale as DragAndScale } from '@pedy/drag-and-scale'
-import { PdDragAndScale as DragAndScale } from '@pedy/components'
+// import { PdDragAndScale as DragAndScale } from '@havue/drag-and-scale'
+import { PdDragAndScale as DragAndScale } from '@havue/components'
 const containerRef = ref()
 
 const dragPosition = ref({

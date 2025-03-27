@@ -19,15 +19,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/use-full-screen-adapt --save
+npm install @havue/use-full-screen-adapt --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/use-full-screen-adapt
+yarn add @havue/use-full-screen-adapt
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/use-full-screen-adapt
+pnpm install @havue/use-full-screen-adapt
 ```
 
 :::
@@ -88,11 +88,11 @@ module.exports = ({ env }) => {
 ::: code-group
 
 ```ts  [安装]
-import { useFullScreenAdapt } from 'pedy'
+import { useFullScreenAdapt } from 'havue'
 // or
-import { useFullScreenAdapt } from '@pedy/hooks'
+import { useFullScreenAdapt } from '@havue/hooks'
 // or
-import { useFullScreenAdapt } from '@pedy/use-full-screen-adapt'
+import { useFullScreenAdapt } from '@havue/use-full-screen-adapt'
 ```
 
 <<< ../../packages/hooks/use-full-screen-adapt/src/index.ts [手动编写]

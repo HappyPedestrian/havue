@@ -79,10 +79,10 @@
 <!--  -->
 // #region script
 <script setup lang="ts">
-import type { DragAndDropPoint, DragAndDropDragType } from '@pedy/drag-and-drop'
+import type { DragAndDropPoint, DragAndDropDragType } from '@havue/drag-and-drop'
 import { computed, ref, reactive } from 'vue'
-// import { PdDraggable as Draggable, PdDroppable as Droppable } from '@pedy/drag-and-drop'
-import { PdDraggable as Draggable, PdDroppable as Droppable } from '@pedy/components'
+// import { PdDraggable as Draggable, PdDroppable as Droppable } from '@havue/drag-and-drop'
+import { PdDraggable as Draggable, PdDroppable as Droppable } from '@havue/components'
 
 type BoxType = {
   key: string | number | symbol

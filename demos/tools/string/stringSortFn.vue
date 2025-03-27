@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { nextTick, ref, computed } from 'vue'
 import type { InputInstance } from 'element-plus'
-import { stringSortFn } from '@pedy/tools'
+import { stringSortFn } from '@havue/tools'
 
 const inputValue = ref('')
 const dynamicTags = ref(['aabc', '1abc', '阿abc', '3abc', '！2abc', '菜菜菜菜111', 'babc'])

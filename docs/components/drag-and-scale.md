@@ -13,15 +13,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/drag-and-scale --save
+npm install @havue/drag-and-scale --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/drag-and-scale
+yarn add @havue/drag-and-scale
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/drag-and-scale
+pnpm install @havue/drag-and-scale
 ```
 
 :::
@@ -30,11 +30,11 @@ pnpm install @pedy/drag-and-scale
 
 ```vue
 <script>
-import { PdDragAndScale } from 'pedy'
+import { PdDragAndScale } from 'havue'
 // or 
-import { PdDragAndScale } from '@pedy/components'
+import { PdDragAndScale } from '@havue/components'
 // or
-import { PdDragAndScale } from '@pedy/color-picker'
+import { PdDragAndScale } from '@havue/color-picker'
 </script>
 ```
 

@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/solutions",
+  "name": "@havue/solutions",
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",
@@ -7,9 +7,9 @@
     "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
   },
   "dependencies": {
-    "@pedy/shared": "workspace:*",
-    "@pedy/bc-connect": "workspace:*",
-    "@pedy/ws-video-manager": "workspace:*",
+    "@havue/shared": "workspace:*",
+    "@havue/bc-connect": "workspace:*",
+    "@havue/ws-video-manager": "workspace:*",
     "lodash": "^4.17.21"
   },
   "main": "./dist/solutions.js",

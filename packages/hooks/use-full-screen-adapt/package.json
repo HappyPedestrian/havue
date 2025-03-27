@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/use-full-screen-adapt",
+  "name": "@havue/use-full-screen-adapt",
   "scripts": {
     "build": "vite build --mode package"
   },

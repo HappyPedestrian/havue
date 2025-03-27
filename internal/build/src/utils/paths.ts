@@ -3,7 +3,7 @@ import { resolve, relative, sep } from 'node:path'
 export const projRoot = resolve(__dirname, '..', '..', '..')
 export const pkgRoot = resolve(projRoot, 'packages')
 export const compRoot = resolve(pkgRoot, 'components')
-export const pdRoot = resolve(pkgRoot, 'pedy')
+export const hvRoot = resolve(pkgRoot, 'havue')
 export const directiveRoot = resolve(pkgRoot, 'directives')
 export const hookRoot = resolve(pkgRoot, 'hooks')
 

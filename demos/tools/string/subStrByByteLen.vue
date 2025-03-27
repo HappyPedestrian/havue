@@ -11,7 +11,7 @@
 // #region script
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { subStrByByteLen } from '@pedy/tools'
+import { subStrByByteLen } from '@havue/tools'
 
 const str = ref('')
 const subByteLen = ref(0)

@@ -38,8 +38,8 @@
     // 默认引入的模块类型声明
     "types": [],
     "paths": {
-      "pedy": ["./packages/pedy/src"],
-      "@pedy/*": [
+      "havue": ["./packages/havue/src"],
+      "@havue/*": [
         "./packages/*/src",
         "./packages/components/*/src",
         "./packages/hooks/*/src",

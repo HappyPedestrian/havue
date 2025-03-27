@@ -9,15 +9,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/use-gesture-2-mouse --save
+npm install @havue/use-gesture-2-mouse --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/use-gesture-2-mouse
+yarn add @havue/use-gesture-2-mouse
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/use-gesture-2-mouse
+pnpm install @havue/use-gesture-2-mouse
 ```
 
 ## 使用
@@ -25,11 +25,11 @@ pnpm install @pedy/use-gesture-2-mouse
 引入
 
 ```ts
-import { useGestrue2Mouse } from 'pedy'
+import { useGestrue2Mouse } from 'havue'
 // or
-import { useGestrue2Mouse } from '@pedy/hooks'
+import { useGestrue2Mouse } from '@havue/hooks'
 // or
-import { useGestrue2Mouse } from '@pedy/gesture-2-mouse'
+import { useGestrue2Mouse } from '@havue/gesture-2-mouse'
 ```
 
 ## 示例

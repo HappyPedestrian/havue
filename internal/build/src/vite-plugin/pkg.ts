@@ -10,7 +10,7 @@ import {
   relCwd,
   writeJsonFile,
   readJsonFile
-} from '@pedy/build-utils'
+} from '@havue/build-utils'
 import { isObjectLike, kebabCase } from '../utils'
 import { getOutFileName } from '../utils/name'
 

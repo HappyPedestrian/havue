@@ -1,6 +1,6 @@
 import type { MaybeRef } from 'vue'
 import { computed, isRef, watch, toValue, onBeforeUnmount } from 'vue'
-import { isMobile } from '@pedy/shared'
+import { isMobile } from '@havue/shared'
 
 export type DragAndScaleOptions = {
   container: HTMLElement | undefined | null

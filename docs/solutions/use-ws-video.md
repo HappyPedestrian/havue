@@ -18,15 +18,15 @@
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/use-ws-video --save
+npm install @havue/use-ws-video --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/use-ws-video
+yarn add @havue/use-ws-video
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/use-ws-video
+pnpm install @havue/use-ws-video
 ```
 
 ## 单独安装此javascript类
@@ -36,15 +36,15 @@ pnpm install @pedy/use-ws-video
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/ws-video-manager --save
+npm install @havue/ws-video-manager --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/ws-video-manager
+yarn add @havue/ws-video-manager
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/ws-video-manager
+pnpm install @havue/ws-video-manager
 ```
 
 ## 使用
@@ -52,21 +52,21 @@ pnpm install @pedy/ws-video-manager
 引入useVideoPlay hook
 
 ```ts
-import { useWsVideo } from 'pedy'
+import { useWsVideo } from 'havue'
 // or
-import { useWsVideo } from '@pedy/hooks'
+import { useWsVideo } from '@havue/hooks'
 // or
-import { useWsVideo } from '@pedy/use-ws-video'
+import { useWsVideo } from '@havue/use-ws-video'
 ```
 
 引入 javascript manager 类使用
 
 ```ts
-import { WsVideoManager } from 'pedy'
+import { WsVideoManager } from 'havue'
 // or
-import { WsVideoManager } from '@pedy/solutions'
+import { WsVideoManager } from '@havue/solutions'
 // or
-import { WsVideoManager } from '@pedy/ws-video-manager'
+import { WsVideoManager } from '@havue/ws-video-manager'
 ```
 
 ## 函数声明

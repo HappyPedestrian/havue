@@ -1,13 +1,13 @@
 import type { UserConfig, LibraryFormats } from 'vite'
 import type { PackageJson } from 'type-fest'
-import { readJsonFile } from '@pedy/build-utils'
+import { readJsonFile } from '@havue/build-utils'
 import type { ModeType } from '../types'
 import { getExternal } from './external'
 import { getPlugins } from './plugins'
 import { getAlias } from './alias'
 import { kebabCase } from '../utils'
 
-import { absCwd, outDir, entryPath } from '@pedy/build-utils'
+import { absCwd, outDir, entryPath } from '@havue/build-utils'
 
 const aliasList = getAlias()
 

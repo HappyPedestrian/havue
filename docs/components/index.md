@@ -13,15 +13,15 @@
 ::: code-group
 
 ```shell
-npm install @pedy/components --save
+npm install @havue/components --save
 ```
 
 ```shell
-yarn add @pedy/components
+yarn add @havue/components
 ```
 
 ```shell
-pnpm install @pedy/components
+pnpm install @havue/components
 ```
 
 :::

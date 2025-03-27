@@ -1,5 +1,5 @@
 {
-  "name": "@pedy/use-gesture-2-mouse",
+  "name": "@havue/use-gesture-2-mouse",
   "scripts": {
     "build": "vite build --mode package"
   },

@@ -1,6 +1,6 @@
 import type { Directive, DirectiveBinding } from 'vue'
-import type { SFCWithInstall } from '@pedy/utils'
-import { withInstallDirective } from '@pedy/utils'
+import type { SFCWithInstall } from '@havue/utils'
+import { withInstallDirective } from '@havue/utils'
 
 export enum MODIFIERS {
   STOP = 'stop',

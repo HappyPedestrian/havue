@@ -1,6 +1,6 @@
 import { ref, onMounted, onBeforeUnmount, reactive } from 'vue'
 import { throttle } from '../utils/tools'
-import { isMobile } from '@pedy/shared'
+import { isMobile } from '@havue/shared'
 
 type Point = {
   x: number

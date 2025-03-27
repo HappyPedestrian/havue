@@ -10,8 +10,8 @@
 // #region script
 <script setup lang="ts">
 import { ref, reactive, computed, nextTick } from 'vue'
-// import { useGestrue2Mouse } from '@pedy/use-gesture-2-mouse'
-import { useGestrue2Mouse } from '@pedy/hooks'
+// import { useGestrue2Mouse } from '@havue/use-gesture-2-mouse'
+import { useGestrue2Mouse } from '@havue/hooks'
 
 const stateText = ref<string>('')
 

@@ -1,10 +1,10 @@
 {
-  "name": "@pedy/ws-video-manager",
+  "name": "@havue/ws-video-manager",
   "scripts": {
     "build": "vite build --mode package"
   },
   "dependencies": {
-    "@pedy/shared": "workspace:*",
+    "@havue/shared": "workspace:*",
     "@vueuse/core": "^11.0.3"
   },
   "main": "./dist/ws-video-manager.js",

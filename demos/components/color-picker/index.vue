@@ -5,8 +5,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-// import { PdColorPicker } from '@pedy/color-picker'
-import { PdColorPicker } from '@pedy/components'
+// import { PdColorPicker } from '@havue/color-picker'
+import { PdColorPicker } from '@havue/components'
 
 const color = ref('#ffffff')
 </script>

@@ -27,10 +27,10 @@
 <!--  -->
 // #region script
 <script setup lang="ts">
-import type { BcConnectSendMessageType } from '@pedy/bc-connect'
+import type { BcConnectSendMessageType } from '@havue/bc-connect'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-// import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@pedy/bc-connect'
-import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@pedy/solutions'
+// import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@havue/bc-connect'
+import { BroadcastChannelManager, BcConnectEventTypeEnum } from '@havue/solutions'
 
 let bcManager: BroadcastChannelManager | null = null
 

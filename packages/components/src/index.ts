@@ -1,3 +1,3 @@
-export * from '@pedy/color-picker'
-export * from '@pedy/drag-and-drop'
-export * from '@pedy/drag-and-scale'
+export * from '@havue/color-picker'
+export * from '@havue/drag-and-drop'
+export * from '@havue/drag-and-scale'

@@ -1,6 +1,6 @@
 import { PluginOption } from 'vite'
 import { cp } from 'node:fs/promises'
-import { pkgRoot, souceTypeRoot, outTypeDir, absCwd } from '@pedy/build-utils'
+import { pkgRoot, souceTypeRoot, outTypeDir, absCwd } from '@havue/build-utils'
 
 /** 自定义插件，将 ts类型定义移动到子包目录 */
 export function pluginTypeDefine(): PluginOption {
@@ -19,9 +19,8 @@ export function pluginTypeDefine(): PluginOption {
           recursive: true
         })
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.log(`[${cwd}]: failed to move dts!`)
-        // eslint-disable-next-line no-console
+
         console.error(err)
       }
     }

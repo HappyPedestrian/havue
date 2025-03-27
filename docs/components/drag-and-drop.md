@@ -21,15 +21,15 @@ Droppalbe只接受`type`在其`acceptDragType`中的Draggalbe
 ::: code-group
 
 ```shell [npm]
-npm install @pedy/drag-and-drop --save
+npm install @havue/drag-and-drop --save
 ```
 
 ```shell [yarn]
-yarn add @pedy/drag-and-drop
+yarn add @havue/drag-and-drop
 ```
 
 ```shell [pnpm]
-pnpm install @pedy/drag-and-drop
+pnpm install @havue/drag-and-drop
 ```
 
 :::
@@ -38,11 +38,11 @@ pnpm install @pedy/drag-and-drop
 
 ```vue
 <script>
-import { PdDraggable, PdDroppable } from 'pedy'
+import { PdDraggable, PdDroppable } from 'havue'
 // or 
-import { PdCoPdDraggable, PdDroppablelorPicker } from '@pedy/components'
+import { PdCoPdDraggable, PdDroppablelorPicker } from '@havue/components'
 // or
-import { PdDraggable, PdDroppable } from '@pedy/drag-and-drop'
+import { PdDraggable, PdDroppable } from '@havue/drag-and-drop'
 </script>
 ```
 
