@@ -1,5 +1,6 @@
 {
   "name": "@havue/components",
+  "version": "1.0.0",
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",
@@ -12,6 +13,16 @@
     "@havue/drag-and-drop": "workspace:*",
     "@havue/drag-and-scale": "workspace:*"
   },
+  "devDependencies": {
+    "vue": "^3.3.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "main": "./dist/components.js",
   "module": "./dist/components.mjs",
   "types": "./dist/types/src/index.d.ts",
@@ -21,6 +32,5 @@
       "import": "./dist/components.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  },
-  "version": "1.0.0"
+  }
 }
