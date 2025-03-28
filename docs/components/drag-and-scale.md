@@ -52,6 +52,7 @@ import Demo from '@/components/drag-and-scale/index.vue'
 </script>
 
 <Demo></Demo>
+
 ::: details 点我看代码
 ::: code-group
 

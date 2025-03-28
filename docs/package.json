@@ -7,6 +7,9 @@
     "build": "vitepress build .",
     "serve": "vitepress serve . --port 9001"
   },
+  "dependencies": {
+    "ssr-window": "^5.0.0"
+  },
   "devDependencies": {
     "@havue/build": "workspace:*",
     "@havue/build-utils": "workspace:*",

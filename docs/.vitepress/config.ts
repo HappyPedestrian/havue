@@ -105,6 +105,9 @@ export default defineConfig({
         ...aliasList
       ]
     },
+    ssr: {
+      noExternal: ['element-plus']
+    },
     plugins: [
       AutoImport({
         resolvers: [ElementPlusResolver()]
