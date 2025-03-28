@@ -17,10 +17,7 @@ export async function getViteConfig(mode: ModeType = 'package'): Promise<UserCon
   const finalName = kebabCase(packageJson.name || 'index')
   const plugins = await getPlugins()
 
-  const formats: LibraryFormats[] = ['umd']
-  if (mode === 'package') {
-    formats.push('es')
-  }
+  const formats: LibraryFormats[] = mode === 'package' ? ['es', 'umd'] : ['umd']
 
   return {
     resolve: {
@@ -35,7 +32,8 @@ export async function getViteConfig(mode: ModeType = 'package'): Promise<UserCon
       lib: {
         entry: entryPath,
         formats: formats,
-        name: finalName
+        name: finalName,
+        fileName: (formats) => getOutFileName(finalName, formats as LibraryFormats, mode)
       },
       cssCodeSplit: false,
       rollupOptions: {
@@ -48,4 +46,20 @@ export async function getViteConfig(mode: ModeType = 'package'): Promise<UserCon
       }
     }
   }
+}
+
+export function getOutFileName(fileName: string, format: LibraryFormats, mode: ModeType) {
+  const formatName = format
+  const ext = formatName === 'es' ? '.mjs' : '.umd.js'
+  let tail: string
+  // 全量构建时，文件名后缀的区别
+  if (mode === 'full') {
+    tail = '.full.js'
+  } else if (mode === 'full-min') {
+    tail = '.full.min.js'
+  } else {
+    tail = ext
+  }
+  console.log('outFileName::::', `${fileName}${tail}`)
+  return `${fileName}${tail}`
 }
