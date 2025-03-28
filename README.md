@@ -12,7 +12,7 @@ root/
 |   |—— components/     # 组件
 |   |—— directives/     # 指令
 |   |—— hooks/          # vue composition api
-|   |—— pedy/           # 全量库
+|   |—— havue/           # 全量库
 |   |—— shared/         # 项目通用模块
 |   |—— solutions/      # 特殊复杂场景解决方案
 |   |—— tools/          # 工具函数库
@@ -59,7 +59,7 @@ pnpm run build:internal
 构建前，请先更新.env文件中的版本号，然后执行以下命令, 全量更新版本号。
 
 ```bash
-pnpm run gen:version
+pnpm run update:version
 ```
 
 ### 构建包
