@@ -16,13 +16,18 @@
     "build:full-min": "vite build --mode full-min",
     "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {
-    "@havue/shared": "workspace:*",
-    "@havue/components": "workspace:*",
-    "@havue/hooks": "workspace:*",
-    "@havue/directives": "workspace:*",
-    "@havue/solutions": "workspace:*",
-    "@havue/tools": "workspace:*"
+    "@havue/shared": "workspace:^",
+    "@havue/components": "workspace:^",
+    "@havue/hooks": "workspace:^",
+    "@havue/directives": "workspace:^",
+    "@havue/solutions": "workspace:^",
+    "@havue/tools": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.3.0"
@@ -34,6 +39,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/havue.js",
   "module": "./dist/havue.mjs",
   "types": "./dist/types/src/index.d.ts",

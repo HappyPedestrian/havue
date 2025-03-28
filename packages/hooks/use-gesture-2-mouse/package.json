@@ -1,7 +1,22 @@
 {
   "name": "@havue/use-gesture-2-mouse",
+  "version": "1.0.0",
+  "description": "Gesture recognition hook for Vue3",
+  "keywords": [
+    "havue",
+    "hook",
+    "gesture",
+    "mouse",
+    "recognition",
+    "vue3"
+  ],
   "scripts": {
     "build": "vite build --mode package"
+  },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
   },
   "dependencies": {},
   "devDependencies": {
@@ -10,6 +25,13 @@
   "peerDependencies": {
     "vue": "^3.3.0"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/use-gesture-2-mouse.js",
   "module": "./dist/use-gesture-2-mouse.mjs",
   "types": "./dist/types/src/index.d.ts",
@@ -19,6 +41,5 @@
       "import": "./dist/use-gesture-2-mouse.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  },
-  "version": "1.0.0"
+  }
 }

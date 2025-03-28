@@ -1,11 +1,24 @@
 {
   "name": "@havue/drag-and-drop",
   "version": "1.0.0",
+  "description": "Drag and drop components for Vue3",
+  "keywords": [
+    "havue",
+    "components",
+    "drag",
+    "drop",
+    "vue3"
+  ],
   "scripts": {
     "build": "vite build --mode package"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {
-    "@havue/shared": "workspace:*"
+    "@havue/shared": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.3.0"
@@ -17,6 +30,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/drag-and-drop.js",
   "module": "./dist/drag-and-drop.mjs",
   "types": "./dist/types/src/index.d.ts",

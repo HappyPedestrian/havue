@@ -1,11 +1,22 @@
 {
   "name": "@havue/directives",
   "version": "1.0.0",
+  "description": "Some directives for Vue3",
+  "keywords": [
+    "havue",
+    "directive",
+    "vue3"
+  ],
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",
     "build:full-min": "vite build --mode full-min",
     "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
+  },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
   },
   "dependencies": {},
   "devDependencies": {
@@ -18,6 +29,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/directives.js",
   "module": "./dist/directives.mjs",
   "types": "./dist/types/src/index.d.ts",

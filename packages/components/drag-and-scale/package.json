@@ -1,11 +1,25 @@
 {
   "name": "@havue/drag-and-scale",
   "version": "1.0.0",
+  "description": "Drag and zoom components for Vue3",
+  "keywords": [
+    "havue",
+    "components",
+    "drag",
+    "scale",
+    "zoom",
+    "vue3"
+  ],
   "scripts": {
     "build": "vite build --mode package"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {
-    "@havue/shared": "workspace:*"
+    "@havue/shared": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.3.0"
@@ -17,6 +31,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/drag-and-scale.js",
   "module": "./dist/drag-and-scale.mjs",
   "types": "./dist/types/src/index.d.ts",

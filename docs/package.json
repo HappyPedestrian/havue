@@ -11,8 +11,8 @@
     "ssr-window": "^5.0.0"
   },
   "devDependencies": {
-    "@havue/build": "workspace:*",
-    "@havue/build-utils": "workspace:*",
+    "@havue/build": "workspace:^",
+    "@havue/build-utils": "workspace:^",
     "vitepress": "^1.2.3"
   }
 }

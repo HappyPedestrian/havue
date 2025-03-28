@@ -1,8 +1,27 @@
 {
   "name": "@havue/shared",
+  "version": "1.0.0",
+  "description": "Shared tools for Havue",
+  "keywords": [
+    "havue",
+    "tools",
+    "Shared"
+  ],
   "scripts": {
     "build": "vite build"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/shared.js",
   "module": "./dist/shared.mjs",
   "exports": {
@@ -12,6 +31,5 @@
       "types": "./dist/types/src/index.d.ts"
     }
   },
-  "types": "./dist/types/src/index.d.ts",
-  "version": "1.0.0"
+  "types": "./dist/types/src/index.d.ts"
 }

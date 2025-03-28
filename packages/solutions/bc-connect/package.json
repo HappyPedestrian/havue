@@ -1,9 +1,29 @@
 {
   "name": "@havue/bc-connect",
+  "version": "1.0.0",
+  "description": "Javascript class for Broadcast channel connect",
+  "keywords": [
+    "havue",
+    "broadcast",
+    "channel",
+    "solutions"
+  ],
   "scripts": {
     "build": "vite build --mode package"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {},
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/bc-connect.js",
   "module": "./dist/bc-connect.mjs",
   "types": "./dist/types/src/index.d.ts",
@@ -13,6 +33,5 @@
       "import": "./dist/bc-connect.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  },
-  "version": "1.0.0"
+  }
 }

@@ -1,7 +1,24 @@
 {
   "name": "@havue/use-full-screen-adapt",
+  "version": "1.0.0",
+  "description": "Full screen adapt hook for Vue3",
+  "keywords": [
+    "havue",
+    "hook",
+    "full",
+    "screen",
+    "adapt",
+    "rem",
+    "postcss",
+    "vue3"
+  ],
   "scripts": {
     "build": "vite build --mode package"
+  },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
   },
   "dependencies": {},
   "devDependencies": {
@@ -10,6 +27,13 @@
   "peerDependencies": {
     "vue": "^3.3.0"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/use-full-screen-adapt.js",
   "module": "./dist/use-full-screen-adapt.mjs",
   "types": "./dist/types/src/index.d.ts",
@@ -19,6 +43,5 @@
       "import": "./dist/use-full-screen-adapt.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  },
-  "version": "1.0.0"
+  }
 }

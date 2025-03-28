@@ -1,12 +1,32 @@
 {
   "name": "@havue/ws-video-manager",
+  "version": "1.0.0",
+  "description": "Javascript class for websocket video manager",
+  "keywords": [
+    "havue",
+    "websocket",
+    "video",
+    "fmp4"
+  ],
   "scripts": {
     "build": "vite build --mode package"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {
-    "@havue/shared": "workspace:*",
+    "@havue/shared": "workspace:^",
     "@vueuse/core": "^11.0.3"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/ws-video-manager.js",
   "module": "./dist/ws-video-manager.mjs",
   "types": "./dist/types/src/index.d.ts",
@@ -16,6 +36,5 @@
       "import": "./dist/ws-video-manager.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
-  },
-  "version": "1.0.0"
+  }
 }

@@ -6,12 +6,12 @@
 
 * [全屏页面适配](/solutions/full-screen-adapt)
 * [移动端手势识别](/solutions/gesture-2-mouse)
-* [WebSocket适配播放器](/solutions/use-ws-video)
+* [WebSocket视频播放器](/solutions/use-ws-video)
 
 以下两个分类提供javascript类使用
 
 * [BoradcastChannle广播消息](/solutions/broadcast-channel-connect)
-* [WebSocket适配播放器](/solutions/use-ws-video)
+* [WebSocket视频播放器](/solutions/use-ws-video)
 
 ## 仅安装hooks
 

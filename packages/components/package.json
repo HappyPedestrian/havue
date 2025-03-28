@@ -1,17 +1,28 @@
 {
   "name": "@havue/components",
   "version": "1.0.0",
+  "description": "Some components for Vue3",
+  "keywords": [
+    "havue",
+    "components",
+    "vue3"
+  ],
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",
     "build:full-min": "vite build --mode full-min",
     "build": "pnpm run build:package && pnpm run build:full && pnpm run build:full-min"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {
-    "@havue/shared": "workspace:*",
-    "@havue/color-picker": "workspace:*",
-    "@havue/drag-and-drop": "workspace:*",
-    "@havue/drag-and-scale": "workspace:*"
+    "@havue/shared": "workspace:^",
+    "@havue/color-picker": "workspace:^",
+    "@havue/drag-and-drop": "workspace:^",
+    "@havue/drag-and-scale": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.3.0"
@@ -23,6 +34,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/components.js",
   "module": "./dist/components.mjs",
   "types": "./dist/types/src/index.d.ts",

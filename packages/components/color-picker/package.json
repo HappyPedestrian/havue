@@ -20,8 +20,13 @@
   "scripts": {
     "build": "vite build --mode package"
   },
+  "homepage": "https://happypedestrian.github.io/havue/guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HappyPedestrian/havue.git"
+  },
   "dependencies": {
-    "@havue/shared": "workspace:*",
+    "@havue/shared": "workspace:^",
     "@types/color": "^3.0.6",
     "color": "^4.2.3",
     "element-plus": "^2.7.7"
@@ -36,5 +41,8 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist"
+  ],
   "types": "./dist/types/src/index.d.ts"
 }
