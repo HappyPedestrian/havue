@@ -60,6 +60,5 @@ export function getOutFileName(fileName: string, format: LibraryFormats, mode: M
   } else {
     tail = ext
   }
-  console.log('outFileName::::', `${fileName}${tail}`)
   return `${fileName}${tail}`
 }
