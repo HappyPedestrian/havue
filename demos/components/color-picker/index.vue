@@ -1,6 +1,6 @@
 <template>
   <div>颜色：<input type="color" v-model="color" /></div>
-  <PdColorPicker v-model="color"></PdColorPicker>
+  <PdColorPicker v-model="color" :preset-colors="['#fff', '#000']"></PdColorPicker>
 </template>
 
 <script setup lang="ts">

@@ -1,11 +1,12 @@
 <template>
   <div class="preset-colors">
-    <div class="preset-colors_title">系统预设色彩</div>
+    <div class="preset-colors_title">{{ props.title || '系统预设色彩' }}</div>
     <div class="preset-color_list">
       <div
         class="preset-color_list-item"
         @click="handleClickColor(color)"
-        v-for="color in presetColors"
+        v-for="color in preColors"
+        :key="color"
         :style="{ backgroundColor: color }"
       ></div>
     </div>
@@ -13,7 +14,9 @@
 </template>
 
 <script setup lang="ts">
-const presetColors = [
+import { computed } from 'vue'
+
+const defaultPresetColors = [
   '#000000',
   '#FFFFFF',
   '#E3822D',
@@ -35,6 +38,15 @@ const presetColors = [
   '#D4C595',
   '#C52F65'
 ]
+
+const props = defineProps<{
+  title?: string
+  presetColors?: string[]
+}>()
+
+const preColors = computed(() => {
+  return !props.presetColors ? defaultPresetColors : props.presetColors
+})
 
 const emits = defineEmits<{
   (name: 'change', value: string): void

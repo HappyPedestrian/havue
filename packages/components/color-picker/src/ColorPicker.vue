@@ -1,6 +1,6 @@
 <template>
   <div class="color-picker">
-    <div class="title">颜色编辑器</div>
+    <div class="title">{{ props.title || '颜色编辑器' }}</div>
     <div class="color-area__wrapper">
       <div class="color-area" ref="colorAreaRef">
         <canvas ref="colorAreaCanvas"></canvas>
@@ -13,7 +13,11 @@
       <div class="origin-color" :style="{ backgroundColor: originHexColor }"></div>
     </div>
     <ColorForm :model-value="color" @change="handleColorChange"></ColorForm>
-    <PresetColors @change="handleColorChange"></PresetColors>
+    <PresetColors
+      @change="handleColorChange"
+      :title="props.presetTitle"
+      :presetColors="props.presetColors"
+    ></PresetColors>
   </div>
 </template>
 
@@ -32,6 +36,12 @@ defineOptions({
 })
 
 const DEFAULT_COLOR = '#ffffff'
+
+const props = defineProps<{
+  title?: string
+  presetTitle?: string
+  presetColors?: string[]
+}>()
 
 const emits = defineEmits<{
   (name: 'update:model-value', value: string): void
