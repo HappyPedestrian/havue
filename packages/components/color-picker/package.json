@@ -9,11 +9,11 @@
     "vue3"
   ],
   "license": "MIT",
-  "main": "./dist/color-picker.js",
+  "main": "./dist/color-picker.umd.js",
   "module": "./dist/color-picker.mjs",
   "exports": {
     ".": {
-      "require": "./dist/color-picker.js",
+      "require": "./dist/color-picker.umd.js",
       "import": "./dist/color-picker.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

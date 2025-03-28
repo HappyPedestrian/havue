@@ -36,12 +36,12 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "./dist/hooks.js",
+  "main": "./dist/hooks.umd.js",
   "module": "./dist/hooks.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/hooks.js",
+      "require": "./dist/hooks.umd.js",
       "import": "./dist/hooks.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

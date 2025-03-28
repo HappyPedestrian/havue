@@ -38,12 +38,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/components.js",
+  "main": "./dist/components.umd.js",
   "module": "./dist/components.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/components.js",
+      "require": "./dist/components.umd.js",
       "import": "./dist/components.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

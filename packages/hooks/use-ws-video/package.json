@@ -36,12 +36,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/use-ws-video.js",
+  "main": "./dist/use-ws-video.umd.js",
   "module": "./dist/use-ws-video.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/use-ws-video.js",
+      "require": "./dist/use-ws-video.umd.js",
       "import": "./dist/use-ws-video.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

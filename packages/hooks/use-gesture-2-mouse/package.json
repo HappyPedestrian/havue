@@ -33,12 +33,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/use-gesture-2-mouse.js",
+  "main": "./dist/use-gesture-2-mouse.umd.js",
   "module": "./dist/use-gesture-2-mouse.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/use-gesture-2-mouse.js",
+      "require": "./dist/use-gesture-2-mouse.umd.js",
       "import": "./dist/use-gesture-2-mouse.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

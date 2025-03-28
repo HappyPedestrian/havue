@@ -30,12 +30,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/tools.js",
+  "main": "./dist/tools.umd.js",
   "module": "./dist/tools.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/tools.js",
+      "require": "./dist/tools.umd.js",
       "import": "./dist/tools.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

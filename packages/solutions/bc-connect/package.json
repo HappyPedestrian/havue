@@ -25,12 +25,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/bc-connect.js",
+  "main": "./dist/bc-connect.umd.js",
   "module": "./dist/bc-connect.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/bc-connect.js",
+      "require": "./dist/bc-connect.umd.js",
       "import": "./dist/bc-connect.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

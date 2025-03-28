@@ -33,12 +33,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/directives.js",
+  "main": "./dist/directives.umd.js",
   "module": "./dist/directives.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/directives.js",
+      "require": "./dist/directives.umd.js",
       "import": "./dist/directives.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

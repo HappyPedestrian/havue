@@ -34,12 +34,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/drag-and-drop.js",
+  "main": "./dist/drag-and-drop.umd.js",
   "module": "./dist/drag-and-drop.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/drag-and-drop.js",
+      "require": "./dist/drag-and-drop.umd.js",
       "import": "./dist/drag-and-drop.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

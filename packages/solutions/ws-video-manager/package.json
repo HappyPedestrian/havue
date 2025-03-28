@@ -28,12 +28,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/ws-video-manager.js",
+  "main": "./dist/ws-video-manager.umd.js",
   "module": "./dist/ws-video-manager.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/ws-video-manager.js",
+      "require": "./dist/ws-video-manager.umd.js",
       "import": "./dist/ws-video-manager.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

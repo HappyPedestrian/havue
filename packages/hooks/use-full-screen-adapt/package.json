@@ -35,12 +35,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/use-full-screen-adapt.js",
+  "main": "./dist/use-full-screen-adapt.umd.js",
   "module": "./dist/use-full-screen-adapt.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/use-full-screen-adapt.js",
+      "require": "./dist/use-full-screen-adapt.umd.js",
       "import": "./dist/use-full-screen-adapt.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

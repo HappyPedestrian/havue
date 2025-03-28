@@ -23,11 +23,11 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/shared.js",
+  "main": "./dist/shared.umd.js",
   "module": "./dist/shared.mjs",
   "exports": {
     ".": {
-      "require": "./dist/shared.js",
+      "require": "./dist/shared.umd.js",
       "import": "./dist/shared.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

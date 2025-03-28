@@ -31,12 +31,12 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "./dist/solutions.js",
+  "main": "./dist/solutions.umd.js",
   "module": "./dist/solutions.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/solutions.js",
+      "require": "./dist/solutions.umd.js",
       "import": "./dist/solutions.mjs",
       "types": "./dist/types/src/index.d.ts"
     }

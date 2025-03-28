@@ -35,12 +35,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/drag-and-scale.js",
+  "main": "./dist/drag-and-scale.umd.js",
   "module": "./dist/drag-and-scale.mjs",
   "types": "./dist/types/src/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/drag-and-scale.js",
+      "require": "./dist/drag-and-scale.umd.js",
       "import": "./dist/drag-and-scale.mjs",
       "types": "./dist/types/src/index.d.ts"
     }
