@@ -8,6 +8,7 @@
     "components",
     "vue3"
   ],
+  "license": "MIT",
   "main": "./dist/color-picker.js",
   "module": "./dist/color-picker.mjs",
   "exports": {

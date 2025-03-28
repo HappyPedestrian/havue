@@ -10,6 +10,7 @@
     "recognition",
     "vue3"
   ],
+  "license": "MIT",
   "scripts": {
     "build": "vite build --mode package"
   },

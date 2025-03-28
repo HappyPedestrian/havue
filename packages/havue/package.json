@@ -10,6 +10,7 @@
     "solutions",
     "vue"
   ],
+  "license": "MIT",
   "scripts": {
     "build:package": "vite build --mode package",
     "build:full": "vite build --mode full",

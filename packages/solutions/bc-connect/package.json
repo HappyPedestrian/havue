@@ -8,6 +8,7 @@
     "channel",
     "solutions"
   ],
+  "license": "MIT",
   "scripts": {
     "build": "vite build --mode package"
   },

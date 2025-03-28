@@ -8,6 +8,7 @@
     "video",
     "fmp4"
   ],
+  "license": "MIT",
   "scripts": {
     "build": "vite build --mode package"
   },
