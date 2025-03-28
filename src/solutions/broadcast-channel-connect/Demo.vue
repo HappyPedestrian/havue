@@ -92,49 +92,56 @@ onBeforeUnmount(() => {
 // #region style
 <style lang="scss" scoped>
 .brdCnl-box {
+  box-sizing: border-box;
+  display: flex;
   width: 100%;
   height: 600px;
-  display: flex;
-  box-sizing: border-box;
-  background-color: #4d797c;
   color: black;
+  background-color: #4d797c;
+
   .left-box {
     width: 30%;
     overflow: auto;
+
     .title {
       font-size: 18px;
       font-weight: bold;
     }
+
     .friend-item {
       padding: 6px 10px;
       margin: 5px;
-      background-color: rgb(100, 148, 237);
+      background-color: rgb(100 148 237);
     }
   }
 
   .right-box {
-    padding: 5px 10px;
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
+    padding: 5px 10px;
     background-color: #4e7c4d;
 
     .current-info {
       padding: 3px 5px;
       background-color: #a8b9be;
     }
+
     .message-box {
-      margin-top: 10px;
       flex: 1;
+      margin-top: 10px;
       overflow: auto;
       background-color: antiquewhite;
+
       .message-item {
         padding: 5px;
         margin: 5px;
         background-color: #8cbba9;
+
         .id {
           font-weight: bold;
         }
+
         .message {
           color: #44b15c;
         }
@@ -142,14 +149,16 @@ onBeforeUnmount(() => {
     }
 
     .form-item {
-      margin: 5px 20px;
       display: flex;
       align-items: center;
+      margin: 5px 20px;
+
       .label {
         display: inline-block;
         width: 100px;
         text-align: right;
       }
+
       input {
         flex: 1;
         padding: 5px;
@@ -158,9 +167,10 @@ onBeforeUnmount(() => {
         background-color: black;
       }
     }
+
     button {
-      color: black;
       width: 100%;
+      color: black;
       background-color: #a8b9be;
     }
   }

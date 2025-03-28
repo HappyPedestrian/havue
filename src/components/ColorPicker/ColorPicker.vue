@@ -27,6 +27,10 @@ import { getLightColorAndDepth, hexToColor, getOriginHexByLightAndDepth, colorTo
 import ColorForm from './children/ColorForm/ColorForm.vue'
 import PresetColors from './children/PresetColors/PresetColors.vue'
 
+defineOptions({
+  name: 'ColorPicker'
+})
+
 const DEFAULT_COLOR = '#ffffff'
 
 const emits = defineEmits<{
