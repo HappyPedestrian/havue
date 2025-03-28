@@ -10,6 +10,6 @@ pnpm update:version
 
 pnpm build:lib
 
-npm publish -ws --access public
+pnpm -r publish --access public
 
 echo "✅ Publish completed"
