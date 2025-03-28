@@ -10,7 +10,7 @@ import { computed, ref } from 'vue'
 import { DnDManagerInstance } from './manager'
 
 defineOptions({
-  name: 'PdDroppable'
+  name: 'HvDroppable'
 })
 
 const emits = defineEmits<{

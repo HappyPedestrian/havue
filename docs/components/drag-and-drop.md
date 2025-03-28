@@ -38,11 +38,11 @@ pnpm install @havue/drag-and-drop
 
 ```vue
 <script>
-import { PdDraggable, PdDroppable } from 'havue'
+import { HvDraggable, HvDroppable } from 'havue'
 // or 
-import { PdCoPdDraggable, PdDroppablelorPicker } from '@havue/components'
+import { HvDraggable, HvDroppable } from '@havue/components'
 // or
-import { PdDraggable, PdDroppable } from '@havue/drag-and-drop'
+import { HvDraggable, HvDroppable } from '@havue/drag-and-drop'
 </script>
 ```
 

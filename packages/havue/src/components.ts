@@ -1,3 +1,3 @@
-import { PdColorPicker, PdDraggable, PdDroppable, PdDragAndScale } from '@havue/components'
+import { HvColorPicker, HvDraggable, HvDroppable, HvDragAndScale } from '@havue/components'
 
-export default [PdColorPicker, PdDraggable, PdDroppable, PdDragAndScale]
+export default [HvColorPicker, HvDraggable, HvDroppable, HvDragAndScale]

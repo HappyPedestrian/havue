@@ -1,3 +1,3 @@
-import { PdRightClickDirective } from '@havue/directives'
+import { HvRightClickDirective } from '@havue/directives'
 
-export default [PdRightClickDirective]
+export default [HvRightClickDirective]

@@ -28,11 +28,11 @@ pnpm install @havue/color-picker
 
 ```vue
 <script>
-import { PdColorPicker } from 'havue'
+import { HvColorPicker } from 'havue'
 // or 
-import { PdColorPicker } from '@havue/components'
+import { HvColorPicker } from '@havue/components'
 // or
-import { PdColorPicker } from '@havue/color-picker'
+import { HvColorPicker } from '@havue/color-picker'
 </script>
 ```
 

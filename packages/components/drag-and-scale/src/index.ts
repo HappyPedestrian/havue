@@ -2,9 +2,9 @@ import type { SFCWithInstall } from '@havue/utils'
 import { withInstall } from '@havue/utils'
 import DragAndScale from './DragAndScale.vue'
 
-export const PdDragAndScale: SFCWithInstall<typeof DragAndScale> = withInstall(DragAndScale)
+export const HvDragAndScale: SFCWithInstall<typeof DragAndScale> = withInstall(DragAndScale)
 
-export default PdDragAndScale
+export default HvDragAndScale
 
 export type {
   DragAndScaleOptions,

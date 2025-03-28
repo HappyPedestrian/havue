@@ -32,7 +32,7 @@ import ColorForm from './children/ColorForm/ColorForm.vue'
 import PresetColors from './children/PresetColors/PresetColors.vue'
 
 defineOptions({
-  name: 'PdColorPicker'
+  name: 'HvColorPicker'
 })
 
 const DEFAULT_COLOR = '#ffffff'

@@ -48,8 +48,8 @@
 <script setup lang="ts">
 import type { DragAndScaleChangeResultType } from '@havue/drag-and-scale'
 import { ref, computed } from 'vue'
-// import { PdDragAndScale as DragAndScale } from '@havue/drag-and-scale'
-import { PdDragAndScale as DragAndScale } from '@havue/components'
+// import { HvDragAndScale as DragAndScale } from '@havue/drag-and-scale'
+import { HvDragAndScale as DragAndScale } from '@havue/components'
 const containerRef = ref()
 
 const dragPosition = ref({

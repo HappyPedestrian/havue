@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { PdRightClickDirective as vRightClick } from '@havue/directives'
+import { HvRightClickDirective as vRightClick } from '@havue/directives'
 </script>
 
 <style lang="scss" scoped>

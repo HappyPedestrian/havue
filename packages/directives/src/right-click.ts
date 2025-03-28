@@ -104,16 +104,16 @@ function createEventListener(
 ) {
   return (e: MouseEvent) => {
     if (targetButtons === e.buttons || (e.buttons & targetButtons) !== 0) {
-      prevent ? e.preventDefault() : null
-      stop ? e.stopPropagation() : null
+      prevent ? e.preventDefault() : void 0
+      stop ? e.stopPropagation() : void 0
       value && value()
     }
   }
 }
 
-export const PdRightClickDirective: SFCWithInstall<typeof RightClickDirective> = withInstallDirective(
+export const HvRightClickDirective: SFCWithInstall<typeof RightClickDirective> = withInstallDirective(
   RightClickDirective,
   'right-click'
 )
 
-export default PdRightClickDirective
+export default HvRightClickDirective

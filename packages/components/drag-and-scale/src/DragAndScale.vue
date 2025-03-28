@@ -31,7 +31,7 @@ import { ref, computed } from 'vue'
 import { useDragAndScale } from './hooks/useDragAndScale'
 
 defineOptions({
-  name: 'PdDragAndScale'
+  name: 'HvDragAndScale'
 })
 
 const emits = defineEmits<{

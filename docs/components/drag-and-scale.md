@@ -30,11 +30,11 @@ pnpm install @havue/drag-and-scale
 
 ```vue
 <script>
-import { PdDragAndScale } from 'havue'
+import { HvDragAndScale } from 'havue'
 // or 
-import { PdDragAndScale } from '@havue/components'
+import { HvDragAndScale } from '@havue/components'
 // or
-import { PdDragAndScale } from '@havue/color-picker'
+import { HvDragAndScale } from '@havue/color-picker'
 </script>
 ```
 

@@ -17,9 +17,9 @@
 
 ```vue
 <script>
-import { PdRightClickDirective } from 'havue'
+import { HvRightClickDirective } from 'havue'
 // or 
-import { PdRightClickDirective } from '@havue/directives'
+import { HvRightClickDirective } from '@havue/directives'
 </script>
 ```
 
