@@ -94,7 +94,7 @@ export default defineConfig({
       '/tools': toolsItems
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/vuejs/vitepress' }]
+    socialLinks: [{ icon: 'github', link: 'https://github.com/HappyPedestrian/havue.git' }]
   },
   vite: {
     resolve: {
