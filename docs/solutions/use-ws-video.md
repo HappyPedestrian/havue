@@ -29,6 +29,8 @@ yarn add @havue/use-ws-video
 pnpm install @havue/use-ws-video
 ```
 
+:::
+
 ## 单独安装此javascript类
 
 如果不通过hook的方式使用：
@@ -46,6 +48,8 @@ yarn add @havue/ws-video-manager
 ```shell [pnpm]
 pnpm install @havue/ws-video-manager
 ```
+
+:::
 
 ## 使用
 

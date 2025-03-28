@@ -39,6 +39,8 @@ yarn add @havue/bc-connect
 pnpm install @havue/bc-connect
 ```
 
+:::
+
 ## 使用
 
 引入
