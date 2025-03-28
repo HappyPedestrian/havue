@@ -43,7 +43,8 @@
         "./packages/*/src",
         "./packages/components/*/src",
         "./packages/hooks/*/src",
-        "./packages/solutions/*/src"
+        "./packages/solutions/*/src",
+        "./packages/tools/*/src"
       ]
     }
   }

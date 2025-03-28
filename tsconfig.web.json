@@ -7,5 +7,5 @@
     "skipLibCheck": true
   },
   "include": ["packages/**/src", "docs/**/*", "demos/**/*", "typings/env.d.ts"],
-  "exclude": ["node_modules", "**/dist", "packages/build"]
+  "exclude": ["node_modules", "**/dist"]
 }
