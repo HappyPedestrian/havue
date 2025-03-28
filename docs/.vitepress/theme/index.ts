@@ -23,6 +23,7 @@ export default {
     // ...
     if (import.meta.env.SSR) {
       globalThis.window = window
+      globalThis.navigator = window.navigator
       globalThis.document = document
     }
   },
