@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises'
 import path, { resolve } from 'path'
 import { consola } from 'consola'
 import fg from 'fast-glob'
+import 'dotenv/config'
 import { pkgRoot, hvRoot, readJsonFile, writeJsonFile } from '@havue/build-utils'
 import pkg from '../packages/havue/package.json' // need to be checked
 
