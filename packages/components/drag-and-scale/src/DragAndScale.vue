@@ -1,22 +1,22 @@
 <template>
-  <div class="drag-and-scale-box" ref="targetRef">
+  <div class="hv-drag-and-scale" ref="targetRef">
     <slot></slot>
-    <div class="zoom-mark-box">
-      <div class="zoom-operate-box" :class="props.disabled ? 'disabled' : ''" ref="operateRef">
-        <div class="top-box block">
-          <div class="left-box" data-scale-side="left,top"></div>
-          <div class="center-box" data-scale-side="top"></div>
-          <div class="right-box" data-scale-side="right,top"></div>
+    <div class="hv-drag-and-scale__zoom-mark">
+      <div class="hv-drag-and-scale__area-box" :class="props.disabled ? 'disabled' : ''" ref="operateRef">
+        <div class="hv-drag-and-scale__area-top hv-drag-and-scale__area-block">
+          <div class="hv-drag-and-scale__area-left" data-scale-side="left,top"></div>
+          <div class="hv-drag-and-scale__area-center" data-scale-side="top"></div>
+          <div class="hv-drag-and-scale__area-right" data-scale-side="right,top"></div>
         </div>
-        <div class="middle-box block">
-          <div class="left-box" data-scale-side="left"></div>
-          <div class="center-box" data-scale-side="center"></div>
-          <div class="right-box" data-scale-side="right"></div>
+        <div class="hv-drag-and-scale__area-middle hv-drag-and-scale__area-block">
+          <div class="hv-drag-and-scale__area-left" data-scale-side="left"></div>
+          <div class="hv-drag-and-scale__area-center" data-scale-side="center"></div>
+          <div class="hv-drag-and-scale__area-right" data-scale-side="right"></div>
         </div>
-        <div class="bottom-box block">
-          <div class="left-box" data-scale-side="left,bottom"></div>
-          <div class="center-box" data-scale-side="bottom"></div>
-          <div class="right-box" data-scale-side="right,bottom"></div>
+        <div class="hv-drag-and-scale__area-bottom hv-drag-and-scale__area-block">
+          <div class="hv-drag-and-scale__area-left" data-scale-side="left,bottom"></div>
+          <div class="hv-drag-and-scale__area-center" data-scale-side="bottom"></div>
+          <div class="hv-drag-and-scale__area-right" data-scale-side="right,bottom"></div>
         </div>
       </div>
     </div>
@@ -73,8 +73,8 @@ const useDragAndScaleOptions = computed<DragAndScaleOptions>(() => {
 useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
 </script>
 
-<style lang="scss" scoped>
-.drag-and-scale-box {
+<style lang="scss">
+.hv-drag-and-scale {
   --drag-box-border-width: 1px;
 
   // 周围响应拖放操作区域宽度
@@ -99,7 +99,7 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
   box-sizing: border-box;
   border: var(--drag-box-border-width) dashed #fff;
 
-  .zoom-mark-box {
+  .hv-drag-and-scale__zoom-mark {
     position: absolute;
     inset: var(--scale-mark-inset);
     background:
@@ -129,27 +129,27 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       var(--scale-mark-width) var(--scale-mark-line-width),
       var(--scale-mark-width) var(--scale-mark-line-width);
 
-    .zoom-operate-box {
+    .hv-drag-and-scale__area-box {
       position: absolute;
       inset: var(--scale-area-inset);
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
 
-      .block {
+      .hv-drag-and-scale__area-block {
         box-sizing: border-box;
         display: flex;
         width: 100%;
 
-        .left-box,
-        .right-box {
+        .hv-drag-and-scale__area-left,
+        .hv-drag-and-scale__area-right {
           box-sizing: border-box;
           width: var(--scale-area-width);
           max-width: 33.3333%;
           height: 100%;
         }
 
-        .center-box {
+        .hv-drag-and-scale__area-center {
           box-sizing: border-box;
           flex: 1;
           height: 100%;
@@ -157,46 +157,46 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       }
 
       &.disabled {
-        .block {
+        .hv-drag-and-scale__area-block {
           * {
             cursor: not-allowed !important;
           }
         }
       }
 
-      .middle-box {
+      .hv-drag-and-scale__area-middle {
         flex: 1;
 
-        .left-box,
-        .right-box {
+        .hv-drag-and-scale__area-left,
+        .hv-drag-and-scale__area-right {
           height: 100%;
           cursor: ew-resize;
         }
 
-        .center-box {
+        .hv-drag-and-scale__area-center {
           flex: 1;
           height: 100%;
           cursor: move;
         }
       }
 
-      .top-box .left-box,
-      .bottom-box .right-box {
+      .hv-drag-and-scale__area-top .hv-drag-and-scale__area-left,
+      .hv-drag-and-scale__area-bottom .hv-drag-and-scale__area-right {
         cursor: nw-resize;
       }
 
-      .top-box .right-box,
-      .bottom-box .left-box {
+      .hv-drag-and-scale__area-top .hv-drag-and-scale__area-right,
+      .hv-drag-and-scale__area-bottom .hv-drag-and-scale__area-left {
         cursor: ne-resize;
       }
 
-      .top-box,
-      .bottom-box {
+      .hv-drag-and-scale__area-top,
+      .hv-drag-and-scale__area-bottom {
         box-sizing: border-box;
         height: var(--scale-area-width);
         max-height: 33.3333%;
 
-        .center-box {
+        .hv-drag-and-scale__area-center {
           cursor: ns-resize;
         }
       }

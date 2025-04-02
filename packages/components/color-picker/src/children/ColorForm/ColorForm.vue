@@ -1,10 +1,10 @@
 <template>
-  <div class="color-form">
-    <div class="hex-color mb-12">
+  <div class="hv-color-picker__color-form">
+    <div class="mb-12">
       <el-input v-model="hexColor" :formatter="hexFormater" @change="handleHexColorChange"></el-input>
     </div>
-    <div class="form-group mb-12">
-      <div class="label">RGB</div>
+    <div class="hv-color-picker__form-group mb-12">
+      <div class="hv-color-picker__form-label">RGB</div>
       <el-input-number
         v-model="formInputRGB.r"
         @change="handleRgbColorChange"
@@ -33,8 +33,8 @@
         :controls="false"
       ></el-input-number>
     </div>
-    <div class="form-group mb-12">
-      <div class="label">HSV</div>
+    <div class="hv-color-picker__form-group mb-12">
+      <div class="hv-color-picker__form-label">HSV</div>
       <el-input-number
         v-model="formInputHSV.h"
         @change="handleHsvColorChange"
@@ -161,15 +161,16 @@ function handleHsvColorChange() {
 }
 </script>
 
-<style lang="scss" scoped>
-.color-form {
-  gap: 12px;
+<style lang="scss">
+.hv-color-picker__color-form {
+  width: 100%;
+  overflow: hidden;
 
   .mb-12 {
     margin-bottom: 12px;
   }
 
-  :deep(.el-input) {
+  .el-input {
     --el-input-border-color: #30343b;
 
     .el-input__wrapper {
@@ -184,15 +185,15 @@ function handleHsvColorChange() {
     }
   }
 
-  .form-group {
+  .hv-color-picker__form-group {
     display: flex;
     align-items: center;
 
-    .label {
+    .hv-color-picker__form-label {
       width: 72px;
     }
 
-    :deep(.el-input) {
+    .el-input {
       flex: 1;
     }
   }

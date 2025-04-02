@@ -1,8 +1,8 @@
 <template>
-  <div ref="dragItemRef" class="draggable-area" :class="disabled ? 'disabled' : ''">
+  <div ref="dragItemRef" class="hv-draggable" :class="disabled ? 'disabled' : ''">
     <slot></slot>
-    <div class="draggable-clone-item" :style="cloneNodeStyle" v-if="isDragThis">
-      <slot name="drag-item"><slot></slot></slot>
+    <div class="hv-draggable__clone-item" :style="cloneNodeStyle" v-if="isDragThis">
+      <slot name="hv-drag-item"><slot></slot></slot>
     </div>
   </div>
 </template>
@@ -163,7 +163,7 @@ function handleMove(point: DragAndDropPoint) {
 </script>
 
 <style lang="scss" scoped>
-.draggable-area {
+.hv-draggable {
   width: fit-content;
   cursor: grab;
 
@@ -172,7 +172,7 @@ function handleMove(point: DragAndDropPoint) {
   }
 }
 
-.draggable-clone-item {
+.hv-draggable__clone-item {
   position: fixed;
   top: 0;
   left: 0;

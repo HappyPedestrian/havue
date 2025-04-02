@@ -1,5 +1,5 @@
 <template>
-  <div ref="dropAreaRef" class="droppable-area">
+  <div ref="dropAreaRef" class="hv-droppable">
     <slot></slot>
   </div>
 </template>
@@ -81,8 +81,8 @@ DnDManagerInstance.on('end', ({ type, point, data }) => {
 })
 </script>
 
-<style lang="scss" scoped>
-.droppable-area {
+<style lang="scss">
+.hv-droppable {
   position: relative;
   width: fit-content;
 }

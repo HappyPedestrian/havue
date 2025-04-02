@@ -1,9 +1,9 @@
 <template>
-  <div class="preset-colors">
-    <div class="preset-colors_title">{{ props.title || '系统预设色彩' }}</div>
-    <div class="preset-color_list">
+  <div class="hv-color-picker__preset">
+    <div class="hv-color-picker__preset-title">{{ props.title || '系统预设色彩' }}</div>
+    <div class="hv-color-picker__preset-list">
       <div
-        class="preset-color_list-item"
+        class="hv-color-picker__preset-list-item"
         @click="handleClickColor(color)"
         v-for="color in preColors"
         :key="color"
@@ -57,20 +57,20 @@ function handleClickColor(color: string) {
 }
 </script>
 
-<style lang="scss" scoped>
-.preset-colors {
-  .preset-colors_title {
+<style lang="scss">
+.hv-color-picker__preset {
+  .hv-color-picker__preset-title {
     margin-bottom: 4px;
     font-size: 12px;
     color: #fff;
   }
 
-  .preset-color_list {
+  .hv-color-picker__preset-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 
-    .preset-color_list-item {
+    .hv-color-picker__preset-list-item {
       width: 16px;
       height: 16px;
 

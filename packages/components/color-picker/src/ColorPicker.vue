@@ -1,16 +1,16 @@
 <template>
-  <div class="color-picker">
-    <div class="title">{{ props.title || '颜色编辑器' }}</div>
-    <div class="color-area__wrapper">
-      <div class="color-area" ref="colorAreaRef">
+  <div class="hv-color-picker">
+    <div class="hv-color-picker__title">{{ props.title || '颜色编辑器' }}</div>
+    <div class="hv-color-picker__area-outer">
+      <div class="hv-color-picker__area" ref="colorAreaRef">
         <canvas ref="colorAreaCanvas"></canvas>
-        <div class="cur-color-circle" :style="cilcleStyle"></div>
+        <div class="hv-color-picker__circle" :style="cilcleStyle"></div>
       </div>
     </div>
 
-    <div class="slider-color">
+    <div class="hv-color-picker__slider">
       <ElSlider v-model="colorDepth" :min="0" :max="100" :show-tooltip="false" :style="sliderBackStyle"></ElSlider>
-      <div class="origin-color" :style="{ backgroundColor: originHexColor }"></div>
+      <div class="hv-color-picker__origin-color" :style="{ backgroundColor: originHexColor }"></div>
     </div>
     <ColorForm :model-value="color" @change="handleColorChange"></ColorForm>
     <PresetColors
@@ -146,8 +146,8 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-.color-picker {
+<style lang="scss">
+.hv-color-picker {
   box-sizing: border-box;
   width: 264px;
   padding: 12px;
@@ -158,17 +158,17 @@ onMounted(() => {
   border-radius: 4px;
   box-shadow: 0 12px 24px 0 #00000080;
 
-  .title {
+  .hv-color-picker__title {
     margin-bottom: 12px;
     font-weight: bold;
   }
 
-  .color-area__wrapper {
+  .hv-color-picker__area-outer {
     width: auto;
     border: 5px solid #000;
     border-radius: 3px;
 
-    .color-area {
+    .hv-color-picker__area {
       position: relative;
       width: auto;
       height: 168px;
@@ -180,7 +180,7 @@ onMounted(() => {
         height: 100%;
       }
 
-      .cur-color-circle {
+      .hv-color-picker__circle {
         position: absolute;
         box-sizing: border-box;
         width: 18px;
@@ -196,13 +196,13 @@ onMounted(() => {
     }
   }
 
-  .slider-color {
+  .hv-color-picker__slider {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    .origin-color {
+    .hv-color-picker__origin-color {
       width: 18px;
       height: 18px;
       margin-left: 12px;
@@ -210,7 +210,7 @@ onMounted(() => {
     }
   }
 
-  :deep(.el-slider) {
+  .el-slider {
     box-sizing: border-box;
 
     .el-slider__runway {
@@ -233,11 +233,6 @@ onMounted(() => {
         }
       }
     }
-  }
-
-  .color-form {
-    width: 100%;
-    overflow: hidden;
   }
 }
 </style>

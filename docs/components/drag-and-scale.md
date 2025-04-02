@@ -67,7 +67,7 @@ import Demo from '@/components/drag-and-scale/index.vue'
 如果想禁用缩放功能，只保留拖动功能，可添加样式实现
 
 ```css
-  .drag-and-scale-box {
+  .hv-drag-and-scale {
     --scale-area-width: 0px;
     border: none;
   }
@@ -76,8 +76,8 @@ import Demo from '@/components/drag-and-scale/index.vue'
 反之，如果想只保留缩放功能，禁用拖动功能，可添加以下样式实现
 
 ```scss
-  .drag-and-scale-box {
-    .center-box {
+  .hv-drag-and-scale {
+    .hv-drag-and-scale__area-center {
       pointer-events: none;
     }
   }
