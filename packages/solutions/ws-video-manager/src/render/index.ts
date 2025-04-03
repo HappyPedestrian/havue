@@ -72,6 +72,10 @@ export class Render extends EventBus<RenderEvents> {
 
   private _cacheAnimationID: number | undefined = undefined
 
+  /** fmp4初始化片段是否已经添加 */
+  private _isInitSegmentAdded: boolean = false
+  private _offset: number = 0
+
   // 调试代码
   // private divID = ''
 
@@ -81,6 +85,7 @@ export class Render extends EventBus<RenderEvents> {
       ? Object.assign({}, WS_VIDEO_RENDER_DEFAULT_OPTIONS, options)
       : WS_VIDEO_RENDER_DEFAULT_OPTIONS
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
+    this._mp4box.onSegment = this._onSegment.bind(this)
     this._setupVideo()
   }
 
@@ -126,14 +131,54 @@ export class Render extends EventBus<RenderEvents> {
     if (this._paused) {
       return
     }
-    if (!this._sourceBuffer) {
-      const buf = bufs[0]
-      buf.fileStart = 0
-      this._mp4box.appendBuffer(buf)
+    const buf = bufs[0]
+    if (this._offset === 0) {
+      this._bufsQueue.push(buf)
     }
-    this._bufsQueue.push(...bufs)
+    bufs.forEach((b) => {
+      b.fileStart = this._offset
+      this._offset += b.byteLength
+      this._mp4box.appendBuffer(b)
+    })
+    return
+  }
 
-    if (this._sourceBuffer && !this._videoEl?.paused && this._bufsQueue.length > 2) {
+  /**
+   * mp4box解析完成
+   * @param info mp4box解析信息
+   */
+  private _onMp4boxReady(info: any) {
+    console.log('onMp4boxReady', info)
+    // this._mp4box.flush()
+    if (!info.isFragmented) {
+      console.error('not fragmented mp4')
+      return
+    }
+    this._mimeType = info.mime
+
+    try {
+      const { width, height } = info.videoTracks[0].video
+      this.emit(RenderEventsEnum.VIDEO_INFO_UPDATE, {
+        width,
+        height
+      })
+      const audioTrack = info.audioTracks[0]
+      const videoTrack = info.videoTracks[0]
+      audioTrack && this._mp4box.setSegmentOptions(audioTrack.id)
+      videoTrack && this._mp4box.setSegmentOptions(videoTrack.id)
+
+      this._mp4box.initializeSegmentation()
+    } catch (error) {
+      console.error(error)
+    }
+    this._setupMSE()
+    this._mp4box.start()
+  }
+
+  private _onSegment(_: number, __: any, buffer: ArrayBuffer, sambleNumber: number) {
+    this._bufsQueue.push(new Uint8Array(buffer).buffer)
+    this._mp4box.releaseUsedSamples(1, sambleNumber)
+    if (this._isInitSegmentAdded && this._sourceBuffer && !this._videoEl?.paused && this._bufsQueue.length > 2) {
       const len = this._bufsQueue.length
       const maxTotal = this._options.maxCacheBufByte
       let lastIndex = len - 1
@@ -150,33 +195,6 @@ export class Render extends EventBus<RenderEvents> {
     this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
     this._cacheAnimationID = undefined
     this._cache()
-  }
-
-  /**
-   * mp4box解析完成
-   * @param info mp4box解析信息
-   */
-  private _onMp4boxReady(info: any) {
-    console.log('onMp4boxReady', info)
-    this._mp4box.flush()
-    if (!info.isFragmented) {
-      console.error('not fragmented mp4')
-      return
-    }
-    this._mimeType = info.mime
-
-    try {
-      const { width, height } = info.videoTracks[0].video
-      this.emit(RenderEventsEnum.VIDEO_INFO_UPDATE, {
-        width,
-        height
-      })
-    } catch (error) {
-      console.error(error)
-    }
-    // this._setupVideo()
-    // this.setupPixi()
-    this._setupMSE()
   }
 
   /**
@@ -405,6 +423,7 @@ export class Render extends EventBus<RenderEvents> {
     }
 
     if (frame) {
+      this._isInitSegmentAdded = true
       this._sourceBuffer.appendBuffer(frame)
     }
   }
@@ -425,8 +444,11 @@ export class Render extends EventBus<RenderEvents> {
     if (this._videoEl) {
       this._videoEl.src = ''
     }
+    this._isInitSegmentAdded = false
+    this._offset = 0
     this._mp4box = MP4Box.createFile()
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
+    this._mp4box.onSegment = this._onSegment.bind(this)
     this._bufsQueue.length = 0
   }
 
@@ -454,6 +476,11 @@ export class Render extends EventBus<RenderEvents> {
    */
   public destroy() {
     this._bufsQueue = []
+    this._isInitSegmentAdded = false
+    this._offset = 0
+    this._mp4box.stop()
+    this._mp4box.flush()
+    this._mp4box = null
     if (this._videoEl) {
       this._videoEl.pause()
       this._videoEl.currentTime = 0
