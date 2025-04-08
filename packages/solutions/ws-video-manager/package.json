@@ -1,6 +1,6 @@
 {
   "name": "@havue/ws-video-manager",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Javascript class for websocket video manager",
   "keywords": [
     "havue",
