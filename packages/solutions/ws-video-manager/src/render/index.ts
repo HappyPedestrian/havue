@@ -1,4 +1,4 @@
-import MP4Box from 'mp4box'
+import MP4Box from './mp4box'
 import { EventBus } from '@havue/shared'
 
 // #region typedefine
@@ -54,18 +54,23 @@ export type RenderEvents = {
 export class Render extends EventBus<RenderEvents> {
   /** video元素 */
   private _videoEl: HTMLVideoElement | undefined = undefined
-  /** pixi.js 实例 */
-  // private _pixiApp: Application | null = null
   /** mp4box 实例 */
   private _mp4box: MP4Box = MP4Box.createFile()
-  /** 接收到的socket消息 视频数据buffer数组 */
-  private _bufsQueue: ArrayBuffer[] = []
+  /** mp4box onFragment获取的视频数据buffer数组 */
+  private _audioBufsQueue: ArrayBuffer[] = []
+  private _videoBufsQueue: ArrayBuffer[] = []
   /** MediaSource 实例 */
   private _mediaSource: MediaSource | undefined
   /** SourceBuffer 实例 */
-  private _sourceBuffer: SourceBuffer | undefined
+  private _audioSourceBuffer: SourceBuffer | undefined
+  private _videoSourceBuffer: SourceBuffer | undefined
+
+  private _audioTrackId: number | undefined
+  private _videoTrackId: number | undefined
   /** 用于MediaSource的mimeType */
   private _mimeType: string = ''
+  private _audioMimeType: string = ''
+  private _videoMimeType: string = ''
   /** 是否暂停播放 */
   private _paused: boolean = false
   private _options: RenderConstructorOptionType
@@ -73,7 +78,8 @@ export class Render extends EventBus<RenderEvents> {
   private _cacheAnimationID: number | undefined = undefined
 
   /** fmp4初始化片段是否已经添加 */
-  private _isInitSegmentAdded: boolean = false
+  private _isAudioInitSegmentAdded: boolean = false
+  private _isVideoInitSegmentAdded: boolean = false
   private _offset: number = 0
 
   // 调试代码
@@ -131,10 +137,6 @@ export class Render extends EventBus<RenderEvents> {
     if (this._paused) {
       return
     }
-    const buf = bufs[0]
-    if (this._offset === 0) {
-      this._bufsQueue.push(buf)
-    }
     bufs.forEach((b) => {
       b.fileStart = this._offset
       this._offset += b.byteLength
@@ -149,7 +151,6 @@ export class Render extends EventBus<RenderEvents> {
    */
   private _onMp4boxReady(info: any) {
     console.log('onMp4boxReady', info)
-    // this._mp4box.flush()
     if (!info.isFragmented) {
       console.error('not fragmented mp4')
       return
@@ -164,10 +165,31 @@ export class Render extends EventBus<RenderEvents> {
       })
       const audioTrack = info.audioTracks[0]
       const videoTrack = info.videoTracks[0]
-      audioTrack && this._mp4box.setSegmentOptions(audioTrack.id)
-      videoTrack && this._mp4box.setSegmentOptions(videoTrack.id)
 
-      this._mp4box.initializeSegmentation()
+      if (audioTrack) {
+        this._audioMimeType = `audio/mp4; codecs="${audioTrack.codec}"`
+        this._audioTrackId = audioTrack.id
+        this._mp4box.setSegmentOptions(audioTrack.id, undefined, {
+          nbSamples: 100
+        })
+      }
+
+      if (videoTrack) {
+        this._videoMimeType = `video/mp4; codecs="${videoTrack.codec}"`
+        this._videoTrackId = videoTrack.id
+        this._mp4box.setSegmentOptions(videoTrack.id, undefined, {
+          nbSamples: 100
+        })
+      }
+
+      const initSegments = this._mp4box.initializeSegmentation()
+      for (const seg of initSegments) {
+        if (audioTrack && seg.id === audioTrack.id) {
+          this._audioBufsQueue.push(seg.buffer)
+        } else if (videoTrack && seg.id === videoTrack.id) {
+          this._videoBufsQueue.push(seg.buffer)
+        }
+      }
     } catch (error) {
       console.error(error)
     }
@@ -175,26 +197,36 @@ export class Render extends EventBus<RenderEvents> {
     this._mp4box.start()
   }
 
-  private _onSegment(_: number, __: any, buffer: ArrayBuffer, sambleNumber: number) {
-    this._bufsQueue.push(new Uint8Array(buffer).buffer)
-    this._mp4box.releaseUsedSamples(1, sambleNumber)
-    if (this._isInitSegmentAdded && this._sourceBuffer && !this._videoEl?.paused && this._bufsQueue.length > 2) {
-      const len = this._bufsQueue.length
+  private _onSegment(id: number, __: any, buffer: ArrayBuffer, sampleNumber: number) {
+    const isAudio = id === this._audioTrackId
+    const isVideo = id === this._videoTrackId
+    const bufQueue = isAudio ? this._audioBufsQueue : isVideo ? this._videoBufsQueue : null
+    if (!bufQueue) {
+      return
+    }
+    const sourceBuffer = isVideo ? this._videoSourceBuffer : this._audioSourceBuffer
+    bufQueue.push(buffer)
+    // 清除已使用的samples
+    this._mp4box.releaseUsedSamples(id, sampleNumber)
+    this._mp4box.removeUsedSamples(id)
+    const segmentAdded = isAudio ? this._isAudioInitSegmentAdded : this._isVideoInitSegmentAdded
+    if (segmentAdded && sourceBuffer && !this._videoEl?.paused && bufQueue.length > 2) {
+      const len = bufQueue.length
       const maxTotal = this._options.maxCacheBufByte
       let lastIndex = len - 1
       let total = 0
       for (let i = len - 1; i > 0; i--) {
-        total += this._bufsQueue[i].byteLength
+        total += bufQueue[i].byteLength
         lastIndex = i
         if (total >= maxTotal) {
-          this._bufsQueue = this._bufsQueue.slice(lastIndex)
+          bufQueue.splice(0, lastIndex)
           break
         }
       }
     }
     this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
     this._cacheAnimationID = undefined
-    this._cache()
+    this._cache(isVideo)
   }
 
   /**
@@ -310,55 +342,75 @@ export class Render extends EventBus<RenderEvents> {
     this._videoEl.src = URL.createObjectURL(this._mediaSource)
 
     this._mediaSource.addEventListener('sourceopen', () => {
-      const sourceBuffer = (this._sourceBuffer = this._mediaSource!.addSourceBuffer(this._mimeType))
-      sourceBuffer.mode = 'sequence'
-      sourceBuffer.onupdateend = () => {
-        if (
-          !this._videoEl ||
-          !sourceBuffer ||
-          this._mediaSource?.readyState !== 'open' ||
-          ![...this._mediaSource.sourceBuffers].includes(sourceBuffer)
-        ) {
-          return
-        }
-        const currentTime = this._videoEl.currentTime
-        // 调试代码
-        // const div = document.getElementById(this.divID)
-        // let innerHTML = `len:${sourceBuffer.buffered.length}`
+      if (!this._mediaSource) {
+        return
+      }
 
-        if (sourceBuffer.buffered.length > 0) {
-          let bufferedLen = sourceBuffer.buffered.length
-          /** 是否需要删除sourceBuffer中的buffer段 */
-          const needDelBuf = bufferedLen > 1
-          /**
-           * sourceBuffer中有多个buffered，时间不连续
-           * 导致视频播放到其中一个buffer最后就暂停了
-           * 如果出现多个buffered，删除之前有的buffer
-           * 使用最新的视频buffer进行播放
-           */
-          if (needDelBuf && currentTime) {
-            const lastIndex = bufferedLen - 1
-            if (currentTime < sourceBuffer.buffered.start(lastIndex)) {
-              this._videoEl.currentTime = sourceBuffer.buffered.start(lastIndex)
-            }
+      // 音频轨
+      if (this._audioMimeType) {
+        this._audioSourceBuffer = this._mediaSource.addSourceBuffer(this._audioMimeType)
+        this._audioSourceBuffer.mode = 'sequence'
+        this._setupSourceBuffer(this._audioSourceBuffer, false)
+      }
 
-            const delBufEnd = sourceBuffer.buffered.end(lastIndex - 1)
-            if (!this._sourceBuffer!.updating && currentTime > delBufEnd) {
-              this._sourceBuffer?.remove(0, delBufEnd)
-            }
+      // 视频轨
+      if (this._videoMimeType) {
+        this._videoSourceBuffer = this._mediaSource.addSourceBuffer(this._videoMimeType)
+        this._videoSourceBuffer.mode = 'sequence'
+        this._setupSourceBuffer(this._videoSourceBuffer, true)
+      }
+    })
+  }
+
+  private _setupSourceBuffer(sourceBuffer: SourceBuffer, isVideo: boolean = false) {
+    sourceBuffer.onupdateend = () => {
+      if (
+        !this._videoEl ||
+        !sourceBuffer ||
+        this._mediaSource?.readyState !== 'open' ||
+        ![...this._mediaSource.sourceBuffers].includes(sourceBuffer)
+      ) {
+        return
+      }
+      const currentTime = this._videoEl.currentTime
+      // 调试代码
+      // const div = document.getElementById(this.divID)
+      // let innerHTML = `len:${sourceBuffer.buffered.length}`
+
+      if (sourceBuffer.buffered.length > 0) {
+        let bufferedLen = sourceBuffer.buffered.length
+        /** 是否需要删除sourceBuffer中的buffer段 */
+        const needDelBuf = bufferedLen > 1
+        /**
+         * sourceBuffer中有多个buffered，时间不连续
+         * 导致视频播放到其中一个buffer最后就暂停了
+         * 如果出现多个buffered，删除之前有的buffer
+         * 使用最新的视频buffer进行播放
+         */
+        if (needDelBuf && currentTime) {
+          const lastIndex = bufferedLen - 1
+          if (currentTime < sourceBuffer.buffered.start(lastIndex)) {
+            this._videoEl.currentTime = sourceBuffer.buffered.start(lastIndex)
           }
 
-          // 调试代码
-          // innerHTML += ` - start:${sourceBuffer.buffered.start(
-          //   sourceBuffer.buffered.length - 1
-          // )} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
-          // innerHTML += ` - currentTime: ${currentTime}`
-          // div && (div.innerHTML = innerHTML)
+          const delBufEnd = sourceBuffer.buffered.end(lastIndex - 1)
+          if (!sourceBuffer!.updating && currentTime > delBufEnd) {
+            sourceBuffer?.remove(0, delBufEnd)
+          }
+        }
 
-          bufferedLen = sourceBuffer.buffered.length
-          const start = sourceBuffer.buffered.start(bufferedLen - 1)
-          const end = sourceBuffer.buffered.end(bufferedLen - 1)
+        // 调试代码
+        // innerHTML += ` - start:${sourceBuffer.buffered.start(
+        //   sourceBuffer.buffered.length - 1
+        // )} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
+        // innerHTML += ` - currentTime: ${currentTime}`
+        // div && (div.innerHTML = innerHTML)
 
+        bufferedLen = sourceBuffer.buffered.length
+        const start = sourceBuffer.buffered.start(bufferedLen - 1)
+        const end = sourceBuffer.buffered.end(bufferedLen - 1)
+
+        if (isVideo) {
           // 设置开始时间
           if (!currentTime && start) {
             this._videoEl.currentTime = start
@@ -372,43 +424,48 @@ export class Render extends EventBus<RenderEvents> {
               this._videoEl.currentTime = end - 0.1
             }
           }
-          // 移除当前时间之前的buffer
-          if (!this._sourceBuffer!.updating && currentTime - start > this._options.maxCache) {
-            this._sourceBuffer?.remove(0, currentTime - this._options.maxCache / 2)
-          }
+        }
+
+        // 移除当前时间之前的buffer
+        if (!sourceBuffer!.updating && currentTime - start > this._options.maxCache) {
+          sourceBuffer?.remove(0, currentTime - this._options.maxCache / 2)
         }
       }
-    })
+    }
   }
 
   /**
    * 将_bufsQueue中的数据添加到SourceBuffer中
    * @returns
    */
-  private _cache() {
+  private _cache(isVideo: boolean = false) {
     if (!this._videoEl) {
       return
     }
+    const queue = isVideo ? this._videoBufsQueue : this._audioBufsQueue
+    const sourceBuffer = isVideo ? this._videoSourceBuffer : this._audioSourceBuffer
     if (
       !this._mediaSource ||
-      !this._sourceBuffer ||
-      this._sourceBuffer.updating ||
-      !this._bufsQueue.length ||
+      !sourceBuffer ||
+      sourceBuffer.updating ||
+      !queue.length ||
       this._mediaSource.readyState !== 'open'
     ) {
-      this._cacheAnimationID === undefined && (this._cacheAnimationID = requestAnimationFrame(() => this._cache()))
+      this._cacheAnimationID === undefined &&
+        (this._cacheAnimationID = requestAnimationFrame(() => this._cache(isVideo)))
       return
     }
     if (this._videoEl.error) {
       this._setupMSE()
       return (
-        this._cacheAnimationID === undefined && (this._cacheAnimationID = requestAnimationFrame(() => this._cache()))
+        this._cacheAnimationID === undefined &&
+        (this._cacheAnimationID = requestAnimationFrame(() => this._cache(isVideo)))
       )
     }
     this._cacheAnimationID = undefined
     let frame: Uint8Array
-    if (this._bufsQueue.length > 1) {
-      const freeBuffer = this._bufsQueue.splice(0, this._bufsQueue.length)
+    if (queue.length > 1) {
+      const freeBuffer = queue.splice(0, queue.length)
       const length = freeBuffer.map((e) => e.byteLength).reduce((a, b) => a + b, 0)
       const buffer = new Uint8Array(length)
       let offset = 0
@@ -419,12 +476,16 @@ export class Render extends EventBus<RenderEvents> {
       }
       frame = buffer
     } else {
-      frame = new Uint8Array(this._bufsQueue.shift() || [])
+      frame = new Uint8Array(queue.shift() || [])
     }
 
     if (frame) {
-      this._isInitSegmentAdded = true
-      this._sourceBuffer.appendBuffer(frame)
+      if (isVideo) {
+        !this._isVideoInitSegmentAdded && (this._isVideoInitSegmentAdded = true)
+      } else {
+        !this._isAudioInitSegmentAdded && (this._isAudioInitSegmentAdded = true)
+      }
+      sourceBuffer.appendBuffer(frame)
     }
   }
 
@@ -440,16 +501,14 @@ export class Render extends EventBus<RenderEvents> {
 
   /** 重置解析的视频mime type */
   public resetMimeType() {
+    this.destroyMp4box()
     this.destroyMediaSource()
     if (this._videoEl) {
       this._videoEl.src = ''
     }
-    this._isInitSegmentAdded = false
-    this._offset = 0
     this._mp4box = MP4Box.createFile()
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
     this._mp4box.onSegment = this._onSegment.bind(this)
-    this._bufsQueue.length = 0
   }
 
   private destroyMediaSource() {
@@ -459,28 +518,44 @@ export class Render extends EventBus<RenderEvents> {
         this._videoEl.src = ''
       }
       if (this._mediaSource.readyState === 'open') {
-        if (this._sourceBuffer) {
-          this._sourceBuffer.abort()
-          this._mediaSource.removeSourceBuffer(this._sourceBuffer)
+        if (this._audioSourceBuffer) {
+          this._audioSourceBuffer.abort()
+          this._mediaSource.removeSourceBuffer(this._audioSourceBuffer)
+        }
+        if (this._videoSourceBuffer) {
+          this._videoSourceBuffer.abort()
+          this._mediaSource.removeSourceBuffer(this._videoSourceBuffer)
         }
         this._mediaSource.endOfStream()
       }
 
       this._mediaSource = undefined
-      this._sourceBuffer = undefined
+      this._audioSourceBuffer = undefined
+      this._videoSourceBuffer = undefined
     }
+  }
+
+  public destroyMp4box() {
+    this._audioTrackId = undefined
+    this._videoTrackId = undefined
+    this._mimeType = ''
+    this._audioMimeType = ''
+    this._videoMimeType = ''
+    this._isAudioInitSegmentAdded = false
+    this._isVideoInitSegmentAdded = false
+    this._audioBufsQueue.length = 0
+    this._videoBufsQueue.length = 0
+    this._offset = 0
+    this._mp4box.stop()
+    this._mp4box.flush()
+    this._mp4box.destroy()
+    this._mp4box = null
   }
 
   /**
    * 销毁
    */
   public destroy() {
-    this._bufsQueue = []
-    this._isInitSegmentAdded = false
-    this._offset = 0
-    this._mp4box.stop()
-    this._mp4box.flush()
-    this._mp4box = null
     if (this._videoEl) {
       this._videoEl.pause()
       this._videoEl.currentTime = 0
@@ -492,11 +567,9 @@ export class Render extends EventBus<RenderEvents> {
       this._videoEl = undefined
     }
 
-    this._mimeType = ''
-
     this._cacheAnimationID && cancelAnimationFrame(this._cacheAnimationID)
     this._cacheAnimationID = undefined
-
+    this.destroyMp4box()
     this.destroyMediaSource()
   }
 }
