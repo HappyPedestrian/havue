@@ -24,3 +24,14 @@
 ### BREAKING CHANGES
 
 * Rename components' class name, and delete scope attribute of SFC style tag.
+
+## [1.1.1] (2025-04-08)
+
+### Bug Fixes
+
+* **ws-video-manager**: Fix MediaSource SourceBuffer can't use Websocket data directively some time,
+  use Mp4box.js deal with before append to SourceBuffer.
+
+### Features
+
+* **ws-video-manager**: Support audio track play.
