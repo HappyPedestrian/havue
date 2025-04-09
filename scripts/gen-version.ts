@@ -24,7 +24,7 @@ async function main() {
 
   const pkgPaths = fg.sync('**/package.json', {
     cwd: pkgRoot,
-    ignore: ['**/node_modules', 'dist', 'havue']
+    ignore: ['**/node_modules', 'dist']
   })
 
   const task: Array<Promise<void>> = []
