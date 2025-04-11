@@ -54,7 +54,9 @@ export class BroadcastChannelManager {
   /** 主节点发送心跳的interval */
   private _mainNodeMsgInterval: number | null = null
   /** 认为主节点掉线的timeout */
-  private _mainNoceMsgTimeoutTimer: number | null = null
+  private _mainNodeMsgTimeoutTimer: number | null = null
+  /** 更新友方列表的timeout */
+  private _updateFriendListTimer: number | null = null
   /** 当前实例id */
   public id: number = Date.now() + Math.random()
   /** 记录的友方id数组 */
@@ -93,6 +95,16 @@ export class BroadcastChannelManager {
   public close() {
     this._debug && console.log('BC:bc close')
     this._broadcastChannel && this._broadcastChannel.close()
+    this._broadcastChannel = undefined
+    this._updateFriendListTimer && clearTimeout(this._updateFriendListTimer)
+    this._updateFriendListTimer = null
+    this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
+    this._mainNodeMsgInterval = null
+    this._mainNodeMsgTimeoutTimer && clearTimeout(this._mainNodeMsgTimeoutTimer)
+    this._mainNodeMsgTimeoutTimer = null
+    this._oldFrendChannelIdList = []
+    this._friendChannelIdSet.clear()
+    this._nodeType = undefined
   }
 
   /**
@@ -117,7 +129,9 @@ export class BroadcastChannelManager {
     // 广播告知己方存在
     this.send(BcConnectEventTypeEnum.Broadcast)
 
-    setTimeout(() => {
+    this._updateFriendListTimer && clearTimeout(this._updateFriendListTimer)
+
+    this._updateFriendListTimer = setTimeout(() => {
       this._oldFrendChannelIdList = this._getNewFriendList()
       this._debug && console.log('BC:connect:updateFriendChannelIdList:', this._oldFrendChannelIdList)
       this.emit(BcConnectEventTypeEnum.Friend_List_Update, {
@@ -221,9 +235,9 @@ export class BroadcastChannelManager {
   }
 
   private _timeoutToBeMainNode() {
-    this._mainNoceMsgTimeoutTimer && clearTimeout(this._mainNoceMsgTimeoutTimer)
+    this._mainNodeMsgTimeoutTimer && clearTimeout(this._mainNodeMsgTimeoutTimer)
     // 超时未收到心跳，认为主节点掉线，申请为主节点
-    this._mainNoceMsgTimeoutTimer = setTimeout(() => {
+    this._mainNodeMsgTimeoutTimer = setTimeout(() => {
       this._req_beMainNode()
     }, MessageTimeout * 3)
   }
@@ -381,8 +395,8 @@ export class BroadcastChannelManager {
 
     this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
     this._mainNodeMsgInterval = null
-    this._mainNoceMsgTimeoutTimer && clearInterval(this._mainNoceMsgTimeoutTimer)
-    this._mainNoceMsgTimeoutTimer = null
+    this._mainNodeMsgTimeoutTimer && clearInterval(this._mainNodeMsgTimeoutTimer)
+    this._mainNodeMsgTimeoutTimer = null
     this._debug && console.log('BC:destroy')
   }
 }
