@@ -90,8 +90,8 @@ export function useOperateEvent() {
     } else {
       y = clientY - top
     }
-    circlePickerCoordinate.x = Math.round(x)
-    circlePickerCoordinate.y = Math.round(y)
+    circlePickerCoordinate.x = x
+    circlePickerCoordinate.y = y
   }
 
   function handleMouseUp() {

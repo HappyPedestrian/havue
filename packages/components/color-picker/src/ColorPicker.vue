@@ -35,7 +35,7 @@ defineOptions({
   name: 'HvColorPicker'
 })
 
-const DEFAULT_COLOR = '#ffffff'
+const DEFAULT_COLOR = '#FFFFFF'
 
 const props = defineProps<{
   title?: string
