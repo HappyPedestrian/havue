@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
-import type { DragAndDropDragType, DragAndDropPoint } from './manager'
+import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import type { DnDManagerEvents, DragAndDropDragType, DragAndDropPoint } from './manager'
 
 import { DnDManagerInstance } from './manager'
 
@@ -67,7 +67,7 @@ const cloneNodeStyle = computed(() => {
   }
 })
 
-DnDManagerInstance.on('down', (params) => {
+const onDown: DnDManagerEvents['down'] = (params) => {
   const { x, y } = params
   const startEl = document.elementFromPoint(x, y)
   if (!props.disabled && dragItemRef.value && dragItemRef.value.contains(startEl)) {
@@ -79,9 +79,9 @@ DnDManagerInstance.on('down', (params) => {
     downPosition.x = x
     downPosition.y = y
   }
-})
+}
 
-DnDManagerInstance.on('first-move', (params, event) => {
+const onFirstMove: DnDManagerEvents['first-move'] = (params, event) => {
   const { x, y } = params
   const directions = immediateDirections.value.filter((item) => item !== ImmediateEnumType.ALL)
 
@@ -119,24 +119,24 @@ DnDManagerInstance.on('first-move', (params, event) => {
       return
     }
   }
-})
+}
 
-DnDManagerInstance.on('start', (params) => {
+const onStart: DnDManagerEvents['start'] = (params) => {
   const { x, y } = params
   const startEl = document.elementFromPoint(x, y)
   if (!props.disabled && dragItemRef.value && dragItemRef.value.contains(startEl)) {
     handleStart(params)
   }
-})
+}
 
-DnDManagerInstance.on('move', (params) => {
+const onMove: DnDManagerEvents['move'] = (params) => {
   const { point } = params
   if (isDragThis.value) {
     handleMove(point)
   }
-})
+}
 
-DnDManagerInstance.on('end', () => {
+const onEnd: DnDManagerEvents['end'] = () => {
   isDownThis.value = false
   isDragThis.value = false
   Object.assign(downPosition, {
@@ -147,7 +147,7 @@ DnDManagerInstance.on('end', () => {
     x: 0,
     y: 0
   })
-})
+}
 
 function handleStart(point: DragAndDropPoint) {
   isDragThis.value = true
@@ -160,6 +160,22 @@ function handleMove(point: DragAndDropPoint) {
   cloneNodePosition.x = point.x
   cloneNodePosition.y = point.y
 }
+
+onMounted(() => {
+  DnDManagerInstance.on('down', onDown)
+  DnDManagerInstance.on('first-move', onFirstMove)
+  DnDManagerInstance.on('start', onStart)
+  DnDManagerInstance.on('move', onMove)
+  DnDManagerInstance.on('end', onEnd)
+})
+
+onBeforeUnmount(() => {
+  DnDManagerInstance.off('down', onDown)
+  DnDManagerInstance.off('first-move', onFirstMove)
+  DnDManagerInstance.off('start', onStart)
+  DnDManagerInstance.off('move', onMove)
+  DnDManagerInstance.off('end', onEnd)
+})
 </script>
 
 <style lang="scss" scoped>

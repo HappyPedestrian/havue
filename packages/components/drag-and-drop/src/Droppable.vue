@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import type { DragAndDropDragType, DragAndDropPoint } from './manager'
-import { computed, ref } from 'vue'
+import type { DnDManagerEvents, DragAndDropDragType, DragAndDropPoint } from './manager'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { DnDManagerInstance } from './manager'
 
 defineOptions({
@@ -55,7 +55,7 @@ function getPositionInArea(point: DragAndDropPoint) {
   }
 }
 
-DnDManagerInstance.on('move', (params) => {
+const onMove: DnDManagerEvents['move'] = (params) => {
   const { type, data, point } = params
   if (dropAreaRef.value && acceptDragTypeList.value.includes(type)) {
     const { isInArea, position } = getPositionInArea(point)
@@ -71,13 +71,23 @@ DnDManagerInstance.on('move', (params) => {
       emits('leave', type, data)
     }
   }
-})
+}
 
-DnDManagerInstance.on('end', ({ type, point, data }) => {
+const onEnd: DnDManagerEvents['move'] = ({ type, point, data }) => {
   if (dropAreaRef.value && acceptDragTypeList.value.includes(type) && isEntered.value) {
     const { position } = getPositionInArea(point)
     emits('drop', type, position, data)
   }
+}
+
+onMounted(() => {
+  DnDManagerInstance.on('move', onMove)
+  DnDManagerInstance.on('end', onEnd)
+})
+
+onBeforeUnmount(() => {
+  DnDManagerInstance.off('move', onMove)
+  DnDManagerInstance.off('end', onEnd)
 })
 </script>
 

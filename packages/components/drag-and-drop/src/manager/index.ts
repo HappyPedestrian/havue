@@ -7,7 +7,7 @@ export type DragAndDropPoint = {
 
 export type DragAndDropDragType = string | number | symbol
 
-type Events = {
+export type DnDManagerEvents = {
   down: (p: DragAndDropPoint) => void
   'first-move': (p: DragAndDropPoint, e: MouseEvent | TouchEvent) => void
   start: (p: DragAndDropPoint) => void
@@ -15,7 +15,7 @@ type Events = {
   end: (params: { type: DragAndDropDragType; data: any; point: DragAndDropPoint }) => void
 }
 
-export class DnDManager extends EventBus<Events> {
+export class DnDManager extends EventBus<DnDManagerEvents> {
   /** 是否开始拖动 */
   public isDragStart: boolean = false
   /** 拖动元素类型 */
