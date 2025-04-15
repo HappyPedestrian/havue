@@ -1,6 +1,6 @@
 {
   "name": "@havue/hooks",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Some hooks for Vue3",
   "keywords": [
     "havue",
