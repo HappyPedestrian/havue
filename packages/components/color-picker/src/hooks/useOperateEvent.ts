@@ -1,6 +1,5 @@
 import { ref, onMounted, onBeforeUnmount, reactive } from 'vue'
 import { throttle } from '../utils/tools'
-import { isMobile } from '@havue/shared'
 
 type Point = {
   x: number
@@ -119,23 +118,19 @@ export function useOperateEvent() {
   }
 
   onMounted(() => {
-    if (isMobile) {
-      colorAreaRef.value?.addEventListener('touchstart', handleTouchStart)
-    } else {
-      colorAreaRef.value?.addEventListener('mousedown', handleMounseDown)
-    }
+    colorAreaRef.value?.addEventListener('touchstart', handleTouchStart)
+
+    colorAreaRef.value?.addEventListener('mousedown', handleMounseDown)
   })
 
   onBeforeUnmount(() => {
-    if (isMobile) {
-      colorAreaRef.value?.removeEventListener('touchstart', handleTouchStart)
-      document.body.removeEventListener('touchmove', handleTouchMove)
-      document.body.removeEventListener('touchend', handleTouchEnd)
-    } else {
-      colorAreaRef.value?.removeEventListener('mousedown', handleMounseDown)
-      document.body.removeEventListener('mousemove', handleMouseMove)
-      document.body.removeEventListener('mouseup', handleMouseUp)
-    }
+    colorAreaRef.value?.removeEventListener('touchstart', handleTouchStart)
+    document.body.removeEventListener('touchmove', handleTouchMove)
+    document.body.removeEventListener('touchend', handleTouchEnd)
+
+    colorAreaRef.value?.removeEventListener('mousedown', handleMounseDown)
+    document.body.removeEventListener('mousemove', handleMouseMove)
+    document.body.removeEventListener('mouseup', handleMouseUp)
   })
 
   return {

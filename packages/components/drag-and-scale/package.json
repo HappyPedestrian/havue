@@ -19,9 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/HappyPedestrian/havue.git"
   },
-  "dependencies": {
-    "@havue/shared": "workspace:^"
-  },
+  "dependencies": {},
   "devDependencies": {
     "vue": "^3.3.0"
   },

@@ -27,7 +27,6 @@
     "url": "git+https://github.com/HappyPedestrian/havue.git"
   },
   "dependencies": {
-    "@havue/shared": "workspace:^",
     "@types/color": "^3.0.6",
     "color": "^4.2.3",
     "element-plus": "^2.7.7"

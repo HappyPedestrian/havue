@@ -1,6 +1,5 @@
 import type { MaybeRef } from 'vue'
 import { computed, isRef, watch, toValue, onBeforeUnmount } from 'vue'
-import { isMobile } from '@havue/shared'
 
 export type DragAndScaleOptions = {
   container: HTMLElement | undefined | null
@@ -647,24 +646,19 @@ export function useDragAndScale(
 
   function bindEvent() {
     removeEvent()
-    if (isMobile) {
-      _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
-    } else {
-      _operateEl.value.addEventListener('mousedown', onMouseDown)
-    }
+    _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
+    _operateEl.value.addEventListener('mousedown', onMouseDown)
   }
 
   function removeEvent() {
-    if (isMobile) {
-      _operateEl.value.removeEventListener('touchstart', onTouchStart)
-      document.body.removeEventListener('touchmove', onTouchMove)
-      document.body.removeEventListener('touchend', onTouchEnd)
-      document.body.removeEventListener('touchcancel', onTouchEnd)
-    } else {
-      _operateEl.value.removeEventListener('mousedown', onMouseDown)
-      document.body.removeEventListener('mousemove', onMouseMove)
-      document.body.removeEventListener('mouseup', onMouseUp)
-    }
+    _operateEl.value.removeEventListener('touchstart', onTouchStart)
+    document.body.removeEventListener('touchmove', onTouchMove)
+    document.body.removeEventListener('touchend', onTouchEnd)
+    document.body.removeEventListener('touchcancel', onTouchEnd)
+
+    _operateEl.value.removeEventListener('mousedown', onMouseDown)
+    document.body.removeEventListener('mousemove', onMouseMove)
+    document.body.removeEventListener('mouseup', onMouseUp)
   }
 
   onBeforeUnmount(() => {

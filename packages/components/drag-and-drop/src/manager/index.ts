@@ -1,4 +1,4 @@
-import { EventBus, isMobile } from '@havue/shared'
+import { EventBus } from '@havue/shared'
 
 export type DragAndDropPoint = {
   x: number
@@ -256,15 +256,15 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
       const onMouseDown = this.onMouseDown.bind(this)
       const onMouseMove = this.onMouseMove.bind(this)
       const onMouseUp = this.onMouseUp.bind(this)
-      if (isMobile) {
-        document.body.addEventListener('touchstart', onTouchStart, { passive: false })
-        document.body.addEventListener('touchmove', onTouchMove, { passive: false })
-        document.body.addEventListener('touchend', onTouchEnd, { passive: false })
-      } else {
-        document.body.addEventListener('mousedown', onMouseDown)
-        document.body.addEventListener('mousemove', onMouseMove)
-        document.body.addEventListener('mouseup', onMouseUp)
-      }
+
+      document.body.addEventListener('touchstart', onTouchStart, { passive: false })
+      document.body.addEventListener('touchmove', onTouchMove, { passive: false })
+      document.body.addEventListener('touchend', onTouchEnd, { passive: false })
+
+      document.body.addEventListener('mousedown', onMouseDown)
+      document.body.addEventListener('mousemove', onMouseMove)
+      document.body.addEventListener('mouseup', onMouseUp)
+
       this.destroy = () => {
         document.body.removeEventListener('touchstart', onTouchStart)
         document.body.removeEventListener('touchmove', onTouchMove)
