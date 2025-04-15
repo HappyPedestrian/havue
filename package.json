@@ -8,17 +8,19 @@
   "scripts": {
     "dev": "vite --port 8000 --host",
     "build": "vue-tsc && vite build",
+    "test": "vitest",
     "update:version": "tsx scripts/gen-version.ts",
     "gen:types": "vue-tsc -p tsconfig.web.json --composite false --declaration --emitDeclarationOnly",
     "clean": "pnpm run clean:dist && pnpm run -r --parallel clean",
     "clean:dist": "rimraf dist",
     "build:internal": "pnpm --filter \"{internal/**}\" run build",
-    "build:lib": "pnpm run clean:dist && pnpm run gen:types && pnpm --filter ./packages/** run build",
+    "build:lib": "pnpm run test && pnpm run clean:dist && pnpm run gen:types && pnpm --filter ./packages/** run build",
     "docs:dev": "pnpm run -C docs dev",
     "docs:build": "pnpm run -C docs build",
     "docs:serve": "pnpm run -C docs serve",
     "prepare": "husky",
-    "publish": "sh ./scripts/publish.sh"
+    "publish": "sh ./scripts/publish.sh",
+    "test:browser": "vitest --workspace=vitest.workspace.ts"
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.10",
@@ -48,10 +50,14 @@
     "@havue/build": "workspace:^",
     "@havue/build-utils": "workspace:^",
     "@pnpm/types": "^1000.2.1",
+    "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.5.2",
     "@types/web": "^0.0.203",
     "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
+    "@vitest/browser": "^3.1.1",
+    "@vue/test-utils": "^2.4.6",
     "consola": "^3.4.2",
     "dotenv": "^16.4.7",
     "eslint": "^9.20.1",
@@ -62,7 +68,9 @@
     "globals": "^15.15.0",
     "gulp": "^5.0.0",
     "husky": "^9.1.7",
+    "jsdom": "^26.0.0",
     "lint-staged": "^15.5.0",
+    "playwright": "^1.51.1",
     "postcss-html": "^1.8.0",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
@@ -82,6 +90,8 @@
     "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.4",
     "vite-plugin-eslint2": "^5.0.3",
+    "vitest": "^3.1.1",
+    "vitest-browser-vue": "^0.2.0",
     "vue-tsc": "^2.0.24"
   }
 }
