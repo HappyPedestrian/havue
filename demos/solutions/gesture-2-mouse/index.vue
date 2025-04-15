@@ -32,7 +32,7 @@ const pointStyle = computed(() => {
   }
 })
 
-const { operateBoxRef } = useGestrue2Mouse(originRect, undefined, {
+const { operateBoxRef } = useGestrue2Mouse(undefined, {
   onMouseEvent: (e, button) => {
     Object.assign(currentPoint, {
       x: e.x,
@@ -56,7 +56,8 @@ const { operateBoxRef } = useGestrue2Mouse(originRect, undefined, {
     })
 
     console.log(stateText.value, e)
-  }
+  },
+  TargetRealSize: originRect
 })
 </script>
 // #endregion script
