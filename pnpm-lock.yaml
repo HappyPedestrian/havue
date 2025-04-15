@@ -291,9 +291,6 @@ importers:
 
   packages/components/color-picker:
     dependencies:
-      '@havue/shared':
-        specifier: workspace:^
-        version: link:../../shared
       '@types/color':
         specifier: ^3.0.6
         version: 3.0.6
@@ -319,10 +316,6 @@ importers:
         version: 3.5.13(typescript@5.8.2)
 
   packages/components/drag-and-scale:
-    dependencies:
-      '@havue/shared':
-        specifier: workspace:^
-        version: link:../../shared
     devDependencies:
       vue:
         specifier: ^3.3.0
