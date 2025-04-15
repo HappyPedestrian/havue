@@ -57,10 +57,13 @@ import Demo from '@/solutions/gesture-2-mouse/index.vue'
 ## useGestrue2Mouse Function Parameters
 
 |       Parameter          |        Description         |      Type      |    default     |
-| :------------------- | :------------------ | :-------------| :----------- |
-| targetRealSize            | Real-world dimensions of target area (not page element dimensions)      | `MaybeRef<UseGestrue2MouseTargetRealSizeType>`        |   —   |
-| target             | Target element. If not provided, returns `operateBoxRef` element reference      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
-| options             | Event handlers to listen to      | `Partial<UseGestrue2MouseEventOptions>`        |   —   |
+| :----------------------- | :------------------ | :-------------| :----------- |
+| target                   | Target element. If not provided, returns `operateBoxRef` element reference      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
+| options                  | Settings      | `Partial<UseGestrue2MouseEventOptions>`        |   —   |
+| options?.targetRealSize  | Real-world dimensions of target area (not page element dimensions)      | `MaybeRef<UseGestrue2MouseTargetRealSizeType>`        |   —   |
+| options?.onMouseEvent    | Handle mouse click event      | `(e: UseGestrue2MouseTargetPositionType, button?: UseGestrue2MouseMouseButtonType) => void`        |   —   |
+| options?.onMouseWheel    | Handle mouse wheel event      | `(e: UseGestrue2MouseTargetPositionType, deltaY: number) => void`        |   —   |
+| options?.throttle        | throttle option      | -        |   —   |
 
 Type Definitions
 

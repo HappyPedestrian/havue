@@ -56,11 +56,14 @@ import Demo from '@/solutions/gesture-2-mouse/index.vue'
 
 ## useOperateTransform函数参数
 
-|       参数名          |        说明         |      类型      |    默认值     |
-| :------------------- | :------------------ | :-------------| :----------- |
-| targetRealSize            | 目标区域对应现实宽高（非页面元素宽高）      | `MaybeRef<UseGestrue2MouseTargetRealSizeType>`        |   —   |
-| target             | 操作元素，如果不传，函数会返回一个`operateBoxRef`元素引用供外部使用      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
-| options             | 需要监听的事件处理函数      | `Partial<UseGestrue2MouseEventOptions>`        |   —   |
+|       参数名             |        说明         |      类型      |    默认值     |
+| :----------------------- | :------------------ | :-------------| :----------- |
+| target                   | 操作元素，如果不传，函数会返回一个`operateBoxRef`元素引用供外部使用      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
+| options                  | 配置      | `Partial<UseGestrue2MouseEventOptions>`        |   —   |
+| options?.targetRealSize  | 目标区域对应现实宽高（非页面元素宽高）      | `MaybeRef<UseGestrue2MouseTargetRealSizeType>`        |   —   |
+| options?.onMouseEvent    | 鼠标点击事件      | `(e: UseGestrue2MouseTargetPositionType, button?: UseGestrue2MouseMouseButtonType) => void`        |   —   |
+| options?.onMouseWheel    | 鼠标滚轮事件      | `(e: UseGestrue2MouseTargetPositionType, deltaY: number) => void`        |   —   |
+| options?.throttle        | throttle option      | -        |   —   |
 
 类型定义
 

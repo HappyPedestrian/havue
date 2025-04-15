@@ -1,6 +1,5 @@
 import type { MaybeRef } from 'vue'
 import { ref, computed, watch, isRef, toValue, onBeforeUnmount } from 'vue'
-import { isMobile } from '@havue/shared'
 import throttle from 'lodash/throttle'
 
 // #region typedefine
@@ -10,6 +9,8 @@ export type UseGestrue2MouseTargetRealSizeType = {
 }
 
 export type UseGestrue2MouseTargetPositionType = {
+  elX: number
+  elY: number
   x: number
   y: number
 }
@@ -17,8 +18,9 @@ export type UseGestrue2MouseTargetPositionType = {
 export type UseGestrue2MouseMouseButtonType = 'left' | 'right' | 'middle'
 
 export type UseGestrue2MouseEventOptions = {
-  onMouseEvent: (e: UseGestrue2MouseTargetPositionType, button?: UseGestrue2MouseMouseButtonType) => void
-  onMouseWheel: (e: UseGestrue2MouseTargetPositionType, deltaY: number) => void
+  onMouseEvent?: (e: UseGestrue2MouseTargetPositionType, button?: UseGestrue2MouseMouseButtonType) => void
+  onMouseWheel?: (e: UseGestrue2MouseTargetPositionType, deltaY: number) => void
+  TargetRealSize?: MaybeRef<UseGestrue2MouseTargetRealSizeType>
   throttle?: {
     wait: number
     leading?: boolean
@@ -28,7 +30,6 @@ export type UseGestrue2MouseEventOptions = {
 // #endregion typedefine
 
 export function useGestrue2Mouse(
-  TargetRealSize: MaybeRef<UseGestrue2MouseTargetRealSizeType>,
   target: MaybeRef<HTMLElement | undefined>,
   options?: Partial<UseGestrue2MouseEventOptions>
 ) {
@@ -41,8 +42,9 @@ export function useGestrue2Mouse(
   }
 
   /** 信号源实际宽高 */
-  const rect = computed<UseGestrue2MouseTargetRealSizeType>(() => {
-    return isRef(TargetRealSize) ? toValue(TargetRealSize) : TargetRealSize
+  const rect = computed<UseGestrue2MouseTargetRealSizeType | undefined>(() => {
+    const sizeOptions = options?.TargetRealSize || undefined
+    return isRef(sizeOptions) ? toValue(sizeOptions) : sizeOptions
   })
 
   const isThrottleMoveEvent = typeof options?.throttle === 'object'
@@ -88,8 +90,8 @@ export function useGestrue2Mouse(
           clientX,
           clientY,
           operateBoxRef.value,
-          rect.value.width,
-          rect.value.height
+          rect.value?.width,
+          rect.value?.height
         )
         if (lastTouchPos && Math.abs(lastTouchPos.x - pos.x) < 30 && Math.abs(lastTouchPos.y - pos.y) < 30) {
           // 如果lastTouchPos有值，且范围小于30以内，认为是双击的第二次点击，
@@ -106,7 +108,7 @@ export function useGestrue2Mouse(
         const [{ clientX: x1, clientY: y1 }, { clientX: x2, clientY: y2 }] = e.touches
         const x = (x1 + x2) / 2
         const y = (y1 + y2) / 2
-        const pos = transformMousePosToTargetPos(x, y, operateBoxRef.value, rect.value.width, rect.value.height)
+        const pos = transformMousePosToTargetPos(x, y, operateBoxRef.value, rect.value?.width, rect.value?.height)
         touchStartPos = pos
         lastTouchPos = pos
         break
@@ -124,8 +126,8 @@ export function useGestrue2Mouse(
           clientX,
           clientY,
           operateBoxRef.value,
-          rect.value.width,
-          rect.value.height
+          rect.value?.width,
+          rect.value?.height
         )
         lastTouchPos = pos
         options?.onMouseEvent && options.onMouseEvent(pos, 'left')
@@ -135,7 +137,7 @@ export function useGestrue2Mouse(
         const [{ clientX: x1, clientY: y1 }, { clientX: x2, clientY: y2 }] = e.touches
         const x = (x1 + x2) / 2
         const y = (y1 + y2) / 2
-        const pos = transformMousePosToTargetPos(x, y, operateBoxRef.value, rect.value.width, rect.value.height)
+        const pos = transformMousePosToTargetPos(x, y, operateBoxRef.value, rect.value?.width, rect.value?.height)
         let deltaY = 0
         if (lastTouchPos) {
           deltaY = lastTouchPos.y - pos.y
@@ -250,7 +252,13 @@ export function useGestrue2Mouse(
       return
     }
     const { clientX, clientY } = e
-    const pos = transformMousePosToTargetPos(clientX, clientY, operateBoxRef.value, rect.value.width, rect.value.height)
+    const pos = transformMousePosToTargetPos(
+      clientX,
+      clientY,
+      operateBoxRef.value,
+      rect.value?.width,
+      rect.value?.height
+    )
 
     if ((e.buttons & 2) !== 0) {
       // 右键按下
@@ -274,7 +282,13 @@ export function useGestrue2Mouse(
       return
     }
     const { clientX, clientY } = e
-    const pos = transformMousePosToTargetPos(clientX, clientY, operateBoxRef.value, rect.value.width, rect.value.height)
+    const pos = transformMousePosToTargetPos(
+      clientX,
+      clientY,
+      operateBoxRef.value,
+      rect.value?.width,
+      rect.value?.height
+    )
 
     Promise.resolve(options?.onMouseEvent && options.onMouseEvent(pos))
       .then(() => options?.onMouseWheel && options.onMouseWheel(pos, e.deltaY))
@@ -294,14 +308,19 @@ export function useGestrue2Mouse(
       if (!operateBoxRef.value) {
         return
       }
-      if (isMobile) {
-        operateBoxRef.value.addEventListener('touchstart', handleTouchStart)
-      } else {
-        operateBoxRef.value.addEventListener('mousedown', handleMouseDown)
+      operateBoxRef.value.addEventListener('touchstart', handleTouchStart)
+      operateBoxRef.value.addEventListener('mousedown', handleMouseDown)
 
-        operateBoxRef.value.addEventListener('wheel', handleWheel)
-        operateBoxRef.value.addEventListener('contextmenu', preventDefaultEvent)
-      }
+      operateBoxRef.value.addEventListener('wheel', handleWheel)
+      operateBoxRef.value.addEventListener('contextmenu', preventDefaultEvent)
+      // if (isMobile) {
+      //   operateBoxRef.value.addEventListener('touchstart', handleTouchStart)
+      // } else {
+      //   operateBoxRef.value.addEventListener('mousedown', handleMouseDown)
+
+      //   operateBoxRef.value.addEventListener('wheel', handleWheel)
+      //   operateBoxRef.value.addEventListener('contextmenu', preventDefaultEvent)
+      // }
     }
   )
 
@@ -309,18 +328,27 @@ export function useGestrue2Mouse(
     if (!operateBoxRef.value) {
       return
     }
-    if (isMobile) {
-      operateBoxRef.value.removeEventListener('touchstart', handleTouchStart)
-      document.body.removeEventListener('touchmove', handleTouchMove)
-      document.body.removeEventListener('touchend', handleTouchEnd)
-    } else {
-      operateBoxRef.value.removeEventListener('mousedown', handleMouseDown)
-      document.body.removeEventListener('mousemove', handleMouseMove)
-      document.body.removeEventListener('mouseup', handleMouseUp)
+    operateBoxRef.value.removeEventListener('touchstart', handleTouchStart)
+    document.body.removeEventListener('touchmove', handleTouchMove)
+    document.body.removeEventListener('touchend', handleTouchEnd)
+    operateBoxRef.value.removeEventListener('mousedown', handleMouseDown)
+    document.body.removeEventListener('mousemove', handleMouseMove)
+    document.body.removeEventListener('mouseup', handleMouseUp)
 
-      operateBoxRef.value.removeEventListener('wheel', handleWheel)
-      operateBoxRef.value.removeEventListener('contextmenu', preventDefaultEvent)
-    }
+    operateBoxRef.value.removeEventListener('wheel', handleWheel)
+    operateBoxRef.value.removeEventListener('contextmenu', preventDefaultEvent)
+    // if (isMobile) {
+    //   operateBoxRef.value.removeEventListener('touchstart', handleTouchStart)
+    //   document.body.removeEventListener('touchmove', handleTouchMove)
+    //   document.body.removeEventListener('touchend', handleTouchEnd)
+    // } else {
+    //   operateBoxRef.value.removeEventListener('mousedown', handleMouseDown)
+    //   document.body.removeEventListener('mousemove', handleMouseMove)
+    //   document.body.removeEventListener('mouseup', handleMouseUp)
+
+    //   operateBoxRef.value.removeEventListener('wheel', handleWheel)
+    //   operateBoxRef.value.removeEventListener('contextmenu', preventDefaultEvent)
+    // }
   })
 
   return {
@@ -341,14 +369,16 @@ function transformMousePosToTargetPos(
   x: number,
   y: number,
   el: HTMLElement,
-  targetWidth: number,
-  targetHeight: number
+  targetWidth?: number,
+  targetHeight?: number
 ): UseGestrue2MouseTargetPositionType {
   const rect = el?.getBoundingClientRect()
   if (!rect) {
-    return { x: 0, y: 0 }
+    return { elX: 0, elY: 0, x: 0, y: 0 }
   }
   const { top, left, width: elWidth, height: elHeight } = rect
+  targetWidth = targetWidth || elWidth
+  targetHeight = targetHeight || elHeight
   /** 在元素中横坐标 */
   let elX = x
   /** 在元素中纵坐标 */
@@ -365,6 +395,8 @@ function transformMousePosToTargetPos(
   const targetY = elY * scaleY
 
   return {
+    elX,
+    elY,
     x: Math.round(targetX),
     y: Math.round(targetY)
   }
