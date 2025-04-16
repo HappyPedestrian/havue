@@ -12,15 +12,15 @@
 
 ::: code-group
 
-```shell
+```shell [npm]
 npm install @havue/components --save
 ```
 
-```shell
+```shell [yarn]
 yarn add @havue/components
 ```
 
-```shell
+```shell [pnpm]
 pnpm install @havue/components
 ```
 

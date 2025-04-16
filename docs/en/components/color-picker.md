@@ -10,15 +10,15 @@ To install the Color Picker individually, run the following command:
 
 ::: code-group
 
-```shell
+```shell [npm]
 npm install @havue/color-picker --save
 ```
 
-```shell
+```shell [yarn]
 yarn add @havue/color-picker
 ```
 
-```shell
+```shell [pnpm]
 pnpm install @havue/color-picker
 ```
 

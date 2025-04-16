@@ -12,15 +12,15 @@
 
 ::: code-group
 
-```shell
+```shell [npm]
 npm install @havue/drag-and-scale --save
 ```
 
-```shell
+```shell [yarn]
 yarn add @havue/drag-and-scale
 ```
 
-```shell
+```shell [pnpm]
 pnpm install @havue/drag-and-scale
 ```
 
