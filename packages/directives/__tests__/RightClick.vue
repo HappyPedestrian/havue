@@ -23,12 +23,10 @@ const emits = defineEmits<{
 }>()
 
 function onDown() {
-  console.log('down')
   emits('right-click-down')
 }
 
 function onUp() {
-  console.log('up')
   emits('right-click-up')
 }
 

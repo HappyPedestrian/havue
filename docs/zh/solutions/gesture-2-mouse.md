@@ -20,6 +20,8 @@ yarn add @havue/use-gesture-2-mouse
 pnpm install @havue/use-gesture-2-mouse
 ```
 
+:::
+
 ## 使用
 
 引入
