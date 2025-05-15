@@ -56,6 +56,10 @@ export function useOperateEvent() {
   }
 
   function handleMouseMove(e: HTMLElementEventMap['mousemove']) {
+    if (!(e.buttons && 1)) {
+      handleMouseUp()
+      return
+    }
     handleCirclePickerCoordinateChange({
       x: e.clientX,
       y: e.clientY
