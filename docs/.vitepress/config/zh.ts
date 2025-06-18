@@ -71,7 +71,8 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { text: '介绍', link: 'components/' },
         { text: '颜色选择器', link: 'components/color-picker' },
         { text: '拖拽', link: 'components/drag-and-drop' },
-        { text: '拖动缩放', link: 'components/drag-and-scale' }
+        { text: '拖动缩放', link: 'components/drag-and-scale' },
+        { text: 'Ip 地址输入', link: 'components/ip-input' }
       ]
     },
     {

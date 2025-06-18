@@ -50,7 +50,8 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { text: 'Introduction', link: 'components/' },
         { text: 'Color Picker', link: 'components/color-picker' },
         { text: 'Drag And Drop', link: 'components/drag-and-drop' },
-        { text: 'Drag And Scale', link: 'components/drag-and-scale' }
+        { text: 'Drag And Scale', link: 'components/drag-and-scale' },
+        { text: 'Ip Input', link: 'components/ip-input' }
       ]
     },
     {
