@@ -30,18 +30,23 @@ import { useOperateEvent } from './hooks/useOperateEvent'
 import { getLightColorAndDepth, hexToColor, getOriginHexByLightAndDepth, colorToHex } from './utils/color'
 import ColorForm from './children/ColorForm/ColorForm.vue'
 import PresetColors from './children/PresetColors/PresetColors.vue'
+import { DEFAULT_COLOR } from '../constants/index'
 
 defineOptions({
   name: 'HvColorPicker'
 })
 
-const DEFAULT_COLOR = '#FFFFFF'
-
-const props = defineProps<{
-  title?: string
-  presetTitle?: string
-  presetColors?: string[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: string
+    title?: string
+    presetTitle?: string
+    presetColors?: string[]
+  }>(),
+  {
+    modelValue: DEFAULT_COLOR
+  }
+)
 
 const emits = defineEmits<{
   (name: 'update:model-value', value: string): void
@@ -50,9 +55,18 @@ const { colorAreaCanvas, getColorByCoordinate, getCoordinateByColor, canvasWidth
 const { colorAreaRef, circlePickerCoordinate, setCirclePickerCoordinate } = useOperateEvent()
 
 // const color = ref<string>('#ffccaa')
-const color = defineModel({
-  type: String,
-  default: DEFAULT_COLOR
+// const color = defineModel({
+//   type: String,
+//   default: DEFAULT_COLOR
+// })
+
+const color = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value: string) {
+    emits('update:model-value', value)
+  }
 })
 
 /** 高亮 在canvas颜色区域中的颜色 */

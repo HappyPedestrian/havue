@@ -69,8 +69,7 @@
 import type { RgbColorType, HsvColorType } from '../../utils/color'
 import { ref, reactive, watch } from 'vue'
 import Color from 'color'
-
-const DEFAULT_COLOR = '#ffffff'
+import { DEFAULT_COLOR } from '../../../constants'
 
 const props = defineProps<{
   modelValue: string

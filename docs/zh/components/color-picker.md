@@ -10,15 +10,15 @@
 
 ::: code-group
 
-```shell [npm]
+```shell
 npm install @havue/color-picker --save
 ```
 
-```shell [yarn]
+```shell
 yarn add @havue/color-picker
 ```
 
-```shell [pnpm]
+```shell
 pnpm install @havue/color-picker
 ```
 
@@ -50,12 +50,12 @@ import Demo from '@/components/color-picker/index.vue'
 
 ## 配置
 
-|          属性名          |        说明         |      类型      |    默认值     |
-| :----------------------- | :------------------ | :-------------| :----------- |
-| model-value / v-model    | 绑定值              | `string`      |   `#ffffff`   |
-| title                    | 标题文字            | `string`      |   `颜色编辑器`   |
-| presetTitle              | 预设标题            | `string`      |   `系统预设色彩`  |
-| presetColors             | 预设颜色            | `string[]`      |   `DEFAULT_PRESET_COLORS`  |
+| 属性名                | 说明     | 类型         | 默认值                    |
+| :-------------------- | :------- | :----------- | :------------------------ |
+| model-value / v-model | 绑定值   | `string`   | `#ffffff`               |
+| title                 | 标题文字 | `string`   | `颜色编辑器`            |
+| presetTitle           | 预设标题 | `string`   | `系统预设色彩`          |
+| presetColors          | 预设颜色 | `string[]` | `DEFAULT_PRESET_COLORS` |
 
 ```ts
 const DEFAULT_PRESET_COLORS [ '#000000','#FFFFFF','#E3822D','#DCE24F','#1DCF69','#6DE5B9','#11A1F2','#AA43FF','#F0689C','#F8D28B','#606368','#E83C34','#EEBE29','#89F0AC','#2FBC9E','#56CCF2','#1C1DFA','#DC88F5','#D4C595','#C52F65']

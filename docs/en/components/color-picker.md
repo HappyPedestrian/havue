@@ -10,15 +10,15 @@ To install the Color Picker individually, run the following command:
 
 ::: code-group
 
-```shell [npm]
+```shell
 npm install @havue/color-picker --save
 ```
 
-```shell [yarn]
+```shell
 yarn add @havue/color-picker
 ```
 
-```shell [pnpm]
+```shell
 pnpm install @havue/color-picker
 ```
 
@@ -48,7 +48,7 @@ import Demo from '@/components/color-picker/index.vue'
 <<< ../../../demos/components/color-picker/index.vue{ts:line-numbers}
 :::
 
-## 配置
+## Props
 
 | Property              | Description   | Type         | Default                   |
 | :-------------------- | :------------ | :----------- | :------------------------ |

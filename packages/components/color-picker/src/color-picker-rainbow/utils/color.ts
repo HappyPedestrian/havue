@@ -2,20 +2,20 @@ import type ColorConstruct from 'color'
 import Color from 'color'
 
 export type RgbColorType = {
-	r: number
-	g: number
-	b: number
+  r: number
+  g: number
+  b: number
 }
 
 export type HsvColorType = {
-	h: number
-	s: number
-	v: number
+  h: number
+  s: number
+  v: number
 }
 
 export function hexToColor(hex: string): ColorConstruct {
-	const colorIns = Color(hex)
-	return colorIns
+  const colorIns = Color(hex)
+  return colorIns
 }
 
 /**
@@ -24,7 +24,7 @@ export function hexToColor(hex: string): ColorConstruct {
  * @returns {string}
  */
 export function colorToHex(color: ColorConstruct): string {
-	return color.hex()
+  return color.hex()
 }
 
 /**
@@ -37,15 +37,15 @@ export function colorToHex(color: ColorConstruct): string {
  *
  */
 export function getLightColorAndDepth(color: ColorConstruct): {
-	color: ColorConstruct
-	value: number
+  color: ColorConstruct
+  value: number
 } {
-	const { h, s, v } = color.hsv().object()
+  const { h, s, v } = color.hsv().object()
 
-	return {
-		color: Color.hsv(h, s, 100),
-		value: v,
-	}
+  return {
+    color: Color.hsv(h, s, 100),
+    value: v
+  }
 }
 
 /**
@@ -56,8 +56,8 @@ export function getLightColorAndDepth(color: ColorConstruct): {
  *
  */
 export function getOriginColorByLightAndDepth(color: ColorConstruct, value: number): ColorConstruct {
-	const { h, s } = color.hsv().object()
-	return Color.hsv(h, s, value)
+  const { h, s } = color.hsv().object()
+  return Color.hsv(h, s, value)
 }
 
 /**
@@ -68,6 +68,6 @@ export function getOriginColorByLightAndDepth(color: ColorConstruct, value: numb
  *
  */
 export function getOriginHexByLightAndDepth(color: ColorConstruct, value: number): string {
-	const originColor = getOriginColorByLightAndDepth(color, value)
-	return colorToHex(originColor)
+  const originColor = getOriginColorByLightAndDepth(color, value)
+  return colorToHex(originColor)
 }
