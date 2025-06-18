@@ -6,7 +6,7 @@
 如果还需要使用其他组件，请参考[全量组件安装](./index.md)
 :::
 
-如果仅需要使用颜色选择器，执行以下命令单独安装:
+如果仅需要使用IP地址输入框，执行以下命令单独安装:
 
 ::: code-group
 
@@ -42,7 +42,7 @@ import HvIpInput from '@havue/ip-input'
 import Demo from '@/components/ip-input/index.vue'
 </script>
 
-<Demo></Demo>
+`<Demo></Demo>`
 
 ::: details 点我看代码
 <<< ../../../demos/components/ip-input/index.vue{ts:line-numbers}

@@ -1,4 +1,4 @@
-# IP address input
+# IP Address Input
 
 ## Installation
 
@@ -6,7 +6,7 @@
 If other components are needed, please refer to[Full Components Installation](./index.md)
 :::
 
-To install the Color Picker individually, run the following command:
+To install the IP Address Input individually, run the following command:
 
 ::: code-group
 
@@ -42,7 +42,7 @@ import HvIpInput from '@havue/ip-input'
 import Demo from '@/components/ip-input/index.vue'
 </script>
 
-<Demo></Demo>
+`<Demo></Demo>`
 
 ::: details Click to view code
 <<< ../../../demos/components/ip-input/index.vue{ts:line-numbers}
@@ -50,7 +50,7 @@ import Demo from '@/components/ip-input/index.vue'
 
 ## Props
 
-| Property              | Description | Type        | Default   |
-| :-------------------- | :---------- | :---------- | :-------- |
-| model-value / v-model | Bound value      | `string`  | `"..."` |
-| disabled              | Disable interaction  | `boolean` | -       |
+| Property              | Description         | Type        | Default   |
+| :-------------------- | :------------------ | :---------- | :-------- |
+| model-value / v-model | Bound value         | `string`  | `"..."` |
+| disabled              | Disable interaction | `boolean` | -         |
