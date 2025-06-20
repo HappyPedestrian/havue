@@ -1,4 +1,5 @@
-import { ref, onMounted, onBeforeUnmount, reactive } from 'vue'
+import { MaybeRef } from 'vue'
+import { ref, computed, isRef, onMounted, onBeforeUnmount, reactive } from 'vue'
 import { throttle } from '../utils/tools'
 
 type Point = {
@@ -6,7 +7,7 @@ type Point = {
   y: number
 }
 
-export function useOperateEvent() {
+export function useOperateEvent(options: { disabled: MaybeRef<boolean> }) {
   const colorAreaRef = ref<HTMLDivElement>()
   /** 圆形颜色坐标 */
   const circlePickerCoordinate = reactive({
@@ -14,7 +15,14 @@ export function useOperateEvent() {
     y: 0
   })
 
+  const isDisabled = computed(() => {
+    return isRef(options.disabled) ? options.disabled.value : options.disabled
+  })
+
   function handleTouchStart(e: TouchEvent) {
+    if (isDisabled.value) {
+      return
+    }
     if (e.touches.length === 0) {
       return
     }
@@ -47,6 +55,9 @@ export function useOperateEvent() {
   }
 
   function handleMounseDown(e: HTMLElementEventMap['mousedown']) {
+    if (isDisabled.value) {
+      return
+    }
     document.body.addEventListener('mousemove', handleMouseMove)
     document.body.addEventListener('mouseup', handleMouseUp)
     handleCirclePickerCoordinateChange({
@@ -69,6 +80,9 @@ export function useOperateEvent() {
   /** 处理鼠标拖动 */
   const handleCirclePickerCoordinateChange = throttle(handleCirclePickerCoordinateChangeFn, 20)
   function handleCirclePickerCoordinateChangeFn(point: Point) {
+    if (isDisabled.value) {
+      return
+    }
     const { x: clientX, y: clientY } = point
     const colorAreaRect = colorAreaRef.value?.getBoundingClientRect()
     if (!colorAreaRect) {

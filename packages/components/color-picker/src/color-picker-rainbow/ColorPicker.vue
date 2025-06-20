@@ -2,17 +2,24 @@
   <div class="hv-color-picker">
     <div class="hv-color-picker__title">{{ props.title || '颜色编辑器' }}</div>
     <div class="hv-color-picker__area-outer">
-      <div class="hv-color-picker__area" ref="colorAreaRef">
+      <div class="hv-color-picker__area" :class="isDisabled ? 'is-disabled' : ''" ref="colorAreaRef">
         <canvas ref="colorAreaCanvas"></canvas>
         <div class="hv-color-picker__circle" :style="cilcleStyle"></div>
       </div>
     </div>
 
     <div class="hv-color-picker__slider">
-      <ElSlider v-model="colorDepth" :min="0" :max="100" :show-tooltip="false" :style="sliderBackStyle"></ElSlider>
+      <ElSlider
+        v-model="colorDepth"
+        :disabled="props.disabled"
+        :min="0"
+        :max="100"
+        :show-tooltip="false"
+        :style="sliderBackStyle"
+      ></ElSlider>
       <div class="hv-color-picker__origin-color" :style="{ backgroundColor: originHexColor }"></div>
     </div>
-    <ColorForm :model-value="color" @change="handleColorChange"></ColorForm>
+    <ColorForm :model-value="color" :disabled="props.disabled" @change="handleColorChange"></ColorForm>
     <PresetColors
       @change="handleColorChange"
       :title="props.presetTitle"
@@ -39,6 +46,7 @@ defineOptions({
 const props = withDefaults(
   defineProps<{
     modelValue: string
+    disabled?: boolean
     title?: string
     presetTitle?: string
     presetColors?: string[]
@@ -51,8 +59,11 @@ const props = withDefaults(
 const emits = defineEmits<{
   (name: 'update:model-value', value: string): void
 }>()
+
+const isDisabled = computed(() => props.disabled)
+
 const { colorAreaCanvas, getColorByCoordinate, getCoordinateByColor, canvasWidth, canvasHeight } = useColorArea()
-const { colorAreaRef, circlePickerCoordinate, setCirclePickerCoordinate } = useOperateEvent()
+const { colorAreaRef, circlePickerCoordinate, setCirclePickerCoordinate } = useOperateEvent({ disabled: isDisabled })
 
 // const color = ref<string>('#ffccaa')
 // const color = defineModel({
@@ -147,6 +158,9 @@ watch(
 
 // 手动输入颜色或选择预制颜色时，计算新的颜色区域坐标
 function handleColorChange(hex: string) {
+  if (props.disabled) {
+    return
+  }
   const color = hexToColor(hex)
   const { color: lightRgb, value: depth } = getLightColorAndDepth(color)
   lightColor.value = lightRgb
@@ -188,6 +202,10 @@ onMounted(() => {
       height: 168px;
       overflow: hidden;
       background-color: #000;
+
+      &.is-disabled {
+        cursor: not-allowed;
+      }
 
       canvas {
         width: 100%;

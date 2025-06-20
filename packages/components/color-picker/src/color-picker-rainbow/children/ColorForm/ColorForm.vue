@@ -1,12 +1,18 @@
 <template>
   <div class="hv-color-picker__color-form">
     <div class="mb-12">
-      <el-input v-model="hexColor" :formatter="hexFormater" @change="handleHexColorChange"></el-input>
+      <el-input
+        v-model="hexColor"
+        :disabled="props.disabled"
+        :formatter="hexFormater"
+        @change="handleHexColorChange"
+      ></el-input>
     </div>
     <div class="hv-color-picker__form-group mb-12">
       <div class="hv-color-picker__form-label">RGB</div>
       <el-input-number
         v-model="formInputRGB.r"
+        :disabled="props.disabled"
         @change="handleRgbColorChange"
         step-strictly
         :min="0"
@@ -16,6 +22,7 @@
       ></el-input-number>
       <el-input-number
         v-model="formInputRGB.g"
+        :disabled="props.disabled"
         @change="handleRgbColorChange"
         step-strictly
         :min="0"
@@ -25,6 +32,7 @@
       ></el-input-number>
       <el-input-number
         v-model="formInputRGB.b"
+        :disabled="props.disabled"
         @change="handleRgbColorChange"
         step-strictly
         :min="0"
@@ -37,6 +45,7 @@
       <div class="hv-color-picker__form-label">HSV</div>
       <el-input-number
         v-model="formInputHSV.h"
+        :disabled="props.disabled"
         @change="handleHsvColorChange"
         :min="0"
         :max="360"
@@ -46,6 +55,7 @@
       ></el-input-number>
       <el-input-number
         v-model="formInputHSV.s"
+        :disabled="props.disabled"
         @change="handleHsvColorChange"
         :min="0"
         :max="100"
@@ -55,6 +65,7 @@
       ></el-input-number>
       <el-input-number
         v-model="formInputHSV.v"
+        :disabled="props.disabled"
         @change="handleHsvColorChange"
         step-strictly
         :min="0"
@@ -73,6 +84,7 @@ import { DEFAULT_COLOR } from '../../../constants'
 
 const props = defineProps<{
   modelValue: string
+  disabled?: boolean
 }>()
 const emits = defineEmits<{
   (name: 'change', value: string): void
