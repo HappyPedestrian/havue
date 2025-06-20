@@ -40,6 +40,7 @@ import { HvColorPicker } from '@havue/color-picker'
 
 <script setup>
 import Demo from '@/components/color-picker/index.vue'
+import NormalDemo from '@/components/color-picker/normal.vue'
 </script>
 
 <Demo></Demo>
@@ -48,14 +49,30 @@ import Demo from '@/components/color-picker/index.vue'
 <<< ../../../demos/components/color-picker/index.vue{ts:line-numbers}
 :::
 
-## 配置
+<NormalDemo></NormalDemo>
+
+::: details 点我看代码
+<<< ../../../demos/components/color-picker/normal.vue{ts:line-numbers}
+:::
+
+## HvColorPicker配置
 
 | 属性名                | 说明     | 类型         | 默认值                    |
 | :-------------------- | :------- | :----------- | :------------------------ |
 | model-value / v-model | 绑定值   | `string`   | `#ffffff`               |
+| disabled <Badge type="tip" text="^1.1.3" />        | 是否禁用   | `boolean`   | _            |
 | title                 | 标题文字 | `string`   | `颜色编辑器`            |
 | presetTitle           | 预设标题 | `string`   | `系统预设色彩`          |
 | presetColors          | 预设颜色 | `string[]` | `DEFAULT_PRESET_COLORS` |
+
+## HvColorPickerNormal 配置 <Badge type="tip" text="^1.1.3" />
+
+| Property              | Description   | Type         | Default                   |
+| :-------------------- | :------------ | :----------- | :------------------------ |
+| model-value / v-model | Bound value   | `string`   | `#ffffff`               |
+| disabled              | 是否禁用   | `boolean`   | _            |
+| presetTitle           | Preset title  | `string`   | `系统预设色彩`          |
+| presetColors          | Preset colors | `string[]` | `DEFAULT_PRESET_COLORS` |
 
 ```ts
 const DEFAULT_PRESET_COLORS [ '#000000','#FFFFFF','#E3822D','#DCE24F','#1DCF69','#6DE5B9','#11A1F2','#AA43FF','#F0689C','#F8D28B','#606368','#E83C34','#EEBE29','#89F0AC','#2FBC9E','#56CCF2','#1C1DFA','#DC88F5','#D4C595','#C52F65']

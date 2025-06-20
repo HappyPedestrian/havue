@@ -13,6 +13,7 @@
         v-if="isSupportEyeDropper"
         @click="handleOpenEyeDropper"
         class="hv-color-picker__dropper"
+        :class="props.disabled ? 'is-disabled' : ''"
         width="28"
         height="28"
         viewBox="0 0 28 28"
@@ -202,6 +203,10 @@ function handleColorChange(hex: string) {
       color: #cad1e0;
       cursor: pointer;
       border-radius: 4px;
+
+      &.is-disabled {
+        cursor: not-allowed;
+      }
 
       &:hover {
         background-color: #3c4452;
