@@ -42,7 +42,7 @@ import HvIpInput from '@havue/ip-input'
 import Demo from '@/components/ip-input/index.vue'
 </script>
 
-`<Demo></Demo>`
+<Demo></Demo>
 
 ::: details 点我看代码
 <<< ../../../demos/components/ip-input/index.vue{ts:line-numbers}

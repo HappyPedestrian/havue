@@ -2,9 +2,9 @@
  * IP每一项值是否有效
  * @param val 单个IP值
  */
-export function isValidIPItemValue(val: string | number) {
+export function getValidIPItemValue(val: string | number): string {
   const num = parseInt(val + '')
-  return !isNaN(num) && num >= 0 && num <= 255
+  return isNaN(num) ? '' : num < 0 ? '0' : num > 255 ? '255' : num + ''
 }
 
 /**

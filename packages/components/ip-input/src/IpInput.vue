@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { isValidIPItemValue, getRange } from './utils/index'
+import { getValidIPItemValue, getRange } from './utils/index'
 
 interface ChangeEvent extends Event {
   target: HTMLInputElement
@@ -37,7 +37,7 @@ const emits = defineEmits<{
 
 const props = withDefaults(
   defineProps<{
-    modelValue: string | Array<string | number> | undefined
+    modelValue: string | undefined
     disabled?: boolean
   }>(),
   {
@@ -53,15 +53,12 @@ const values = ref<string[]>([])
 watch(
   () => props.modelValue,
   (value) => {
-    if (!Array.isArray(value)) {
-      value = value + ''
-      value = value.split('.')
-    }
+    value = value + ''
+    const strs = value.split('.')
     values.value = Array(4)
       .fill('')
       .map((_, i) => {
-        const num = parseInt(value[i] + '')
-        return !isValidIPItemValue(num) ? '' : num + ''
+        return getValidIPItemValue(strs[i] + '')
       })
   },
   {
@@ -70,29 +67,21 @@ watch(
 )
 
 function onIPChange() {
-  const ip = values.value.map((val) => (isNaN(Number(val)) ? '' : val)).join('.')
+  const ip = values.value.map((val) => getValidIPItemValue(val)).join('.')
   return emits('update:model-value', ip)
 }
 
 function handleChange(e: ChangeEvent, i: number) {
   const curValue = e.target.value
-  let num = parseInt(curValue)
+  const num = getValidIPItemValue(curValue)
+
+  values.value[i] = num
+  e.target.value = num
+  onIPChange()
   // 如果无法转换为int，设置为''
-  if (isNaN(num)) {
-    values.value[i] = ''
-    e.target.value = ''
-    onIPChange()
+  if (num === '') {
     return e.preventDefault()
   }
-
-  // 不在[0, 255],设置为255
-  if (!isValidIPItemValue(num)) {
-    num = 255
-  }
-
-  values.value[i] = num + ''
-  e.target.value = num + ''
-  onIPChange()
 
   if (String(num).length === 3 && i < 3) {
     inputRefs.value[i + 1]?.focus()
@@ -152,12 +141,12 @@ function handlePaste(e: ClipboardEvent, i: number) {
     return
   }
 
-  const value = pasteData.split('.').map((v) => parseInt(v))
+  const value = pasteData.split('.').map((v) => getValidIPItemValue(v))
   if (value.length !== 4 - i) {
     return
   }
 
-  if (!value.every(isValidIPItemValue)) {
+  if (!value.every((item) => item !== '')) {
     return
   }
 
@@ -177,7 +166,6 @@ function handlePaste(e: ClipboardEvent, i: number) {
   font-size: 14px;
   line-height: 19px;
   outline: none;
-  background-color: #131519;
   border: 1px solid #373d48;
   border-radius: 4px;
 
@@ -191,7 +179,6 @@ function handlePaste(e: ClipboardEvent, i: number) {
 
   &.is-disabled {
     cursor: not-allowed;
-    background-color: #262727;
 
     input {
       cursor: not-allowed;
