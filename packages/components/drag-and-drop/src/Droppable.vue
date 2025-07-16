@@ -22,6 +22,7 @@ const emits = defineEmits<{
 
 const props = defineProps<{
   acceptDragType: DragAndDropDragType | Array<DragAndDropDragType>
+  disabled?: boolean
 }>()
 
 const dropAreaRef = ref<HTMLElement>()
@@ -56,6 +57,9 @@ function getPositionInArea(point: DragAndDropPoint) {
 }
 
 const onMove: DnDManagerEvents['move'] = (params) => {
+  if (props.disabled) {
+    return
+  }
   const { type, data, point } = params
   if (dropAreaRef.value && acceptDragTypeList.value.includes(type)) {
     const { isInArea, position } = getPositionInArea(point)
@@ -74,6 +78,9 @@ const onMove: DnDManagerEvents['move'] = (params) => {
 }
 
 const onEnd: DnDManagerEvents['move'] = ({ type, point, data }) => {
+  if (props.disabled) {
+    return
+  }
   if (dropAreaRef.value && acceptDragTypeList.value.includes(type) && isEntered.value) {
     const { position } = getPositionInArea(point)
     emits('drop', type, position, data)

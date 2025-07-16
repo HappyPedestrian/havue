@@ -99,6 +99,7 @@ type ImmediateType = 'left' | 'right' | 'top' | 'bottom' | 'all' | undefined
 |  Property   |        Description         |      Type      |    Default     |
 | :------- | :------------------ | :-------------| :----------- |
 | acceptDragType   | Accepted drag types         | `DragAndDropDragType \| Array<DragAndDropDragType>` | - |
+| disabled? <Badge type="tip" text="^1.1.3" />| Whether the element is disabled      | `boolean`          | -            |
 
 ## Droppable Events
 
