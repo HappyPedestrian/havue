@@ -39,6 +39,7 @@
           }"
         ></ElSlider>
         <ElSlider
+          v-if="props.enableAlpha"
           v-model="alpha"
           :min="0"
           :max="100"
@@ -51,7 +52,7 @@
         ></ElSlider>
       </div>
     </div>
-    <ColorForm v-model:model-value="color" :disabled="props.disabled"></ColorForm>
+    <ColorForm v-model:model-value="color" :disabled="props.disabled" :enable-alpha="props.enableAlpha"></ColorForm>
     <PresetColors
       @change="handleColorChange"
       :title="props.presetTitle"
@@ -81,11 +82,13 @@ const props = withDefaults(
   defineProps<{
     modelValue: string
     disabled?: boolean
+    enableAlpha?: boolean
     presetTitle?: string
     presetColors?: string[]
   }>(),
   {
-    modelValue: DEFAULT_COLOR
+    modelValue: DEFAULT_COLOR,
+    enableAlpha: true
   }
 )
 
@@ -122,9 +125,10 @@ watch(
   color,
   (c) => {
     const color = Color(c)
-    const { h } = color.hsv().object()
+    const { h, s } = color.hsv().object()
+    saturationv.value = s
     const equlValues = [0, 360]
-    alpha.value = Math.round(color.alpha() * 100)
+    alpha.value = props.enableAlpha ? Math.round(color.alpha() * 100) : 100
     const curColor = Color.hsv({ h: hue.value, s: saturationv.value, v: value.value, alpha: alpha.value }).hexa()
     if (curColor !== color.hexa()) {
       if (!(equlValues.includes(h) && equlValues.includes(hue.value))) {

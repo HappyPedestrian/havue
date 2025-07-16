@@ -43,6 +43,7 @@
         :controls="false"
       ></el-input-number>
       <el-input-number
+        v-if="props.enableAlpha"
         v-model="formInputState[3]"
         @change="handleColorChange"
         step-strictly
@@ -75,6 +76,7 @@ defineOptions({
 const props = defineProps<{
   modelValue: string
   disabled?: boolean
+  enableAlpha?: boolean
 }>()
 const emits = defineEmits<{
   (name: 'update:modelValue', value: string): void
@@ -136,7 +138,7 @@ function handleColorChange() {
       break
     }
   }
-  emits('update:modelValue', color.alpha(formInputState.value[3] / 100).hexa())
+  emits('update:modelValue', color.alpha(props.enableAlpha ? formInputState.value[3] / 100 : 1).hexa())
 }
 </script>
 
@@ -183,6 +185,7 @@ function handleColorChange() {
     :deep(.el-input-number) {
       --el-text-color-regular: #c2c6cc;
 
+      flex: 1;
       width: 23%;
 
       &:last-child {

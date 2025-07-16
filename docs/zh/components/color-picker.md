@@ -71,6 +71,7 @@ import NormalDemo from '@/components/color-picker/normal.vue'
 | :-------------------- | :------------ | :----------- | :------------------------ |
 | model-value / v-model | Bound value   | `string`   | `#ffffff`               |
 | disabled              | 是否禁用   | `boolean`   | _            |
+| enableAlpha           | 是否可设置透明度   | `boolean`   | `true`            |
 | presetTitle           | Preset title  | `string`   | `系统预设色彩`          |
 | presetColors          | Preset colors | `string[]` | `DEFAULT_PRESET_COLORS` |
 
