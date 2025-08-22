@@ -60,12 +60,12 @@ import NormalDemo from '@/components/color-picker/normal.vue'
 | Property              | Description   | Type         | Default                   |
 | :-------------------- | :------------ | :----------- | :------------------------ |
 | model-value / v-model | Bound value   | `string`   | `#ffffff`               |
-| disabled  <Badge type="tip" text="^1.1.3" />      | Disable interaction    | `boolean`   | _            |
+| disabled  <Badge type="tip" text="^1.2.0" />      | Disable interaction    | `boolean`   | _            |
 | title                 | Title text    | `string`   | `颜色编辑器`            |
 | presetTitle           | Preset title  | `string`   | `系统预设色彩`          |
 | presetColors          | Preset colors | `string[]` | `DEFAULT_PRESET_COLORS` |
 
-## HvColorPickerNormal Props <Badge type="tip" text="^1.1.3" />
+## HvColorPickerNormal Props <Badge type="tip" text="^1.2.0" />
 
 | Property              | Description   | Type         | Default                   |
 | :-------------------- | :------------ | :----------- | :------------------------ |

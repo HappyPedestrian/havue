@@ -98,7 +98,7 @@ type ImmediateType = 'left' | 'right' | 'top' | 'bottom' | 'all' | undefined
 |  属性名   |        说明         |      类型      |    默认值     |
 | :------- | :------------------ | :-------------| :----------- |
 | acceptDragType   | 可接受拖拽元素类型         | `DragAndDropDragType \| Array<DragAndDropDragType>` | - |
-| disabled? <Badge type="tip" text="^1.1.3" />| 是否禁用             | `boolean`          | -            |
+| disabled? <Badge type="tip" text="^1.2.0" />| 是否禁用             | `boolean`          | -            |
 
 ## Droppable 事件
 
