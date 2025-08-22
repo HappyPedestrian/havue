@@ -46,7 +46,7 @@ const props = withDefaults(
   }
 )
 
-const inputRefs = ref()
+const inputRefs = ref<Array<HTMLInputElement>>([])
 
 const values = ref<string[]>([])
 
@@ -123,7 +123,15 @@ function handleKeyDown(e: InputKeyboardEvent, i: number) {
       break
     }
   }
-  inputRefs.value[domId].focus()
+  const inputEl = inputRefs.value[domId]
+  inputEl.focus()
+  // 确保删除或者左右移动连续，避免切换input focus，光标位置会保持在上一次聚焦位置的问题
+  if (domId < i) {
+    const len = inputEl.value.length
+    inputEl.selectionStart = inputEl.selectionEnd = len
+  } else if (domId > i) {
+    inputEl.selectionStart = inputEl.selectionEnd = 0
+  }
 }
 
 /**
