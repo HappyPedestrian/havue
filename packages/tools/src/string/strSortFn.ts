@@ -71,12 +71,14 @@ export function stringSortFn(a: string, b: string, ignoreSpecialChar: boolean = 
 
   // 如果 a 是英文而 b 不是，则 a 应该排在前面
   if (isEnglishA && !isEnglishB) {
-    return new Intl.Collator('zh-Hans', { caseFirst: 'lower' }).compare(a1, getPinyinInitial(b1))
+    const res = new Intl.Collator('zh-Hans', { caseFirst: 'lower' }).compare(a1, getPinyinInitial(b1))
+    return res === 0 ? -1 : res
   }
 
   // 如果 b 是英文而 a 不是，则 b 应该排在前面
   if (!isEnglishA && isEnglishB) {
-    return new Intl.Collator('zh-Hans', { caseFirst: 'lower' }).compare(getPinyinInitial(a1), b1)
+    const res = new Intl.Collator('zh-Hans', { caseFirst: 'lower' }).compare(getPinyinInitial(a1), b1)
+    return res === 0 ? 1 : res
   }
 
   const compareRes = new Intl.Collator('zh-Hans', { caseFirst: 'lower' }).compare(a1, b1)
