@@ -154,7 +154,7 @@ const reCompColor = throttle(
   function reCompColor() {
     const newColor = Color({ h: hue.value, s: saturationv.value, v: value.value, alpha: alpha.value / 100 })
 
-    color.value = newColor.hexa()
+    color.value = props.enableAlpha ? newColor.hexa() : newColor.hex()
   },
   50,
   {
