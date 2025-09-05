@@ -9,7 +9,7 @@ type Point = {
 
 export function useOperateEvent(options: { disabled: MaybeRef<boolean> }) {
   const colorAreaRef = ref<HTMLDivElement>()
-  /** 圆形颜色坐标 */
+  /** 当前颜色坐标 | Current color coordinates */
   const circlePickerCoordinate = reactive({
     x: 0,
     y: 0
@@ -77,7 +77,7 @@ export function useOperateEvent(options: { disabled: MaybeRef<boolean> }) {
     })
   }
 
-  /** 处理鼠标拖动 */
+  /** 处理鼠标拖动 | Handles mouse drag */
   const handleCirclePickerCoordinateChange = throttle(handleCirclePickerCoordinateChangeFn, 20)
   function handleCirclePickerCoordinateChangeFn(point: Point) {
     if (isDisabled.value) {
@@ -117,11 +117,11 @@ export function useOperateEvent(options: { disabled: MaybeRef<boolean> }) {
   }
 
   /**
-   * 更新圆形颜色图标位置
-   * @param x 横坐标
-   * @param y 纵坐标
-   * @param width 坐标系宽度
-   * @param height 坐标系高度
+   * 更新当前颜色坐标位置 | Update the current color coordinate position
+   * @param x 横坐标 | Horizontal coordinate
+   * @param y 纵坐标 | Vertical coordinate
+   * @param width 坐标系宽度 | Width of the coordinate system
+   * @param height 坐标系高度 | Height of the coordinate system
    */
   function setCirclePickerCoordinate(x: number, y: number, width: number, height: number) {
     const colorAreaRect = colorAreaRef.value?.getBoundingClientRect()

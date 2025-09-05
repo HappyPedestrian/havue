@@ -78,21 +78,27 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
   --drag-box-border-width: 1px;
 
   // 周围响应拖放操作区域宽度
+  // Width of the area around the response drag-and-drop operation
   --scale-area-width: 30px;
 
   // 缩放标志与内容的距离
+  // Scale the distance of the logo from the content
   --scale-mark-gap: 2px;
 
   // 缩放标志 边框的宽度
+  // Resize the width of the flag border
   --scale-mark-width: 3px;
 
   // 缩放边框图标区域inset
+  // Resize the border icon area inset
   --scale-mark-inset: calc(0px - (var(--scale-mark-width) + var(--scale-mark-gap) + var(--drag-box-border-width)));
 
   // 缩放边框图标 边框长度
+  // Resize the border icon border length
   --scale-mark-line-width: calc(var(--scale-area-width) / 2);
 
   // 缩放操作区域inset
+  // Zoom the operation area inset
   --scale-area-inset: calc(0px - var(--scale-area-width) / 2 + var(--scale-mark-width) + var(--scale-mark-gap));
 
   position: relative;

@@ -1,6 +1,6 @@
 <template>
   <div class="color-picker-demo">
-    <h3>HvHvColorPicker/HvColorPickerRainbow</h3>
+    <h3>ColorPicker/ColorPickerRainbow</h3>
     <div>Color：<input type="color" v-model="color" /></div>
     <HvColorPicker v-model="color" :preset-colors="['#fff', '#000']"></HvColorPicker>
     <hr />

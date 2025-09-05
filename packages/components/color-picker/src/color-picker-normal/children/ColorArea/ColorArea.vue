@@ -88,7 +88,7 @@ watch(
     state.bgHexColor = Color({ h, s: 100, v: 100 }).hex()
     const curColor = Color.hsv({ h, s: circlePickerCoordinate.x, v: circlePickerCoordinate.y }).hex()
     if (curColor == color.hex()) {
-      // 黑色在底部不更改位置
+      // 在底部的黑色不更改位置 | The black at the bottom does not change position
       s = circlePickerCoordinate.x
     }
     setCirclePickerCoordinate(s, v)

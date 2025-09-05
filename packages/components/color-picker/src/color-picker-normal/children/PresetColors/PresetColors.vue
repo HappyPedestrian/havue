@@ -1,6 +1,6 @@
 <template>
   <div class="hv-color-picker__preset">
-    <div class="hv-color-picker__preset-title">{{ props.title || '系统预设色彩' }}</div>
+    <div class="hv-color-picker__preset-title">{{ props.title || 'Reset colors' }}</div>
     <div class="hv-color-picker__preset-list">
       <div
         class="hv-color-picker__preset-list-item"

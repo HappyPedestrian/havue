@@ -1,6 +1,6 @@
 /**
- * IP每一项值是否有效
- * @param val 单个IP值
+ * IP每一项值是否有效 | IP Whether each entry value is valid
+ * @param val 单个IP值 | Single IP value
  */
 export function getValidIPItemValue(val: string | number): string {
   const num = parseInt(val + '')
@@ -8,7 +8,7 @@ export function getValidIPItemValue(val: string | number): string {
 }
 
 /**
- * 光标在输入框文本中的位置
+ * 光标在输入框文本中的位置 | The position of the cursor within the text of the input field
  * @param { HTMLInputElement } el
  */
 export function getRange(el: HTMLInputElement) {

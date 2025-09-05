@@ -2,7 +2,7 @@ import MP4Box from 'mp4box'
 
 function ExtendMp4box() {
   const MP4BoxFile = MP4Box.createFile().constructor
-  // 清空samples
+  // 清空samples | Clear samples
   MP4BoxFile.prototype.removeUsedSamples = function (id: number) {
     const track = this.getTrackById(id)
     const samples = track.samples

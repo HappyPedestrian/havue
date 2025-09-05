@@ -1,28 +1,31 @@
 // #region typedefine
-/** 心跳配置 */
+/** 心跳配置 | Heartbeat configuration */
 type HeartbeatConfigType = {
-  /** 只发送一次 */
+  /** 只发送一次 | Only send it once */
   once: boolean
-  /** 心跳消息 */
+  /** 心跳消息 | Heartbeat message */
   message: string
-  /** 时间间隔 */
+  /** 心跳间隔 | Interval of heartbeat */
   interval?: number
 }
 
-/** 重连配置 */
+/** 重连配置 | Reconnect configuration */
 type InterruptConfigType = {
-  /** 是否重连 */
+  /** 是否重连 | Reconnect or not */
   reconnect: boolean
-  /** 最大重连次数 */
+  /** 最大重连次数 | Maximum number of reconnections */
   maxReconnectTimes: number
-  /** 每次重连延时 */
+  /** 每次重连延时 | Delay per reconnection */
   delay: number
 }
 
 export type WebSocketOptionsType = {
-  /** WebSocket 子协议 WebSocket(url: string, protocols: string | string[]) */
+  /** WebSocket subprotocol: WebSocket(url: string, protocols: string | string[]) */
   protocols?: string | string[]
-  /** WebSocket 连接所传输二进制数据的类型 */
+  /**
+   * WebSocket 连接接收的二进制数据类型
+   *  the type of binary data being received over the WebSocket connection
+   */
   binaryType?: WebSocket['binaryType']
   heartbeat?: HeartbeatConfigType
   interrupt?: InterruptConfigType
@@ -121,6 +124,7 @@ class WebSocketLoader {
       }
 
       // 非手动关闭导致连接意外中断
+      // Non-manual shutdown results in unexpected connection interruption
       if (this._interruptConfig.reconnect && this._interruptReconnectTimes < this._interruptConfig.maxReconnectTimes) {
         this._interruptReconnectTimes++
 
@@ -157,7 +161,7 @@ class WebSocketLoader {
 
     const { message, interval, once } = this._heartbeatConfig
 
-    // 只发一次心跳
+    // 只发一次心跳 | Only one heartbeat
     if (once) {
       this.sendMessage(message)
       return

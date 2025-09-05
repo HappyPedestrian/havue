@@ -16,24 +16,22 @@ export type DnDManagerEvents = {
 }
 
 export class DnDManager extends EventBus<DnDManagerEvents> {
-  /** 是否开始拖动 */
+  /** 是否开始拖动 | Whether to start dragging */
   public isDragStart: boolean = false
-  /** 拖动元素类型 */
+  /** 拖动元素类型 | Drag type */
   public dragType: DragAndDropDragType | undefined = undefined
-  /** Draggable传递的数据，
-   * 供Droppable使用
-   */
+  /** Draggable传递的数据，供Droppable使用 | Draggable passes data for use by Droppable */
   public dragData: any
 
   private isSendFirstMovePos = false
 
-  /** 移动端长按一定时间才触发 onStart */
+  /** 长按一定时间才触发 onStart | Press and hold for a certain amount of time to trigger onStart */
   private touchStartPressTime = 300
-  /** touchstart事件触发的时的时间 */
+  /** 点击触发时的时间 | The time at which the click is triggered */
   private touchStartTime: number = 0
-  /** touchstart时间触发的位置 */
+  /** 点击触发的位置 | The position where the click event is triggered */
   private touchStartPosition: DragAndDropPoint = { x: 0, y: 0 }
-  /** onMove最后位置 */
+  /** onMove最后位置 | onMove last position */
   private lastMovePoint: DragAndDropPoint = { x: 0, y: 0 }
   private emitTouchStartTimer: number | undefined = undefined
   private destroy: () => void = () => {}
@@ -56,7 +54,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   /**
-   * 通知 Draggable 开始点击
+   * 通知 Draggable 开始点击 | Tell Draggable to start clicking
    * @param point
    */
   private onDown(point: DragAndDropPoint) {
@@ -64,7 +62,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   /**
-   * 通知 Draggable 拖拽开始
+   * 第一次移动时，通知 Draggable | On the first move, notify Draggable
    * @param point
    */
   private onFirstMove(point: DragAndDropPoint, e: MouseEvent | TouchEvent) {
@@ -76,7 +74,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   /**
-   * 通知 Draggable 拖拽开始
+   * 通知 Draggable 拖拽开始 | Notify Draggable to begin the drag
    * @param point
    */
   private onStart(point: DragAndDropPoint) {
@@ -87,7 +85,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   /**
-   * 通知 Draggable 移动
+   * 通知 Draggable 移动 | Notify Draggable to move
    * @param point
    * @returns
    */
@@ -104,7 +102,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   /**
-   * 结束拖拽
+   * 结束拖拽 | Ending drag
    * @returns
    */
   private onEnd() {
@@ -123,7 +121,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   private onMouseDown(e: MouseEvent) {
-    // 非左键按下
+    // 非左键按下 | Not left button press
     if (e.buttons !== 1) {
       this.onEnd()
       return
@@ -141,7 +139,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
     this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
 
     this.onDown(position)
-    // 300ms后调用onStart（如果在此期间没有移动超过30px）
+    // touchStartPressTime ms后调用onStart（如果在此期间没有移动超过30px） | Call onStart after touchStartPressTime ms (if you haven't moved more than 30px in that time)
     this.emitTouchStartTimer = window.setTimeout(() => {
       this.onStart(position)
     }, this.touchStartPressTime)
@@ -153,7 +151,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
   }
 
   private onMouseMove(e: MouseEvent) {
-    // 非左键按下
+    // 非左键按下 | Not left button press
     if (e.buttons !== 1) {
       this.onEnd()
       return
@@ -177,7 +175,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
           e
         )
       }
-      // touch 300ms内移动了超过30px，认为不是拖拽
+      // touchStartPressTime ms内移动了超过30px，认为不是拖拽
       const { x, y } = this.touchStartPosition
       const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
       if (timeInLimit && (Math.abs(x - clientX) > 30 || Math.abs(y - clientY) > 30)) {
@@ -208,7 +206,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
     this.touchStartTime = Date.now()
     this.touchStartPosition = position
     this.onDown(position)
-    // 300ms后调用onStart（如果在此期间没有移动超过30px）
+    // touchStartPressTime ms后调用onStart（如果在此期间没有移动超过30px） | Call onStart after touchStartPressTime ms (if you haven't moved more than 30px in that time)
     this.emitTouchStartTimer = window.setTimeout(() => {
       this.onStart(position)
     }, this.touchStartPressTime)
@@ -236,7 +234,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
           e
         )
       }
-      // touch 300ms内移动了超过30px，认为不是拖拽
+      // touchStartPressTime ms内移动了超过30px，认为不是拖拽
       const { x, y } = this.touchStartPosition
       const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
       if (timeInLimit && (Math.abs(x - clientX) > 30 || Math.abs(y - clientY) > 30)) {

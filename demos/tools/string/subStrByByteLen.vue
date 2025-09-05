@@ -1,9 +1,9 @@
 // #region template
 <template>
   <div class="sub-str">
-    <p>字符串：<el-input v-model="str"></el-input></p>
-    <p>裁剪byte长度：<el-input-number v-model="subByteLen"></el-input-number></p>
-    <p>结果：{{ result }}</p>
+    <p>string：<el-input v-model="str"></el-input></p>
+    <p>byte length：<el-input-number v-model="subByteLen"></el-input-number></p>
+    <p>result：{{ result }}</p>
   </div>
 </template>
 // #endregion template

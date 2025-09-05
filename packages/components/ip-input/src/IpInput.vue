@@ -78,7 +78,6 @@ function handleChange(e: ChangeEvent, i: number) {
   values.value[i] = num
   e.target.value = num
   onIPChange()
-  // 如果无法转换为int，设置为''
   if (num === '') {
     return e.preventDefault()
   }
@@ -89,9 +88,9 @@ function handleChange(e: ChangeEvent, i: number) {
 }
 
 /**
- * 监听键盘←、→、backspace、. 按下时进行处理
+ * 监听键盘←、→、backspace、. 按下时进行处理 | Listen to the keyboard ←, →, backspace, and. When pressed
  * @param { InputKeyboardEvent } e
- * @param { number } i 输入框index
+ * @param { number } i 输入框index | Input field index
  */
 function handleKeyDown(e: InputKeyboardEvent, i: number) {
   /* 37 = ←, 39 = →, 8 = backspace, 110 or 190 = . */
@@ -100,14 +99,14 @@ function handleKeyDown(e: InputKeyboardEvent, i: number) {
   switch (e.keyCode) {
     case 37:
     case 8: {
-      // 左移或删除
+      // 左移或删除 | Move left or delete
       if (end === 0 && i > 0) {
         domId = i - 1
       }
       break
     }
     case 39: {
-      // 右移
+      // 右移 | Move right
       if (end === e.target.value.length && i < 3) {
         domId = i + 1
       }
@@ -115,7 +114,7 @@ function handleKeyDown(e: InputKeyboardEvent, i: number) {
     }
     case 110:
     case 190: {
-      // 输入.
+      // 输入'.' | input '.'
       e.preventDefault()
       if (i < 3) {
         domId = i + 1
@@ -126,6 +125,7 @@ function handleKeyDown(e: InputKeyboardEvent, i: number) {
   const inputEl = inputRefs.value[domId]
   inputEl.focus()
   // 确保删除或者左右移动连续，避免切换input focus，光标位置会保持在上一次聚焦位置的问题
+  // Make sure to delete or move left and right continuously to avoid the problem of switching input focus, the cursor position will remain at the last focus position
   if (domId < i) {
     const len = inputEl.value.length
     inputEl.selectionStart = inputEl.selectionEnd = len
@@ -135,9 +135,9 @@ function handleKeyDown(e: InputKeyboardEvent, i: number) {
 }
 
 /**
- * 处理粘贴ip字符串事件
+ * 处理粘贴ip字符串事件 | Handle the paste ip string event
  * @param { ClipboardEvent } e
- * @param { number } i 输入框index
+ * @param { number } i 输入框index | Input field index
  */
 function handlePaste(e: ClipboardEvent, i: number) {
   if (!e.clipboardData || !e.clipboardData.getData) {

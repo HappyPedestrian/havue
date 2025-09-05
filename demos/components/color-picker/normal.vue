@@ -1,6 +1,6 @@
 <template>
   <div class="color-picker-demo">
-    <h3>HvColorPickerNormal</h3>
+    <h3>ColorPickerNormal</h3>
     <div>Color：<input type="color" v-model="inputColor" /></div>
     <HvColorPickerNormal v-model="color"></HvColorPickerNormal>
   </div>
@@ -24,6 +24,7 @@ watch(color, (val) => {
 
 <style lang="scss">
 // 重置文档默认样式，避免影响el-select的样式。
+// Reset the document's default styles to avoid affecting el-select's styles.
 .color-picker-demo {
   ul {
     padding: 0;

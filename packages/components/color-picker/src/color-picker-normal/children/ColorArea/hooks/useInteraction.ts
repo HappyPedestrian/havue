@@ -14,7 +14,7 @@ let lastPoint: Partial<Point> = {
 
 export function useInteraction(disabled: Ref<boolean>) {
   const colorAreaRef = ref<HTMLDivElement>()
-  /** 圆形颜色坐标 */
+  /** 当前颜色坐标 | Current color coordinates */
   const circlePickerCoordinate = reactive({
     x: 100,
     y: 100
@@ -84,7 +84,7 @@ export function useInteraction(disabled: Ref<boolean>) {
     })
   }
 
-  /** 处理鼠标拖动 */
+  /** 处理鼠标拖动 | Handles mouse drag */
   const handleCirclePickerCoordinateChange = throttle(handleCirclePickerCoordinateChangeFn, 20)
   // const handleCirclePickerCoordinateChange = handleCirclePickerCoordinateChangeFn
   function handleCirclePickerCoordinateChangeFn(point: Point) {
@@ -126,11 +126,11 @@ export function useInteraction(disabled: Ref<boolean>) {
   }
 
   /**
-   * 更新圆形颜色图标位置
-   * @param x 横坐标
-   * @param y 纵坐标
-   * @param width 坐标系宽度
-   * @param height 坐标系高度
+   * 更新圆形颜色位置 | Update the current color position
+   * @param x 横坐标 | Horizontal coordinate
+   * @param y 纵坐标 | Vertical coordinate
+   * @param width 坐标系宽度 | Width of the coordinate system
+   * @param height 坐标系高度 | Height of the coordinate system
    */
   function setCirclePickerCoordinate(x: number, y: number) {
     circlePickerCoordinate.x = x

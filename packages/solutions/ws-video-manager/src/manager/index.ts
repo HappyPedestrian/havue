@@ -15,21 +15,31 @@ import { CanvasDrawer } from '../render/drawer'
 
 // #region typedefine
 export type WsVideoManaCstorOptionType = {
-  /** 预监流连接数量限制, 移动端默认10个，pc端默认32个 */
+  /**
+   * websocket流连接数量限制, 移动端默认10个，pc端默认32个
+   * Limit the number of websocket streaming connections to 10 by default for mobile and 32 by default for pc
+   */
   connectLimit?: number
-  /** WebSocketLoader 实例配置 */
+  /** WebSocketLoader configuration */
   wsOptions?: WebSocketOptionsType
   /**
    * websocket重连时，重新解析视频编码方式，
    * 默认 true
+   *
+   * When the websocket reconnects, the video encoding is reparsed.
+   * The default is true
    */
   reparseMimeOnReconnect?: boolean
   /** Render 实例配置 */
   renderOptions?: Partial<RenderConstructorOptionType>
   /**
-   * 是否使用WebGL，
-   * 默认 false，
-   * WebGL在不同游览器，以及受限于显存，不能同时创建过多WebGL上下文，一般8-16个 */
+   * 是否使用WebGL，默认 false，
+   * WebGL在不同游览器，以及受限于显存，不能同时创建过多WebGL上下文，一般8-16个
+   *
+   * Whether to use WebGL, false by default,
+   * WebGL can not be created too many WebGL contexts at the same time in different browsers,
+   *  and due to the limitations of video memory, usually 8-16 WebGL contexts
+   */
   useWebgl?: boolean
 }
 
@@ -44,11 +54,11 @@ const DEFAULT_OPTIONS: Required<WsVideoManaCstorOptionType> = Object.freeze({
 })
 
 type WsInfoType = {
-  /** 需要绘制的canvas列表 */
+  /** 需要绘制的canvas map | canvas map to be drawn */
   canvasMap: Map<HTMLCanvasElement, CanvasDrawer>
-  /** WebSocketLoader 实例 */
+  /** WebSocketLoader instance */
   socket: WebSocketLoader
-  /** socket连接渲染render实例 */
+  /** Render instance */
   render: Render
 }
 
@@ -72,7 +82,7 @@ export const WsVideoManagerEventEnums = Object.assign({}, EventEnums, RenderEven
 // #endregion typedefine
 
 export class WsVideoManager extends EventBus<Events> {
-  /** socket连接 渲染相关对应信息 */
+  /** socket相关信息map | map of socket information */
   private _wsInfoMap: Map<string, WsInfoType> = new Map()
 
   private _option: Required<WsVideoManaCstorOptionType> = DEFAULT_OPTIONS
@@ -116,8 +126,8 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 添加socket实例
-   * @param url socket地址
+   * 添加socket连接 | Adding a socket connection
+   * @param url socket url
    * @returns
    */
   private _addSocket(url: string, renderOptions?: Partial<RenderConstructorOptionType>) {
@@ -148,9 +158,9 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 绑定render事件
-   * @param url 连接地址
-   * @param render Render实例
+   * 绑定render事件 | Binding the render event
+   * @param url 连接地址 | websocket url
+   * @param render Render instance
    */
   private _bindRenderEvent(url: string, render: Render) {
     render.on(RenderEventsEnum.AUDIO_STATE_CHANGE, (state) => {
@@ -165,8 +175,8 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 销毁socket实例
-   * @param url socket地址
+   * Destroying the socket connect
+   * @param url socket url
    */
   private _removeSocket(url: string) {
     const wsInfo = this._wsInfoMap.get(url)
@@ -181,9 +191,9 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 绑定socket事件
-   * @param url 连接地址
-   * @param socket WebSocketLoader实例
+   * 绑定socket事件 | Binding socket events
+   * @param url websocket url
+   * @param socket WebSocketLoader instance
    */
   private _bindSocketEvent(socket: WebSocketLoader, render: Render, url: string) {
     socket.on('close', () => {
@@ -217,8 +227,8 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * url对应的 socket实例是否已存在
-   * @param url socket地址
+   * url对应的 socket实例是否已存在 | Whether the socket instance for the url already exists
+   * @param url websocket url
    * @returns boolean
    */
   private _isSocketExist(url: string): boolean {
@@ -227,8 +237,9 @@ export class WsVideoManager extends EventBus<Events> {
 
   /**
    * 添加url对应socket，以及需要绘制的canvas元素
-   * @param canvas canvas元素
-   * @param url socket url地址
+   * Add the socket for the url and the canvas element to draw
+   * @param canvas canvas
+   * @param url websocket url
    */
   public addCanvas(canvas: HTMLCanvasElement, url: string, renderOptions?: Partial<RenderConstructorOptionType>) {
     this._addSocket(url, renderOptions)
@@ -250,8 +261,8 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 初始化canvas背景
-   * @param canvas canvas元素
+   * 初始化canvas背景 | Initialize the canvas background
+   * @param canvas canvas
    * @returns
    */
   // private _setupCanvas(canvas: HTMLCanvasElement) {
@@ -264,8 +275,8 @@ export class WsVideoManager extends EventBus<Events> {
   // }
 
   /**
-   * 删除canvas元素
-   * @param canvas canvas元素
+   * 删除canvas元素 || Remove the canvas element
+   * @param canvas canvas
    */
   public removeCanvas(canvas: HTMLCanvasElement) {
     const entries = this._wsInfoMap.entries()
@@ -284,8 +295,8 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 返回canvas是否已经添加过
-   * @param canvas canvas元素
+   * 获取canvas是否已经添加过 | Gets whether the canvas has already been added
+   * @param canvas canvas
    * @returns boolean
    */
   public isCanvasExist(canvas: HTMLCanvasElement): boolean {
@@ -295,14 +306,14 @@ export class WsVideoManager extends EventBus<Events> {
     })
   }
 
-  /** 设置全部render静音状态 */
+  /** 设置全部render静音状态 | Mute all render */
   public setAllVideoMutedState(muted: boolean) {
     this._wsInfoMap.forEach((wsInfo) => {
       wsInfo.render.muted = muted
     })
   }
 
-  /** 更新单个render实例的配置 */
+  /** 更新单个render实例的配置 | Update the configuration of a single render instance */
   public updateRenderOptions(url: string, options?: Partial<RenderConstructorOptionType>) {
     if (options) {
       const wsInfo = this._wsInfoMap.get(url)
@@ -311,9 +322,9 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 设置单个render静音状态
+   * 设置单个render静音状态 | Set a single render to be silent
    * @param url
-   * @param muted boolean 是否静音
+   * @param {boolean} muted  是否静音 | Muted or not
    */
   public setOneMutedState(url: string, muted: boolean) {
     const wsInfo = this._wsInfoMap.get(url)
@@ -325,7 +336,8 @@ export class WsVideoManager extends EventBus<Events> {
 
   /**
    * 获取url对应render video元素是否静音
-   * @param url socket地址
+   * Gets whether the render video element of the url is muted
+   * @param url websocket url
    */
   public getOneMutedState(url: string) {
     const wsInfo = this._wsInfoMap.get(url)
@@ -337,7 +349,8 @@ export class WsVideoManager extends EventBus<Events> {
 
   /**
    * 单个解除静音，其他未静音的变成静音，只播放一个
-   * @param url socket地址
+   * Unmute a single video and mute all other videos
+   * @param url websocket url
    */
   public playOneAudio(url: string) {
     this.setAllVideoMutedState(true)
@@ -346,6 +359,7 @@ export class WsVideoManager extends EventBus<Events> {
 
   /**
    * 设置单个render是否继续处理ws数据
+   * Sets whether a single render continues to process ws data
    * @param url
    */
   public setOneVideoPausedState(url: string, paused: boolean) {
@@ -356,7 +370,7 @@ export class WsVideoManager extends EventBus<Events> {
     wsInfo.render.paused = paused
   }
 
-  /** 设置全部render是否继续处理ws数据 */
+  /** 设置全部render是否继续处理ws数据 | Sets whether all render continues to process ws data */
   public setAllVideoPausedState(paused: boolean) {
     this._wsInfoMap.forEach((wsInfo) => {
       wsInfo.render.paused = paused
@@ -364,8 +378,9 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 获取url对应render video元素是否继续播放
-   * @param url socket地址
+   * 获取url对应render video元素的播放状态
+   * Get the playback status of the render video element corresponding to the url
+   * @param url websocket url
    */
   public getOneVideoPausedState(url: string) {
     const wsInfo = this._wsInfoMap.get(url)
@@ -377,7 +392,8 @@ export class WsVideoManager extends EventBus<Events> {
 
   /**
    * 单个视频继续播放，其他暂停处理数据
-   * @param url socket地址
+   * A single video continues to play while others pause to process data
+   * @param url websocket url
    */
   public playOneVideo(url: string) {
     this.setAllVideoPausedState(true)
@@ -386,6 +402,7 @@ export class WsVideoManager extends EventBus<Events> {
 
   /**
    * 刷新socket，以及播放时间
+   * Refresh the socket, and the playback time
    */
   public refresh(url?: string) {
     if (url) {
@@ -407,7 +424,7 @@ export class WsVideoManager extends EventBus<Events> {
   }
 
   /**
-   * 销毁
+   * 销毁 | Destroy
    */
   public destroy() {
     this._wsInfoMap.forEach((wsInfo) => {

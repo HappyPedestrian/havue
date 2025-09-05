@@ -40,8 +40,7 @@ const { operateBoxRef } = useGestrue2Mouse(undefined, {
     })
 
     if (button) {
-      stateText.value =
-        button === 'left' ? '左键' : button === 'right' ? '右键' : button === 'middle' ? '鼠标中键' : '未按下键'
+      stateText.value = button || 'No key is pressed'
     }
 
     console.log(stateText.value, e)
@@ -52,7 +51,7 @@ const { operateBoxRef } = useGestrue2Mouse(undefined, {
       y: e.y
     })
     nextTick(() => {
-      stateText.value = `滚动：deltaY:${deltaY}`
+      stateText.value = `wheel:${deltaY}`
     })
 
     console.log(stateText.value, e)

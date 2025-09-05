@@ -2,17 +2,17 @@
 <template>
   <div class="brdCnl-box">
     <div class="left-box">
-      <div class="title">其他标签页实例id 列表</div>
+      <div class="title">Node id list</div>
       <div class="friend-item" v-for="friend in friendList" :key="friend">{{ friend }}</div>
     </div>
     <div class="right-box">
-      <div class="current-info">当前标签页实例 id: {{ currentBcId }}</div>
-      <div class="current-info">当前标签页实例 类型: {{ currentBcNodeType }}</div>
+      <div class="current-info">Current tab node id: {{ currentBcId }}</div>
+      <div class="current-info">current tab node type: {{ currentBcNodeType }}</div>
       <div class="options-box">
-        <div class="form-item"><span class="label">发送消息:</span><input v-model="message" /></div>
-        <button class="borad-btn" @click="handleBroadMessage">广播</button>
-        <div class="form-item"><span class="label">目标实例id:</span><input v-model="targetId" /></div>
-        <button class="sigle-btn" @click="handleBroadOneMessage">单发</button>
+        <div class="form-item"><span class="label">Message:</span><input v-model="message" /></div>
+        <button class="borad-btn" @click="handleBroadMessage">广播(Broadcast)</button>
+        <div class="form-item"><span class="label">Target node id:</span><input v-model="targetId" /></div>
+        <button class="sigle-btn" @click="handleBroadOneMessage">Single talk</button>
       </div>
       <div class="message-box">
         <div class="message-item" v-for="message in recieveMessageList" :key="message.id">
@@ -45,7 +45,7 @@ const recieveMessageList = ref<Array<BcConnectSendMessageType>>([])
 
 function handleBroadMessage() {
   if (!message.value) {
-    alert('请输入消息')
+    alert('Please enter message')
     return
   }
   bcManager?.send('test-message', message.value)
@@ -53,11 +53,11 @@ function handleBroadMessage() {
 
 function handleBroadOneMessage() {
   if (!message.value) {
-    alert('请输入消息')
+    alert('Please enter message')
     return
   }
   if (!targetId.value) {
-    alert('请输入目标id')
+    alert('Please enter target id')
     return
   }
   bcManager?.sendToTarget('test-message', Number(targetId.value), message.value)

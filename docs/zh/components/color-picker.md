@@ -55,24 +55,24 @@ import NormalDemo from '@/components/color-picker/normal.vue'
 <<< ../../../demos/components/color-picker/normal.vue{ts:line-numbers}
 :::
 
-## HvColorPicker配置
+## ColorPicker配置
 
 | 属性名                | 说明     | 类型         | 默认值                    |
 | :-------------------- | :------- | :----------- | :------------------------ |
 | model-value / v-model | 绑定值   | `string`   | `#ffffff`               |
 | disabled <Badge type="tip" text="^1.2.0" />        | 是否禁用   | `boolean`   | _            |
-| title                 | 标题文字 | `string`   | `颜色编辑器`            |
-| presetTitle           | 预设标题 | `string`   | `系统预设色彩`          |
+| title                 | 标题文字 | `string`   | `Color picker`            |
+| presetTitle           | 预设标题 | `string`   | `Preset colors`          |
 | presetColors          | 预设颜色 | `string[]` | `DEFAULT_PRESET_COLORS` |
 
-## HvColorPickerNormal 配置 <Badge type="tip" text="^1.2.0" />
+## ColorPickerNormal 配置 <Badge type="tip" text="^1.2.0" />
 
 | Property              | Description   | Type         | Default                   |
 | :-------------------- | :------------ | :----------- | :------------------------ |
 | model-value / v-model | Bound value   | `string`   | `#ffffff`               |
 | disabled              | 是否禁用   | `boolean`   | _            |
 | enableAlpha           | 是否可设置透明度   | `boolean`   | `true`            |
-| presetTitle           | Preset title  | `string`   | `系统预设色彩`          |
+| presetTitle           | Preset title  | `string`   | `Preset colors`          |
 | presetColors          | Preset colors | `string[]` | `DEFAULT_PRESET_COLORS` |
 
 ```ts

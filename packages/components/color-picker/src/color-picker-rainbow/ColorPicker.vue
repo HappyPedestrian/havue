@@ -1,6 +1,6 @@
 <template>
   <div class="hv-color-picker">
-    <div class="hv-color-picker__title">{{ props.title || '颜色编辑器' }}</div>
+    <div class="hv-color-picker__title">{{ props.title || 'Color picker' }}</div>
     <div class="hv-color-picker__area-outer">
       <div class="hv-color-picker__area" :class="isDisabled ? 'is-disabled' : ''" ref="colorAreaRef">
         <canvas ref="colorAreaCanvas"></canvas>
@@ -80,12 +80,12 @@ const color = computed({
   }
 })
 
-/** 高亮 在canvas颜色区域中的颜色 */
+/** 在canvas颜色区域中的颜色(明度为100) | The color in the canvas color area (Value = 100) */
 const lightColor = ref<ColorConstruct>(Color(DEFAULT_COLOR))
-/** 滑块 hsv 深度缩放 */
+/** hsv 明度 | hsv Value */
 const colorDepth = ref(100)
 
-/** 根据 lightColor 以及 colorDepth 计算出的实际显示16进制颜色值*/
+/** 根据 lightColor 以及 colorDepth 计算出的实际显示16进制颜色值 | The actual displayed hexadecimal color value calculated from lightColor and colorDepth */
 const originHexColor = computed(() => {
   if (lightColor.value) {
     const hex = getOriginHexByLightAndDepth(lightColor.value, colorDepth.value)
@@ -94,7 +94,7 @@ const originHexColor = computed(() => {
   return DEFAULT_COLOR
 })
 
-// 颜色值更改，更新显示
+// 颜色值更改，更新当前颜色位置 | The color value changes, updating the current color position
 watch(color, (val) => {
   const hex = getOriginHexByLightAndDepth(lightColor.value, colorDepth.value)
   if (hex === val) {
@@ -103,7 +103,7 @@ watch(color, (val) => {
   handleColorChange(val)
 })
 
-// 颜色区域坐标更改，计算新的颜色值
+// 当颜色位置更改时，计算新的颜色值 | When the color position changes, the new color value is calculated
 watch(
   () => circlePickerCoordinate,
   (coordianate) => {
@@ -120,7 +120,7 @@ watch(
   }
 )
 
-// 当前颜色圆形图标位置样式
+// 当前颜色圆形图标位置样式 | Current color circular icon position and style
 const cilcleStyle = computed(() => {
   if (!color.value) {
     return {
@@ -136,7 +136,7 @@ const cilcleStyle = computed(() => {
   }
 })
 
-// 颜色明暗度slider背景颜色
+// 颜色明暗度slider背景颜色 | Color Lightness slider background color
 const sliderBackStyle = computed(() => {
   const lightHex = colorToHex(lightColor.value)
   return {
@@ -145,7 +145,7 @@ const sliderBackStyle = computed(() => {
   }
 })
 
-// 颜色值更改，触发更新
+// 颜色值更改，触发更新 | The color value changes, triggering the update
 watch(
   () => originHexColor.value,
   (value, oldValue) => {
@@ -156,7 +156,7 @@ watch(
   }
 )
 
-// 手动输入颜色或选择预制颜色时，计算新的颜色区域坐标
+// 手动输入颜色或选择预制颜色时，计算新的颜色区域坐标 | When a color is entered manually or a premade color is selected, the new color area coordinates are calculated
 function handleColorChange(hex: string) {
   if (props.disabled) {
     return

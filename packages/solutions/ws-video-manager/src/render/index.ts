@@ -3,11 +3,21 @@ import { EventBus } from '@havue/shared'
 
 // #region typedefine
 export type RenderConstructorOptionType = {
-  /** 当前播放currentTime和最新视频时长最多相差 秒数，默认0.3s */
+  /**
+   * 当前播放currentTime和最新视频时长最多相差 秒数，默认0.3s
+   * The delay of currentTime relative to the latest video duration is 0.3s by default
+   */
   liveMaxLatency: number
-  /** 最多缓存ws传输的未处理的buffer数据大小, 默认200kb */
+  /**
+   * 最多缓存ws传输的未处理的buffer数据大小, 默认200kb。
+   * The maximum amount of unprocessed buffer data to be cached for websocket transfers.
+   * 200kb by default
+   */
   maxCacheBufByte: number
-  /** 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据, 默认10s */
+  /**
+   * 最多存储的时间，用于清除在currentTime之前x秒时间节点前的buffer数据, 默认10s
+   * The maximum amount of time used to clear the buffer before a time node x seconds before currentTime (default 10s)
+   */
   maxCache: number
 }
 
@@ -52,32 +62,35 @@ export type RenderEvents = {
 // let curPosY = 0
 
 export class Render extends EventBus<RenderEvents> {
-  /** video元素 */
+  /** video元素 | videw element */
   private _videoEl: HTMLVideoElement | undefined = undefined
-  /** mp4box 实例 */
+  /** mp4box file */
   private _mp4box: MP4Box = MP4Box.createFile()
-  /** mp4box onFragment获取的视频数据buffer数组 */
+  /**
+   * mp4box onFragment获取的视频数据buffer数组
+   * mp4box onFragment gets a buffer array of audio and video data
+   */
   private _audioBufsQueue: ArrayBuffer[] = []
   private _videoBufsQueue: ArrayBuffer[] = []
-  /** MediaSource 实例 */
+  /** MediaSource instance */
   private _mediaSource: MediaSource | undefined
-  /** SourceBuffer 实例 */
+  /** SourceBuffer instance */
   private _audioSourceBuffer: SourceBuffer | undefined
   private _videoSourceBuffer: SourceBuffer | undefined
 
   private _audioTrackId: number | undefined
   private _videoTrackId: number | undefined
-  /** 用于MediaSource的mimeType */
+  /** 用于MediaSource的mimeType | mime type of the video */
   private _mimeType: string = ''
   private _audioMimeType: string = ''
   private _videoMimeType: string = ''
-  /** 是否暂停播放 */
+  /** 是否暂停播放 | Pause or not */
   private _paused: boolean = false
   private _options: RenderConstructorOptionType
 
   private _cacheAnimationID: number | undefined = undefined
 
-  /** fmp4初始化片段是否已经添加 */
+  /** fmp4初始化片段是否已经添加 | fmp4 Initializes whether the fragment has been added */
   private _isAudioInitSegmentAdded: boolean = false
   private _isVideoInitSegmentAdded: boolean = false
   private _offset: number = 0
@@ -122,7 +135,7 @@ export class Render extends EventBus<RenderEvents> {
     return this._videoEl
   }
 
-  /** 更新实例配置 */
+  /** 更新实例配置 | Update configuration */
   public updateOptions(option: Partial<RenderConstructorOptionType> = {}) {
     Object.assign(this._options, {
       ...option
@@ -130,7 +143,7 @@ export class Render extends EventBus<RenderEvents> {
   }
 
   /**
-   * 添加视频流buffer数据
+   * 添加视频流buffer数据 | Add video stream buffer data
    * @param buf
    */
   public appendMediaBuffer(bufs: Array<ArrayBuffer & { fileStart: number }>) {
@@ -146,8 +159,8 @@ export class Render extends EventBus<RenderEvents> {
   }
 
   /**
-   * mp4box解析完成
-   * @param info mp4box解析信息
+   * mp4box解析完成 | handle Mp4box onReady
+   * @param info mp4box解析信息 | mp4box parses the information
    */
   private _onMp4boxReady(info: any) {
     console.log('onMp4boxReady', info)
@@ -206,7 +219,7 @@ export class Render extends EventBus<RenderEvents> {
     }
     const sourceBuffer = isVideo ? this._videoSourceBuffer : this._audioSourceBuffer
     bufQueue.push(buffer)
-    // 清除已使用的samples
+    // 清除已使用的samples | Clear the used samples
     this._mp4box.releaseUsedSamples(id, sampleNumber)
     this._mp4box.removeUsedSamples(id)
     const segmentAdded = isAudio ? this._isAudioInitSegmentAdded : this._isVideoInitSegmentAdded
@@ -230,7 +243,7 @@ export class Render extends EventBus<RenderEvents> {
   }
 
   /**
-   * 初始化视频元素
+   * 初始化视频元素 | Initialize the video element
    */
   private _setupVideo() {
     this._videoEl = document.createElement('video')
@@ -269,11 +282,19 @@ export class Render extends EventBus<RenderEvents> {
     })
 
     /**
-     * bug: 因预监画面播放一段时间后，
+     * @bug : 因预监画面播放一段时间后，
      * 虽然视频时间在走，但video的画面会暂停,
      * 发现将视频元素添加到视口中，画面就不会暂停，
      * 可能与浏览器的资源优化策略有关，先将video标签添加到视口中,
      * 后面有时间寻找一下是否有其他解决方案
+     *
+     * @bug :After the pre-monitoring screen plays for a period of time,
+     * although the video time is running, the video screen will pause.
+     *  It is found that the video element is added to the viewport,
+     *  and the screen will not pause.
+     *  This may be related to the resource optimization strategy of the browser,
+     *  so the video tag will be added to the viewport first,
+     *  and then we have time to find out whether there are other solutions
      */
     // this._videoEl.controls = true
     document.body.appendChild(this._videoEl)
@@ -314,6 +335,7 @@ export class Render extends EventBus<RenderEvents> {
 
   /**
    * 是否支持Media Source Extention
+   * whether Media Source Extention is supported
    * @returns boolean
    */
   public isSupportMSE() {
@@ -321,7 +343,7 @@ export class Render extends EventBus<RenderEvents> {
   }
 
   /**
-   * 初始化MSE
+   * 初始化MSE | Init MSE
    * @returns
    */
   private _setupMSE(): void {
@@ -346,14 +368,14 @@ export class Render extends EventBus<RenderEvents> {
         return
       }
 
-      // 音频轨
+      // 音频轨 | Audio track
       if (this._audioMimeType) {
         this._audioSourceBuffer = this._mediaSource.addSourceBuffer(this._audioMimeType)
         this._audioSourceBuffer.mode = 'sequence'
         this._setupSourceBuffer(this._audioSourceBuffer, false)
       }
 
-      // 视频轨
+      // 视频轨 | Video track
       if (this._videoMimeType) {
         this._videoSourceBuffer = this._mediaSource.addSourceBuffer(this._videoMimeType)
         this._videoSourceBuffer.mode = 'sequence'
@@ -379,13 +401,22 @@ export class Render extends EventBus<RenderEvents> {
 
       if (sourceBuffer.buffered.length > 0) {
         let bufferedLen = sourceBuffer.buffered.length
-        /** 是否需要删除sourceBuffer中的buffer段 */
+        /**
+         * 是否需要删除sourceBuffer中的buffer段
+         * Whether the buffer section in sourceBuffer should be removed
+         */
         const needDelBuf = bufferedLen > 1
         /**
          * sourceBuffer中有多个buffered，时间不连续
          * 导致视频播放到其中一个buffer最后就暂停了
          * 如果出现多个buffered，删除之前有的buffer
          * 使用最新的视频buffer进行播放
+         *
+         * There are multiple buffers in the sourceBuffer,
+         *  and the time is not continuous,
+         *  so the video playback will be paused at the end of one of the buffers.
+         *  If there are multiple buffers,
+         *  delete the previous buffers and use the latest video buffer to play
          */
         if (needDelBuf && currentTime) {
           const lastIndex = bufferedLen - 1
@@ -411,12 +442,12 @@ export class Render extends EventBus<RenderEvents> {
         const end = sourceBuffer.buffered.end(bufferedLen - 1)
 
         if (isVideo) {
-          // 设置开始时间
+          // 设置开始时间 | Set the start time
           if (!currentTime && start) {
             this._videoEl.currentTime = start
           }
 
-          // 限制最低延迟时间
+          // 限制最低延迟时间 | Limit the minimum latency
           if (this._options.liveMaxLatency) {
             const offsetMaxLatency = this._options.liveMaxLatency
 
@@ -426,7 +457,8 @@ export class Render extends EventBus<RenderEvents> {
           }
         }
 
-        // 移除当前时间之前的buffer
+        // 移除最大缓存时间之前的buffer
+        // Remove buffers before the maximum cache time
         if (!sourceBuffer!.updating && currentTime - start > this._options.maxCache) {
           sourceBuffer?.remove(0, currentTime - this._options.maxCache / 2)
         }
@@ -436,6 +468,7 @@ export class Render extends EventBus<RenderEvents> {
 
   /**
    * 将_bufsQueue中的数据添加到SourceBuffer中
+   * Add the data from _bufsQueue to the SourceBuffer
    * @returns
    */
   private _cache(isVideo: boolean = false) {
@@ -491,6 +524,7 @@ export class Render extends EventBus<RenderEvents> {
 
   /**
    * 刷新播放时间为最新
+   * Refresh the playback time to the latest
    */
   public refresh() {
     if (this._videoEl && this._videoEl.buffered.length) {
@@ -499,7 +533,7 @@ export class Render extends EventBus<RenderEvents> {
     }
   }
 
-  /** 重置解析的视频mime type */
+  /** 重置解析的视频mime type | Reset the parsed video mime type */
   public resetMimeType() {
     this.destroyMp4box()
     this.destroyMediaSource()
@@ -553,7 +587,7 @@ export class Render extends EventBus<RenderEvents> {
   }
 
   /**
-   * 销毁
+   * 销毁 | Destroy
    */
   public destroy() {
     if (this._videoEl) {

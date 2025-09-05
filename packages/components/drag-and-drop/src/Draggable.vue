@@ -40,14 +40,14 @@ const props = withDefaults(
 )
 
 const dragItemRef = ref<HTMLElement>()
-/** 是否在当前组件按下 */
+/** 是否拖动当前组件 | Whether to drag the current component */
 const isDownThis = ref(false)
-/** 开始按下时的点 */
+/** 开始按下时的位置 | Position at the beginning of the press */
 const downPosition = reactive({
   x: 0,
   y: 0
 })
-/** 是否开始拖动 */
+/** 是否开始拖动 | Whether to start dragging */
 const isDragThis = ref(false)
 const cloneNodePosition = reactive({
   x: 0,
@@ -96,7 +96,7 @@ const onFirstMove: DnDManagerEvents['first-move'] = (params, event) => {
     const isMaxH = distanceHAbs === max
     const isMaxV = distanceVAbs === max
 
-    /** 是否立即响应拖动 */
+    /** 是否立即响应拖动 | Whether to respond immediately to a drag */
     let isImmediate = false
 
     if (isMaxH) {

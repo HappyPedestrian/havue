@@ -1,9 +1,9 @@
 /**
- * 根据UI设计尺寸，以及当前屏幕尺寸，计算合适的根元素字体大小
- * @param uiWidth UI设计宽度
- * @param uiHeight UI设计高度
- * @param pxtoremRootValue postcss-pxtorem的rootValue值
- * @param stopOnInput 在input聚焦时，停止计算根元素字体大小，固定页面尺寸
+ * 根据UI设计尺寸，以及当前屏幕尺寸，计算合适的根元素字体大小 | Calculate the appropriate font size for the root element based on the UI design dimensions and the current screen size
+ * @param uiWidth UI设计宽度 | UI design width
+ * @param uiHeight UI设计高度 | UI design height
+ * @param pxtoremRootValue postcss-pxtorem的rootValue值 | rootValue for postcss-pxtorem
+ * @param stopOnInput 在input聚焦时，停止计算根元素字体大小，固定页面尺寸 | While inputting focus, stop calculating the root font size and fix the page size
  */
 export function useFullScreenAdapt(
   uiWidth: number,
@@ -30,15 +30,15 @@ export function useFullScreenAdapt(
   }
   setBodyFontSize()
 
-  /** 更改根元素字体大小 */
+  /** 更改根元素字体大小 | Change the root font size */
   function setRemUnit() {
     if (isStopAdapt) {
       return
     }
-    /** UI 设计比例 */
+    /** UI 设计比例 | UI Design aspect ratio */
     const uiRatio = uiWidth / uiHeight
     const { clientWidth, clientHeight } = docEl
-    /** 屏幕宽高比例 */
+    /** 屏幕宽高比例 | Screen aspect ratio */
     const screenRatio = clientWidth / clientHeight
 
     let targetWidth = clientWidth
@@ -68,7 +68,7 @@ export function useFullScreenAdapt(
 }
 
 /**
- * 输入时，暂停根元素字体自适应计算
+ * 输入时，暂停根元素字体自适应计算 | When typing, pause the root element font adaptation calculation
  * @param onFocus
  * @param onBlur
  */

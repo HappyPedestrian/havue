@@ -1,7 +1,7 @@
 // #region template
 <template>
   <div class="str-sort">
-    <p>列表项:</p>
+    <p>列表项(List items):</p>
     <div class="orgin">
       <el-tag v-for="tag in dynamicTags" :key="tag" closable :disable-transitions="false" @close="handleClose(tag)">
         {{ tag }}
@@ -17,7 +17,7 @@
       />
       <el-button v-else class="button-new-tag" size="small" @click="showInput"> + New Tag </el-button>
     </div>
-    <p>排序后:</p>
+    <p>排序后(After sorting):</p>
     <div class="after">
       <el-tag v-for="tag in sortedTags" :key="tag" :disable-transitions="false">
         {{ tag }}

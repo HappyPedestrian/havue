@@ -1,8 +1,8 @@
 // #region template
 <template>
   <div class="get-pinyin">
-    <p>中文：<el-input v-model:model-value="inputValue"></el-input></p>
-    <p>拼音首字母：{{ pinyin }}</p>
+    <p>中文(Chinese)：<el-input v-model:model-value="inputValue"></el-input></p>
+    <p>拼音首字母(Pinyin first letter)：{{ pinyin }}</p>
   </div>
 </template>
 // #endregion template

@@ -48,3 +48,15 @@
 ### Features
 
 * **vitest**: Add vitest.
+
+## [1.2.0] (2025-06-21)
+
+### Features
+
+* **color-picker**: Add HvColorPickerNormal component, HvColorPicker add disabled prop support.
+* **ip-input**: Add ip address input component.
+* **drag-and-drop**: HvDroppable add disabled prop support.
+
+### Bug Fixes
+
+* **tools/strSortFn**: Fixed the issue where Chinese characters would be placed before English capital letters in text sorting.

@@ -109,12 +109,12 @@ const isSupportEyeDropper = !!(window as any).EyeDropper
 
 const colorAreaRef = ref<InstanceType<typeof ColorArea>>()
 
-/** 色相 */
+/** 色相 | Hue */
 const hue = ref(0)
 const alpha = ref(0)
-/** 饱和度 */
+/** 饱和度 | saturationv */
 const saturationv = ref(100)
-/** 明度 */
+/** 明度 | value */
 const value = ref(100)
 
 const fullAlphaColor = computed(() => {

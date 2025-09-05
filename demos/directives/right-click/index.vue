@@ -1,6 +1,6 @@
 // #region code
 <template>
-  <div class="box" v-right-click:contextmenu.prevent>阻止右键菜单</div>
+  <div class="box" v-right-click:contextmenu.prevent>阻止右键菜单(Prevents right-clicking contextmenu)</div>
 </template>
 
 <script setup lang="ts">

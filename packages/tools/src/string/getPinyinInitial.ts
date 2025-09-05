@@ -1,7 +1,7 @@
 /**
- * 获取中文拼音首字母
- * @param str 中文字符
- * @returns 大写首字母
+ * 获取中文拼音首字母 | Get the first letter of Chinese pinyin
+ * @param str 中文字符 | Chinese characters
+ * @returns 大写首字母 | Capital letter
  */
 export function getPinyinInitial(str: string) {
   let idx = -1

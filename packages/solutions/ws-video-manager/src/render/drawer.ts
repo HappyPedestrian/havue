@@ -1,5 +1,5 @@
 /**
- * 绘制视频到canvas中
+ * 绘制视频到canvas中 | Draw video into canvas
  */
 class CanvasDrawer {
   private _canvas: HTMLCanvasElement | null = null
@@ -36,12 +36,12 @@ class CanvasDrawer {
   }
 
   /**
-   * 初始化 webgl
+   * 初始化 webgl | Initialize webgl
    */
   private initGl() {
     if (!this._canvas) return
 
-    // 初始化 gl
+    // 初始化 gl | Initialize gl
     this._gl = this._canvas.getContext('webgl') || this._canvas.getContext('webgl2')
     if (!this._gl) {
       console.error('WebGL not supported')
@@ -61,17 +61,17 @@ class CanvasDrawer {
 
     if (!program) return
 
-    // 坐标缓冲
+    // 坐标缓冲 | Position buffer
     const positionBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW)
 
-    // 纹理坐标缓冲
+    // 纹理坐标缓冲 | Texture coordinate buffer
     const texCoordBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]), gl.STATIC_DRAW)
 
-    // 纹理
+    // 纹理 | Texture
     const texture = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_2D, texture)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
@@ -79,12 +79,12 @@ class CanvasDrawer {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
-    // 着色器变量的引用
+    // 着色器变量的引用 | References to shader variables
     const positionLocation = gl.getAttribLocation(program, 'a_position')
     const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord')
     const textureLocation = gl.getUniformLocation(program, 'u_texture')
 
-    // 缓存数据
+    // 缓存数据 | Caching data
     this._program = program
     this._positionBuffer = positionBuffer
     this._texCoordBuffer = texCoordBuffer
@@ -93,15 +93,15 @@ class CanvasDrawer {
     this._texCoordLocation = texCoordLocation
     this._textureLocation = textureLocation
 
-    // 设置标志
+    // 设置标志 | gl is Ready
     this._glReady = true
   }
 
   /**
-   * 创建着色器源码
+   * 创建着色器源码 | Create shader source code
    */
   private createShaderSource(gl: WebGLRenderingContext, type: number) {
-    // 顶点着色器
+    // 顶点着色器 | Vertex shaders
     const vertexShaderSource = `
       attribute vec2 a_position;
       attribute vec2 a_texCoord;
@@ -112,7 +112,7 @@ class CanvasDrawer {
       }
     `
 
-    // 片段着色器
+    // 片段着色器 | Fragment shader
     const fragmentShaderSource = `
       precision mediump float;
       varying vec2 v_texCoord;
@@ -130,7 +130,7 @@ class CanvasDrawer {
   }
 
   /**
-   * 创建着色器
+   * 创建着色器 | Create shaders
    */
   private createShader(gl: WebGLRenderingContext, type: number, source: string) {
     const shader = gl.createShader(type)
@@ -154,7 +154,7 @@ class CanvasDrawer {
   }
 
   /**
-   * 创建着色器程序
+   * 创建着色器程序 | Create program
    */
   private createProgram(gl: WebGLRenderingContext, vertexShader: WebGLShader, fragmentShader: WebGLShader) {
     const program = gl.createProgram()
@@ -179,7 +179,7 @@ class CanvasDrawer {
   }
 
   /**
-   * 绘制
+   * 绘制 | draw
    */
   public draw(video: HTMLVideoElement) {
     if (this._useGl) {
@@ -193,22 +193,23 @@ class CanvasDrawer {
       const texCoordLocation = this._texCoordLocation
       const textureLocation = this._textureLocation!
 
-      // 更新视口区域
+      // 更新视口区域 | Update the viewport area
       gl.viewport(0, 0, this._canvas.width, this._canvas.height)
 
       if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return
 
-      // 更新纹理
+      // 更新纹理 | Update texture
       gl.bindTexture(gl.TEXTURE_2D, texture)
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video)
 
-      // 清理画布
+      // 清理画布 | Clean the canvas
       gl.clear(gl.COLOR_BUFFER_BIT)
 
-      // 使用着色器程序
+      // 使用着色器程序 | Use shader programs
       gl.useProgram(program)
 
       // 设置着色器变量对应的 buffer 数据
+      // Set the buffer corresponding to the shader variable
       gl.enableVertexAttribArray(positionLocation)
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
@@ -220,6 +221,7 @@ class CanvasDrawer {
       gl.uniform1i(textureLocation, 0)
 
       // 绘制(两个三角形六个顶点, 组成一个矩形)
+      // Draw (two triangles with six vertices, forming a rectangle)
       gl.drawArrays(gl.TRIANGLES, 0, 6)
     } else {
       const ctx = this._ctx2d
@@ -234,7 +236,7 @@ class CanvasDrawer {
   }
 
   /**
-   * 销毁
+   * 销毁 | Destroy
    */
   public destroy() {
     this._canvas = null

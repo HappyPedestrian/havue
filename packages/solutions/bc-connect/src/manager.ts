@@ -1,72 +1,80 @@
 // #region typedefine
-/** 事件数据类型 */
+/** 事件数据类型 | Event Datatypes */
 export type BcConnectSendMessageType = {
-  /** 事件类型 */
+  /** 事件类型 | type */
   type: string
-  /** 数据 */
+  /** 数据 | data */
   data: any
-  /** 发送事件的实例id */
+  /** 发送事件的实例id | BroadcastChannelManager instance id */
   id: number
-  /** 消息是发送给目标实例id的 */
+  /** 此消息的目标实例id | The target instance id for this message */
   targetId?: number
 }
 
-/** 事件类型 */
+/** 事件类型 | Event types */
 export enum BcConnectEventTypeEnum {
-  /** 初始广播 */
-  Broadcast = 'Hello world',
-  /** 回复初始广播 */
-  Broadcast_Reply = 'I can hear you',
-  /** 主节点心跳 */
-  Main_Node_Hearbeat = '苍天还在，别立黄天',
-  /** 回复主节点心跳 */
-  Res_Main_Node_Hearbeat = '苍天在上，受我一拜',
-  /** 长时间未收到主节点心跳，我想当主节点，你们同意吗 */
-  Req_Be_Main_Node = '苍天已死，黄天当立',
-  /** 排资论辈，我应是主节点，不同意 */
-  Res_Be_Main_Node = '我是黄天，尔等退下',
-  /** 当前BC节点类型更改 */
-  Node_Type_Change = 'node type change',
-  /** 其他标签页BC节点id列表更新 */
-  Friend_List_Update = 'friend list update'
+  /** 初始广播 | Initial broadcast */
+  Broadcast = '__BCM_INIT__',
+  /** 回复初始广播 | Reply to initial broadcast */
+  Broadcast_Reply = '__BCM_INIT_REPLY__',
+  /** 主节点心跳 | Master node heartbeat */
+  Main_Node_Hearbeat = '__BCM_MAIN_NODE_HEARBEAT__',
+  /** 回复主节点心跳 | Reply to the master node heartbeat */
+  Res_Main_Node_Hearbeat = '__BCM_MAIN_NODE_HEARBEAT_REPLY__',
+  /**
+   * 长时间未收到主节点心跳，申请成为主节点
+   * It has not received the heartbeat of the master node for a long time.
+   *  Apply to become the master node
+   */
+  Req_Be_Main_Node = '__BCM_REQ_BE_MAIN_NODE__',
+  /** 拒绝其他节点成为主节点 | Reject other nodes as master nodes */
+  Res_Be_Main_Node = '__BCM_REQ_BE_MAIN_NODE_REJECT__',
+  /** 当前节点类型更改 | The current node type has changed */
+  Node_Type_Change = '__BCM_NODE_TYPE_CHANGE__',
+  /** 其他标签页BC节点id列表更新 | Other TAB node id list updated */
+  Friend_List_Update = '__BCM_FRIEND_LIST_UPDATE__'
 }
 
-/** 当前webview BroadcastChannel节点类型 */
+/** BroadcastChannel节点类型 | BroadcastChannel node type */
 export enum BcConnectNodeTypeEnum {
   Main = 'main',
   Normal = 'normal'
 }
 // #endregion typedefine
 
-// 消息超时时间
+// 消息超时时间 | Message timeout time
 const MessageTimeout = 300
 
 /**
  * 使用BroadcastChannel与其他标签页进行通信
+ * Use BroadcastChannel to communicate with other tabs
  */
 export class BroadcastChannelManager {
-  /** 通道名称 */
+  /** 通道名称 | Channel name */
   private _bcName: string
-  /** BroadcastChannel实例 */
+  /** BroadcastChannel instance */
   private _broadcastChannel: BroadcastChannel | undefined = undefined
-  /** 事件map */
+  /** Event map */
   private _eventMap: Map<string, Array<(_: BcConnectSendMessageType) => void>>
-  /** 主节点发送心跳的interval */
+  /** 主节点发送心跳的interval | The interval at which the master node sends the heartbeat */
   private _mainNodeMsgInterval: number | null = null
-  /** 认为主节点掉线的timeout */
+  /** 认为主节点掉线的timeout | timeout to consider the primary node to be offline */
   private _mainNodeMsgTimeoutTimer: number | null = null
-  /** 更新友方列表的timeout */
+  /** 更新友方列表的timeout | Update the timeout of the friend list */
   private _updateFriendListTimer: number | null = null
-  /** 当前实例id */
+  /** 当前实例id | Current instance id */
   public id: number = Date.now() + Math.random()
-  /** 记录的友方id数组 */
+  /** 其他广播通道id列表 | List of other broadcast channel ids */
   private _oldFrendChannelIdList: Array<number> = []
-  /** 正在更新的右方id数组 */
+  /** 正在更新的id数组 | The id array being updated */
   private _friendChannelIdSet: Set<number> = new Set()
-  /** 当前节点类型 */
+  /** 当前节点类型 | Current node type */
   private _nodeType: BcConnectNodeTypeEnum | undefined = undefined
 
-  /** 是否开启调试模式，会在控制台打印相关信息 */
+  /**
+   * 是否开启调试模式，会在控制台打印相关信息
+   * If debug mode is enabled, it will print information to the console
+   */
   private _debug: boolean = false
 
   constructor(name: string, debug: boolean = false) {
@@ -108,7 +116,7 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 切换节点类型
+   * 切换节点类型 | Switching node type
    * @param {BcConnectNodeTypeEnum} type
    * @returns
    */
@@ -124,9 +132,9 @@ export class BroadcastChannelManager {
     })
   }
 
-  /** 更新友方列表 */
+  /** 更新广播id列表 | Update the list of broadcast ids */
   private _updateFriendList() {
-    // 广播告知己方存在
+    // 广播告知己方存在 | Broadcast your presence
     this.send(BcConnectEventTypeEnum.Broadcast)
 
     this._updateFriendListTimer && clearTimeout(this._updateFriendListTimer)
@@ -142,7 +150,7 @@ export class BroadcastChannelManager {
       this._updataNodeType()
     }, MessageTimeout)
   }
-  /** 绑定事件 */
+  /** 绑定事件 | Bind event */
   private _bindBroadcastChannelEvent() {
     this._broadcastChannel &&
       (this._broadcastChannel.onmessage = (event) => {
@@ -153,7 +161,7 @@ export class BroadcastChannelManager {
         this.emit(type, event.data)
       })
 
-    // 收到世界呼唤
+    // 收到初始广播 | Receiving the initial broadcast
     this.on(BcConnectEventTypeEnum.Broadcast, (data) => {
       const { id } = data
       if (!this._friendChannelIdSet.has(id)) {
@@ -163,13 +171,13 @@ export class BroadcastChannelManager {
       this.sendToTarget(BcConnectEventTypeEnum.Broadcast_Reply, id)
     })
 
-    // 收到友方存在
+    // 收到初始广播回复 | The initial broadcast reply is received
     this.on(BcConnectEventTypeEnum.Broadcast_Reply, (data) => {
       const { id } = data
       this._addFriend(id)
     })
 
-    // 收到其他申请为主节点
+    // 收到其他节点申请为主节点 | Others apply for the master node
     this.on(BcConnectEventTypeEnum.Req_Be_Main_Node, (data) => {
       const { id } = data
       if (id > this.id) {
@@ -177,7 +185,7 @@ export class BroadcastChannelManager {
       }
     })
 
-    // 收到其他节点回复主节点心跳
+    // 收到主节点心跳回复 | Received the master node heartbeat reply
     this.on(BcConnectEventTypeEnum.Res_Main_Node_Hearbeat, (data) => {
       this._addFriend(data.id)
     })
@@ -185,7 +193,7 @@ export class BroadcastChannelManager {
     this._bindNodeEvent()
   }
 
-  /** 监听节点类型切换事件 */
+  /** 监听节点类型切换事件 |  */
   private _bindNodeEvent() {
     const onMainNodeHearbeat = (data: BcConnectSendMessageType) => {
       this._timeoutToBeMainNode()
@@ -197,9 +205,9 @@ export class BroadcastChannelManager {
     this.on(BcConnectEventTypeEnum.Node_Type_Change, (info) => {
       const { data } = info
       this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
-      this._debug && console.log('BC:代理类型切换：', info.data)
+      this._debug && console.log('BC:NODE_TYPE_CHANGE：', info.data)
       if (data === BcConnectNodeTypeEnum.Main) {
-        // 定时发送主节点心跳
+        // 定时发送主节点心跳 | The heartbeat of the master node is sent periodically
         this._mainNodeMsgInterval = setInterval(() => {
           this._catchOldFriend()
           this.send(BcConnectEventTypeEnum.Main_Node_Hearbeat)
@@ -207,17 +215,17 @@ export class BroadcastChannelManager {
       } else if (data === BcConnectNodeTypeEnum.Normal) {
         this._timeoutToBeMainNode()
       }
-      // 收到主节点心跳, 重新更新友方列表
+      // 收到主节点心跳, 重新更新友方列表 | Update the friend list after receiving the heartbeat of the master node
       this.on(BcConnectEventTypeEnum.Main_Node_Hearbeat, onMainNodeHearbeat)
     })
   }
 
-  /** 获取最新的友方列表 */
+  /** 获取最新的节点列表 | Get the latest node list */
   private _getNewFriendList() {
     return [...this._friendChannelIdSet].sort((a, b) => a - b)
   }
   /**
-   * 更新当前节点类型
+   * 更新当前节点类型 | Update the current node type
    */
   private _updataNodeType() {
     this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
@@ -237,14 +245,15 @@ export class BroadcastChannelManager {
   private _timeoutToBeMainNode() {
     this._mainNodeMsgTimeoutTimer && clearTimeout(this._mainNodeMsgTimeoutTimer)
     // 超时未收到心跳，认为主节点掉线，申请为主节点
+    // If no heartbeat is received after the timeout, the master node is considered to be offline and the master node is applied
     this._mainNodeMsgTimeoutTimer = setTimeout(() => {
       this._req_beMainNode()
     }, MessageTimeout * 3)
   }
 
   /**
-   * 保持记录的活跃的友方id列表
-   * 清空正在记录的友方id列表
+   * 保存最新的节点列表到_oldFrendChannelIdList，清空_friendChannelIdSet
+   * Save the latest node list to _oldFrendChannelIdList and clear _friendChannelIdSet
    */
   private _catchOldFriend() {
     const newFriendList = this._getNewFriendList()
@@ -259,7 +268,7 @@ export class BroadcastChannelManager {
     }
 
     if (this._nodeType === BcConnectNodeTypeEnum.Main && Math.min(...this._oldFrendChannelIdList) < this.id) {
-      // 有更小的id，不再为主节点
+      // 有更小的id，不再为主节点 | Has a smaller id and is no longer a master node
       this._setNodeType(BcConnectNodeTypeEnum.Normal)
     }
 
@@ -267,20 +276,22 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 申请成为主节点
+   * 申请成为主节点 | Apply to be a master node
    */
   private _req_beMainNode() {
     this._debug && console.log('BC:req_beMainNode')
 
-    // 向所有id友方节点发送申请
+    // 向所有节点申请成为主节点 | Apply to all nodes to become master nodes
     this.send(BcConnectEventTypeEnum.Req_Be_Main_Node)
 
     // 如果长时间未回复，认为自己可以当主节点
+    // If there is no reply for a long time, it considers itself to be the master
     const timer = setTimeout(() => {
       this._setNodeType(BcConnectNodeTypeEnum.Main)
     }, MessageTimeout)
 
     // 收到拒绝回复，清空timeout
+    // Clear the timeout when you receive a rejection reply
     const handleRes_beMainNode = () => {
       clearTimeout(timer)
       this.off(BcConnectEventTypeEnum.Res_Be_Main_Node, handleRes_beMainNode)
@@ -290,8 +301,8 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 添加友方
-   * @param id 节点id
+   * add node
+   * @param id id
    */
   public _addFriend(id: number) {
     if (!this._friendChannelIdSet.has(id)) {
@@ -300,9 +311,9 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 广播消息
-   * @param type 消息类型
-   * @param data 数据
+   * 广播消息 | Send Broadcast message
+   * @param type 消息类型 | Message type
+   * @param data 数据 | data
    */
   public send(type: string, data?: any) {
     this._broadcastChannel?.postMessage({
@@ -313,10 +324,10 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 给特定id的节点发送消息
-   * @param type 消息类型
-   * @param targetId 目标节点id
-   * @param data 数据
+   * 给特定id的节点发送消息 | Send a message to a node with a specific id
+   * @param type 消息类型 | Message type
+   * @param targetId 目标节点id | Target Node id
+   * @param data 数据 | data
    */
   public sendToTarget(type: string, targetId: number, data?: any) {
     this._broadcastChannel?.postMessage({
@@ -328,9 +339,9 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 注册事件
-   * @param { string } event 事件类型
-   * @param callback 回调
+   * 注册事件 | Registering events
+   * @param { string } event 事件类型 | Event type
+   * @param callback 回调 | callback
    * @returns void
    */
   public on(event: string, callback: (_: BcConnectSendMessageType) => void) {
@@ -347,9 +358,9 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 注销事件
-   * @param { string } event 事件类型
-   * @param callback 事件回调
+   * 注销事件 | Remove events
+   * @param { string } event 事件类型 | Event type
+   * @param callback 事件回调 | callback
    * @returns
    */
   public off(event: string, callback?: (_: BcConnectSendMessageType) => void) {
@@ -368,9 +379,9 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 触发事件
-   * @param { string } event 事件类型
-   * @param data 数据
+   * 触发事件 | Triggering events
+   * @param { string } event 事件类型 | Event type
+   * @param data 数据 | data
    */
   public emit(event: string, data: BcConnectSendMessageType) {
     const callbacks = this._eventMap.get(event) || []
@@ -381,7 +392,7 @@ export class BroadcastChannelManager {
   }
 
   /**
-   * 销毁
+   * 销毁 | destroy
    */
   public destroy() {
     this._bcName = ''
