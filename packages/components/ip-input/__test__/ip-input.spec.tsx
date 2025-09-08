@@ -52,6 +52,7 @@ describe('Ip input', () => {
     })
 
     it.sequential('input1 change min', async () => {
+      inputList[0].element.focus()
       await userEvent.fill(inputList[0].element, '-999')
       expect(inputList[0].element.value).toBe('0')
       expect(document.activeElement).toBe(inputList[0].element)

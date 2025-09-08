@@ -34,5 +34,15 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "main": "./dist/ip-input.umd.js",
+  "module": "./dist/ip-input.mjs",
+  "types": "./dist/types/src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/ip-input.umd.js",
+      "import": "./dist/ip-input.mjs",
+      "types": "./dist/types/src/index.d.ts"
+    }
+  }
 }
