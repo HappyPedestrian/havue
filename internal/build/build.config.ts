@@ -7,7 +7,7 @@ export default defineBuildConfig({
   rollup: {
     emitCJS: true,
     esbuild: {
-      // 跳过 .d.ts 文件处理
+      // 跳过 .d.ts 文件处理 | Skip '.d.ts' file processing
       exclude: ['**/*.d.ts']
     }
   },

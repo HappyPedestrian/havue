@@ -2,7 +2,10 @@ import { PluginOption } from 'vite'
 import { cp } from 'node:fs/promises'
 import { pkgRoot, souceTypeRoot, outTypeDir, absCwd } from '@havue/build-utils'
 
-/** 自定义插件，将 ts类型定义移动到子包目录 */
+/**
+ * 自定义插件，将 ts类型定义移动到子包目录
+ * Customize the plug-in to move the ts type definition to the subpackage directory
+ */
 export function pluginTypeDefine(): PluginOption {
   const cwd = absCwd()
   const sourceRoot = cwd.replace(pkgRoot, souceTypeRoot)
@@ -13,7 +16,7 @@ export function pluginTypeDefine(): PluginOption {
     apply: 'build',
     async closeBundle() {
       try {
-        // 移动产物
+        // 移动产物 | Moving products
         await cp(sourceRoot, targetRoot, {
           force: true,
           recursive: true

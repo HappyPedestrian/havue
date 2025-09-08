@@ -11,8 +11,9 @@ export const ensureDir = async (path: string) => {
 
 /**
  * 从文件中读取出 JSON 对象
- * @param filePath 文件路径
- * @returns JSON 对象
+ * Read the JSON object from the file
+ * @param filePath 文件路径 | path
+ * @returns JSON Object
  */
 export async function readJsonFile<T extends Record<string, any> = Record<string, any>>(filePath: string): Promise<T> {
   const buffer = await readFile(filePath, 'utf-8')
@@ -21,8 +22,9 @@ export async function readJsonFile<T extends Record<string, any> = Record<string
 
 /**
  * 从文件中读取出 JSON 对象
- * @param filePath 文件路径
- * @returns JSON 对象
+ * Read the JSON object from the file
+ * @param filePath 文件路径 | path
+ * @returns JSON Object
  */
 export function readJsonFileSync<T extends Record<string, any> = Record<string, any>>(filePath: string): T {
   const buffer = readFileSync(filePath, 'utf-8')
@@ -31,8 +33,9 @@ export function readJsonFileSync<T extends Record<string, any> = Record<string, 
 
 /**
  * 将 JSON 对象写入文件
- * @param filePath 文件路径
- * @param rests {@link JSON.stringify} 的参数
+ * Writing a JSON object to a file
+ * @param filePath 文件路径 | path
+ * @param rests {@link JSON.stringify} 的参数 | args
  */
 export async function writeJsonFile(filePath: string, ...rests: Parameters<typeof JSON.stringify>) {
   await writeFile(filePath, JSON.stringify(...rests), 'utf-8')

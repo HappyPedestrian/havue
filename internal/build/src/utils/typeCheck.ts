@@ -2,6 +2,6 @@ export function isObjectLike(val: unknown): val is Record<any, any> {
   return val !== null && typeof val === 'object'
 }
 
-export function isFunction(val: unknown): val is Function {
+export function isFunction(val: unknown): val is typeof Function {
   return typeof val === 'function'
 }

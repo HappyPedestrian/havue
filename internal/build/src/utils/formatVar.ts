@@ -1,10 +1,16 @@
-/** 将变量名转换为肉串形式：@huavue/build -> huavue-build */
+/**
+ * 将变量名转换为肉串形式：@huavue/build -> huavue-build
+ * Convert the variable name to a kebab: @huavue/build -> huavue-build
+ */
 export function kebabCase(varName: string) {
   const nameArr = varName.split('/')
   return nameArr.map((item) => item.toLowerCase()).join('-')
 }
 
-/** 将变量名转换为驼峰形式：@huavue/build -> huavueBuild */
+/**
+ * 将变量名转换为驼峰形式：@huavue/build -> huavueBuild
+ * Convert the variable names to camel case form: @huavue/build -> huavueBuild
+ */
 export function camelCase(varName: string, isFirstWordUpperCase = false) {
   const nameArr = varName.split('/')
   return nameArr
