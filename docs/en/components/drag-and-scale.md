@@ -48,10 +48,15 @@ The second gray element limits minimum size to 128x128 and maximum size to 512x3
 
 <script setup lang="ts">
 import Demo from '@/components/drag-and-scale/index.vue'
+import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 
 </script>
 
 <Demo></Demo>
+
+Custom style
+
+<CustemStyleDemo></CustemStyleDemo>
 
 ::: details Click to view code
 ::: code-group
@@ -68,10 +73,14 @@ To disable scaling while keeping dragging, add these styles:
 
 ```css
   .hv-drag-and-scale {
-    --scale-area-width: 0px;
+    --hv-dns-response-width: 0px;
     border: none;
   }
 ```
+
+::: info
+If you're using a version below 1.2.0, '--hv-dns-response-width' should be '--scale-area-width'
+:::
 
 To disable dragging while keeping scaling, add these styles:
 

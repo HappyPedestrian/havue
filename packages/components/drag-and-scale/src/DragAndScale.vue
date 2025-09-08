@@ -75,39 +75,39 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
 
 <style lang="scss">
 .hv-drag-and-scale {
-  --drag-box-border-width: 1px;
+  --hv-dns-border-width: 1px;
 
   // 周围响应拖放操作区域宽度
   // Width of the area around the response drag-and-drop operation
-  --scale-area-width: 30px;
+  --hv-dns-response-width: 30px;
 
   // 缩放标志与内容的距离
   // Scale the distance of the logo from the content
-  --scale-mark-gap: 2px;
+  --hv-dns-mark-gap: 2px;
 
   // 缩放标志 边框的宽度
   // Resize the width of the flag border
-  --scale-mark-width: 3px;
+  --hv-dns-mark-width: 3px;
 
   // 缩放边框图标区域inset
   // Resize the border icon area inset
-  --scale-mark-inset: calc(0px - (var(--scale-mark-width) + var(--scale-mark-gap) + var(--drag-box-border-width)));
+  --hv-dns-mark-inset: calc(0px - (var(--hv-dns-mark-width) + var(--hv-dns-mark-gap) + var(--hv-dns-border-width)));
 
   // 缩放边框图标 边框长度
   // Resize the border icon border length
-  --scale-mark-line-width: calc(var(--scale-area-width) / 2);
+  --hv-dns-mark-border-width: calc(var(--hv-dns-response-width) / 2);
 
   // 缩放操作区域inset
   // Zoom the operation area inset
-  --scale-area-inset: calc(0px - var(--scale-area-width) / 2 + var(--scale-mark-width) + var(--scale-mark-gap));
+  --hv-dns-inset: calc(0px - var(--hv-dns-response-width) / 2 + var(--hv-dns-mark-width) + var(--hv-dns-mark-gap));
 
   position: relative;
   box-sizing: border-box;
-  border: var(--drag-box-border-width) dashed #fff;
+  border: var(--hv-dns-border-width) dashed #fff;
 
   .hv-drag-and-scale__zoom-mark {
     position: absolute;
-    inset: var(--scale-mark-inset);
+    inset: var(--hv-dns-mark-inset);
     background:
       linear-gradient(to right, #fff, #fff) left top no-repeat,
       linear-gradient(to right, #fff, #fff) right top no-repeat,
@@ -122,22 +122,22 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       linear-gradient(to bottom, #fff, #fff) right bottom no-repeat,
       linear-gradient(to bottom, #fff, #fff) right center no-repeat;
     background-size:
-      var(--scale-mark-line-width) var(--scale-mark-width),
-      var(--scale-mark-line-width) var(--scale-mark-width),
-      var(--scale-mark-line-width) var(--scale-mark-width),
-      var(--scale-mark-line-width) var(--scale-mark-width),
-      var(--scale-mark-line-width) var(--scale-mark-width),
-      var(--scale-mark-line-width) var(--scale-mark-width),
-      var(--scale-mark-width) var(--scale-mark-line-width),
-      var(--scale-mark-width) var(--scale-mark-line-width),
-      var(--scale-mark-width) var(--scale-mark-line-width),
-      var(--scale-mark-width) var(--scale-mark-line-width),
-      var(--scale-mark-width) var(--scale-mark-line-width),
-      var(--scale-mark-width) var(--scale-mark-line-width);
+      var(--hv-dns-mark-border-width) var(--hv-dns-mark-width),
+      var(--hv-dns-mark-border-width) var(--hv-dns-mark-width),
+      var(--hv-dns-mark-border-width) var(--hv-dns-mark-width),
+      var(--hv-dns-mark-border-width) var(--hv-dns-mark-width),
+      var(--hv-dns-mark-border-width) var(--hv-dns-mark-width),
+      var(--hv-dns-mark-border-width) var(--hv-dns-mark-width),
+      var(--hv-dns-mark-width) var(--hv-dns-mark-border-width),
+      var(--hv-dns-mark-width) var(--hv-dns-mark-border-width),
+      var(--hv-dns-mark-width) var(--hv-dns-mark-border-width),
+      var(--hv-dns-mark-width) var(--hv-dns-mark-border-width),
+      var(--hv-dns-mark-width) var(--hv-dns-mark-border-width),
+      var(--hv-dns-mark-width) var(--hv-dns-mark-border-width);
 
     .hv-drag-and-scale__area-box {
       position: absolute;
-      inset: var(--scale-area-inset);
+      inset: var(--hv-dns-inset);
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -150,7 +150,7 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
         .hv-drag-and-scale__area-left,
         .hv-drag-and-scale__area-right {
           box-sizing: border-box;
-          width: var(--scale-area-width);
+          width: var(--hv-dns-response-width);
           max-width: 33.3333%;
           height: 100%;
         }
@@ -199,7 +199,7 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
       .hv-drag-and-scale__area-top,
       .hv-drag-and-scale__area-bottom {
         box-sizing: border-box;
-        height: var(--scale-area-width);
+        height: var(--hv-dns-response-width);
         max-height: 33.3333%;
 
         .hv-drag-and-scale__area-center {

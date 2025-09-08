@@ -72,6 +72,9 @@ function onIPChange() {
 }
 
 function handleChange(e: ChangeEvent, i: number) {
+  if (props.disabled) {
+    return
+  }
   const curValue = e.target.value
   const num = getValidIPItemValue(curValue)
 
@@ -167,8 +170,10 @@ function handlePaste(e: ClipboardEvent, i: number) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .hv-ip-input {
+  --hv-ip-input-width: 30px;
+
   display: inline-block;
   padding: 6px 8px;
   font-size: 14px;
@@ -178,7 +183,7 @@ function handlePaste(e: ClipboardEvent, i: number) {
   border-radius: 4px;
 
   input {
-    width: 30px;
+    width: var(--hv-ip-input-width);
     text-align: center;
     outline: none;
     background-color: transparent;

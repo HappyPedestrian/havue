@@ -48,6 +48,7 @@ import { HvDragAndScale } from '@havue/color-picker'
 
 <script setup lang="ts">
 import Demo from '@/components/drag-and-scale/index.vue'
+import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 
 </script>
 
@@ -64,14 +65,33 @@ import Demo from '@/components/drag-and-scale/index.vue'
 
 :::
 
+自定义样式
+
+<CustemStyleDemo></CustemStyleDemo>
+
+::: details 点我看代码
+::: code-group
+
+<<< ../../../demos/components/drag-and-scale/custom-style.vue#template{vue:line-numbers} [template]
+
+<<< ../../../demos/components/drag-and-scale/custom-style.vue#script{ts:line-numbers} [script]
+
+<<< ../../../demos/components/drag-and-scale/custom-style.vue#style{scss:line-numbers} [style]
+
+:::
+
 如果想禁用缩放功能，只保留拖动功能，可添加样式实现
 
 ```css
   .hv-drag-and-scale {
-    --scale-area-width: 0px;
+    --hv-dns-response-width: 0px;
     border: none;
   }
 ```
+
+::: info
+如果您使用的版本低于1.2.0, '--hv-dns-response-width' 应该为 '--scale-area-width'
+:::
 
 反之，如果想只保留缩放功能，禁用拖动功能，可添加以下样式实现
 

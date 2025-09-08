@@ -1,6 +1,6 @@
 // #region template
 <template>
-  <div class="drag-area" ref="containerRef">
+  <div class="custom-drag-area" ref="containerRef">
     <DragAndScale
       :container="containerRef"
       :containerRealSize="containerRealSize"
@@ -17,27 +17,7 @@
       <div class="inner-box">
         <div>min: 64*64</div>
         <div>keepRatio: true</div>
-        <div>inContaienr: true</div>
-      </div>
-    </DragAndScale>
-    <DragAndScale
-      :container="containerRef"
-      :containerRealSize="containerRealSize"
-      :keepRatio="{
-        enable: false,
-        scaleCase: 'min'
-      }"
-      :limit="{ inContainer: false, minWidth: 128, minHeight: 128, maxWidth: 512, maxHeight: 300 }"
-      :disabled="false"
-      class="drag-box"
-      @change="handleChange2"
-      :style="dragStyle2"
-    >
-      <div class="inner-box">
-        <div>min: 128*128</div>
-        <div>max: 512*300</div>
-        <div>keepRatio: false</div>
-        <div>inContainer: false</div>
+        <div>inContainer: true</div>
       </div>
     </DragAndScale>
   </div>
@@ -59,13 +39,6 @@ const dragPosition = ref({
   height: 80
 })
 
-const dragPosition2 = ref({
-  x: 230,
-  y: 50,
-  width: 150,
-  height: 80
-})
-
 const containerRealSize = ref({ width: 1920, height: 1080 })
 
 const dragStyle = computed(() => {
@@ -74,16 +47,6 @@ const dragStyle = computed(() => {
     left: `${dragPosition.value.x}px`,
     width: `${dragPosition.value.width}px`,
     height: `${dragPosition.value.height}px`
-  }
-})
-
-const dragStyle2 = computed(() => {
-  return {
-    top: `${dragPosition2.value.y}px`,
-    left: `${dragPosition2.value.x}px`,
-    width: `${dragPosition2.value.width}px`,
-    height: `${dragPosition2.value.height}px`,
-    background: 'gray'
   }
 })
 
@@ -96,22 +59,12 @@ function handleChange(params: DragAndScaleChangeResultType) {
   })
   console.log(params)
 }
-
-function handleChange2(params: DragAndScaleChangeResultType) {
-  Object.assign(dragPosition2.value, {
-    x: params.elX,
-    y: params.elY,
-    width: params.elWidth,
-    height: params.elHeight
-  })
-  console.log(params)
-}
 </script>
 // #endregion script
 <!--  -->
 // #region style
 <style lang="scss" scoped>
-.drag-area {
+.custom-drag-area {
   position: relative;
   box-sizing: border-box;
   width: 100%;
@@ -129,6 +82,43 @@ function handleChange2(params: DragAndScaleChangeResultType) {
       overflow: hidden;
       white-space: nowrap;
       user-select: none;
+    }
+  }
+
+  :deep(.hv-drag-and-scale) {
+    --hv-dns-mark-inset: -5px;
+
+    background:
+      linear-gradient(to right, #0977e5 50%, transparent 50%) 0 0 / 16px 1px repeat-x,
+      linear-gradient(to right, #0977e5 50%, transparent 50%) bottom / 16px 1px repeat-x,
+      linear-gradient(to bottom, #0977e5 50%, transparent 50%) 0 0 / 1px 16px repeat-y,
+      linear-gradient(to bottom, #0977e5 50%, transparent 50%) right / 1px 16px repeat-y,
+      rgb(26 24 24);
+    border: none;
+
+    .hv-drag-and-scale__zoom-mark {
+      background: none;
+
+      .hv-drag-and-scale__area-box {
+        .hv-drag-and-scale__area-top div,
+        .hv-drag-and-scale__area-bottom div,
+        .hv-drag-and-scale__area-middle .left-box,
+        .hv-drag-and-scale__area-middle .right-box {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &::after {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            content: '';
+            background-color: #0977e5;
+            border: 1px solid #fff;
+          }
+        }
+      }
     }
   }
 }
