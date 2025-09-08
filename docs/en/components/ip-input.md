@@ -3,7 +3,7 @@
 ## Installation
 
 ::: info
-If other components are needed, please refer to[Full Components Installation](./index.md)
+If other components are needed, please refer to [Full Components Installation](./index.md)
 :::
 
 To install the IP Address Input individually, run the following command:

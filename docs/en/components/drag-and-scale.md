@@ -1,11 +1,11 @@
-# Drag and Scale
+# Drag And Scale
 
 Operate elements to move within the parent container and perform scaling.
 
 ## Installation
 
 ::: info
-If you need to use other components, please refer to[Full Components Installation](./index.md)
+If you need to use other components, please refer to [Full Components Installation](./index.md)
 :::
 
 To install this component individually, run the following command:

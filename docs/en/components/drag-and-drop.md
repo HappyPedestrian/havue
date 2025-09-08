@@ -1,4 +1,4 @@
-# Drag and Drop
+# Drag And Drop
 
 Drag and Drop Scaling
 A drag-and-drop component that works on both mobile and PC, consisting of two components: `Draggable` and `Droppable`.
@@ -15,7 +15,7 @@ To accommodate various use cases:
 ## Installation
 
 ::: info
-If you need other components, refer to[Full Components Installation](./index.md)
+If you need other components, refer to [Full Components Installation](./index.md)
 :::
 
 To install this component individually, run:
