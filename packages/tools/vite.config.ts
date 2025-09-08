@@ -1,4 +1,4 @@
 import { defineConfig } from 'vite'
-import { getConfig } from '../../internal/build/src'
+import { getConfig } from '@havue/build'
 
 export default defineConfig(({ mode }) => getConfig(mode))
