@@ -52,7 +52,6 @@ describe('Ip input', () => {
     })
 
     it.sequential('input1 change min', async () => {
-      inputList[0].element.focus()
       await userEvent.fill(inputList[0].element, '-999')
       expect(inputList[0].element.value).toBe('0')
       expect(document.activeElement).toBe(inputList[0].element)
@@ -130,6 +129,22 @@ describe('Ip input', () => {
       await user.paste()
       await nextTick()
       expect(ipInput.props().modelValue).toBe(oldValue)
+    })
+
+    it.sequential('paste invalid2', async () => {
+      value.value = oldValue
+      await nextTick()
+      const user = userEvent.setup()
+      const type = 'text/plain'
+      const clipboardItemData = {
+        [type]: '-999.999.-255.256'
+      }
+      const clipboardItem = new ClipboardItem(clipboardItemData)
+      await navigator.clipboard.write([clipboardItem])
+      inputList[0].element.focus()
+      await user.paste()
+      await nextTick()
+      expect(ipInput.props().modelValue).toBe('0.255.0.255')
     })
   })
 })
