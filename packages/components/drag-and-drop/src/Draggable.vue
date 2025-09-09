@@ -2,7 +2,7 @@
   <div ref="dragItemRef" class="hv-draggable" :class="disabled ? 'disabled' : ''">
     <slot></slot>
     <div class="hv-draggable__clone-item" :style="cloneNodeStyle" v-if="isDragThis">
-      <slot name="hv-drag-item"><slot></slot></slot>
+      <slot name="drag-item"><slot></slot></slot>
     </div>
   </div>
 </template>
