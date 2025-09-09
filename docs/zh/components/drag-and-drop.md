@@ -51,6 +51,7 @@ import { HvDraggable, HvDroppable } from '@havue/drag-and-drop'
 
 * 左侧标签块为Draggalbe元素，文本显示其类型和大小。
 * 灰色`Draggalbe`元素设置了`immediate="right"`,可向右立即拖动。
+* yellow标签块设置了drag-item自定义插槽展示。
 * 右侧有两个Droppable区域
   * green标签块只能拖放到green区域
   * yellow标签块只能拖放到yellow区域

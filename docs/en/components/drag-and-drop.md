@@ -52,6 +52,7 @@ import { HvDraggable, HvDroppable } from '@havue/drag-and-drop'
 
 * Left-side label blocks are Draggable elements, displaying their type and size.
 * The ​gray Draggable element has `immediate="right"`, allowing instant dragging to the right.
+* The yellow labels sets the drag-item custom slot display.
 * ​Right-side contains two Droppable areas:
   * Green labels can only be dropped in the green area.
   * Yellow labels can only be dropped in the yellow area.

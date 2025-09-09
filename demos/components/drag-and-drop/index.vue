@@ -2,7 +2,7 @@
 <template>
   <div class="dnd-demo" ref="divRef">
     <div class="left-box">
-      <p>下列卡片可拖动(The following cards can be dragged)：</p>
+      <p>Draggable list：</p>
       <div class="top-drag-list-box">
         <Draggable :type="item.type" v-for="(item, i) in DragItems" :data="item" :key="i" :immediate="item.immediate">
           <div class="drag-box" :style="item.style">
@@ -10,12 +10,15 @@
             <br />
             {{ item.immediate ? 'immediate: ' + item.immediate : '' }}
           </div>
+          <template #drag-item v-if="item.type === 'yellow'">
+            <div style="width: 50px; height: 50px; background-color: yellow"></div>
+          </template>
         </Draggable>
       </div>
     </div>
 
     <div class="right-box">
-      <p>下方为可拖放区域green(Below is the green drag-and-drop area)：</p>
+      <p>Droppable's accept-drag-type property is set to 'green'.</p>
       <Droppable
         accept-drag-type="green"
         @enter="
@@ -44,7 +47,7 @@
         </div>
       </Droppable>
 
-      <p>下方为可拖放区域yellow(Below is the yellow drag-and-drop area)：</p>
+      <p>Droppable's accept-drag-type property is set to 'yellow'.</p>
       <Droppable
         accept-drag-type="yellow"
         @enter="
