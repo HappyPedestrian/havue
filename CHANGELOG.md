@@ -59,4 +59,9 @@
 
 ### Bug Fixes
 
+* **drag-and-drop**: Fixed an issue where the 'drag-item' slot of the Draggable component was not named in accordance with the documentation and was not usable.
 * **tools/strSortFn**: Fixed the issue where Chinese characters would be placed before English capital letters in text sorting.
+
+### Refactors
+
+* **drag-and-scale**: Normalize component css variable names.

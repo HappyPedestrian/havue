@@ -47,7 +47,7 @@ function nav(): DefaultTheme.NavItem[] {
       items: [
         {
           text: '更新日志',
-          link: 'https://github.com/HappyPedestrian/havue/blob/main/CHANGELOG.md'
+          link: 'https://github.com/HappyPedestrian/havue/blob/main/CHANGELOG-zh_CN.md'
         }
       ]
     }
