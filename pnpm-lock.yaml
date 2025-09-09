@@ -321,6 +321,16 @@ importers:
         specifier: ^3.3.0
         version: 3.5.13(typescript@5.8.2)
 
+  packages/components/ip-input:
+    dependencies:
+      '@havue/shared':
+        specifier: workspace:^
+        version: link:../../shared
+    devDependencies:
+      vue:
+        specifier: ^3.3.0
+        version: 3.5.13(typescript@5.8.2)
+
   packages/directives:
     devDependencies:
       vue:
