@@ -58,6 +58,7 @@ function getPositionInArea(point: DragAndDropPoint) {
 
 const onMove: DnDManagerEvents['move'] = (params) => {
   if (props.disabled) {
+    isEntered.value = false
     return
   }
   const { type, data, point } = params
@@ -78,13 +79,11 @@ const onMove: DnDManagerEvents['move'] = (params) => {
 }
 
 const onEnd: DnDManagerEvents['move'] = ({ type, point, data }) => {
-  if (props.disabled) {
-    return
-  }
-  if (dropAreaRef.value && acceptDragTypeList.value.includes(type) && isEntered.value) {
+  if (!props.disabled && dropAreaRef.value && acceptDragTypeList.value.includes(type) && isEntered.value) {
     const { position } = getPositionInArea(point)
     emits('drop', type, position, data)
   }
+  isEntered.value = false
 }
 
 onMounted(() => {

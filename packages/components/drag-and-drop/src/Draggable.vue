@@ -130,6 +130,10 @@ const onStart: DnDManagerEvents['start'] = (params) => {
 }
 
 const onMove: DnDManagerEvents['move'] = (params) => {
+  if (props.disabled) {
+    isDragThis.value = false
+    return
+  }
   const { point } = params
   if (isDragThis.value) {
     handleMove(point)
