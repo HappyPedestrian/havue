@@ -17,6 +17,7 @@
         step-strictly
         :min="0"
         :max="255"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       ></el-input-number>
@@ -27,6 +28,7 @@
         step-strictly
         :min="0"
         :max="255"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       ></el-input-number>
@@ -37,6 +39,7 @@
         step-strictly
         :min="0"
         :max="255"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       ></el-input-number>
@@ -49,6 +52,7 @@
         @change="handleHsvColorChange"
         :min="0"
         :max="360"
+        :value-on-clear="0"
         step-strictly
         :step="1"
         :controls="false"
@@ -59,6 +63,7 @@
         @change="handleHsvColorChange"
         :min="0"
         :max="100"
+        :value-on-clear="0"
         step-strictly
         :step="1"
         :controls="false"
@@ -70,6 +75,7 @@
         step-strictly
         :min="0"
         :max="100"
+        :value-on-clear="0"
         :controls="false"
       ></el-input-number>
     </div>

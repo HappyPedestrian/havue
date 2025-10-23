@@ -19,6 +19,7 @@
         :disabled="props.disabled"
         :min="0"
         :max="isRGB ? 255 : 360"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       ></el-input-number>
@@ -29,6 +30,7 @@
         :disabled="props.disabled"
         :min="0"
         :max="isRGB ? 255 : 100"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       ></el-input-number>
@@ -39,6 +41,7 @@
         :disabled="props.disabled"
         :min="0"
         :max="isRGB ? 255 : 100"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       ></el-input-number>
@@ -46,10 +49,12 @@
         v-if="props.enableAlpha"
         v-model="formInputState[3]"
         @change="handleColorChange"
+        class="hv-color-picker__form-opacity"
         step-strictly
         :disabled="props.disabled"
         :min="0"
         :max="100"
+        :value-on-clear="0"
         :step="1"
         :controls="false"
       >
@@ -68,10 +73,6 @@ import { ref, computed, watch } from 'vue'
 import { DEFAULT_COLOR } from '../../../constants'
 
 const SelectOptions = ['RGB', 'HSL', 'HSV']
-
-defineOptions({
-  name: 'HvColorPickerNormal'
-})
 
 const props = defineProps<{
   modelValue: string
@@ -181,15 +182,16 @@ function handleColorChange() {
 
   .hv-color-picker__form-body {
     display: flex;
+    flex: 1;
 
     :deep(.el-input-number) {
       --el-text-color-regular: #c2c6cc;
 
-      flex: 1;
+      flex: 23;
       width: 23%;
 
-      &:last-child {
-        width: 31%;
+      &.hv-color-picker__form-opacity {
+        flex: 31;
       }
 
       .el-input__wrapper {
