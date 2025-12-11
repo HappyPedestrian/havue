@@ -43,7 +43,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
 
   public updateDargInfo(type: Exclude<DragAndDropDragType, undefined>, data: any) {
     if (type === undefined || type === null) {
-      throw new Error('请传入拖动元素 type')
+      throw new Error('Expected to get a drag type, but received ', type)
     }
     this.isDragStart = true
     this.dragType = type

@@ -78,7 +78,7 @@ const onMove: DnDManagerEvents['move'] = (params) => {
   }
 }
 
-const onEnd: DnDManagerEvents['move'] = ({ type, point, data }) => {
+const onEnd: DnDManagerEvents['end'] = ({ type, point, data }) => {
   if (!props.disabled && dropAreaRef.value && acceptDragTypeList.value.includes(type) && isEntered.value) {
     const { position } = getPositionInArea(point)
     emits('drop', type, position, data)

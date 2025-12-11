@@ -71,10 +71,6 @@ const onDown: DnDManagerEvents['down'] = (params) => {
   const { x, y } = params
   const startEl = document.elementFromPoint(x, y)
   if (!props.disabled && dragItemRef.value && dragItemRef.value.contains(startEl)) {
-    if (immediateDirections.value.includes(ImmediateEnumType.ALL)) {
-      handleStart(params)
-      return
-    }
     isDownThis.value = true
     downPosition.x = x
     downPosition.y = y
@@ -83,7 +79,7 @@ const onDown: DnDManagerEvents['down'] = (params) => {
 
 const onFirstMove: DnDManagerEvents['first-move'] = (params, event) => {
   const { x, y } = params
-  const directions = immediateDirections.value.filter((item) => item !== ImmediateEnumType.ALL)
+  const directions = immediateDirections.value
 
   if (isDownThis.value && !props.disabled && directions.length) {
     const distanceH = x - downPosition.x
@@ -99,16 +95,20 @@ const onFirstMove: DnDManagerEvents['first-move'] = (params, event) => {
     /** 是否立即响应拖动 | Whether to respond immediately to a drag */
     let isImmediate = false
 
-    if (isMaxH) {
-      isImmediate =
-        (directions.includes(ImmediateEnumType.LEFT) && distanceH < 0) ||
-        (directions.includes(ImmediateEnumType.RIGHT) && distanceH > 0)
-    }
+    if (directions.includes(ImmediateEnumType.ALL)) {
+      isImmediate = true
+    } else {
+      if (isMaxH) {
+        isImmediate =
+          (directions.includes(ImmediateEnumType.LEFT) && distanceH < 0) ||
+          (directions.includes(ImmediateEnumType.RIGHT) && distanceH > 0)
+      }
 
-    if (isMaxV && !isImmediate) {
-      isImmediate =
-        (directions.includes(ImmediateEnumType.TOP) && distanceV < 0) ||
-        (directions.includes(ImmediateEnumType.BOTTOM) && distanceV > 0)
+      if (isMaxV && !isImmediate) {
+        isImmediate =
+          (directions.includes(ImmediateEnumType.TOP) && distanceV < 0) ||
+          (directions.includes(ImmediateEnumType.BOTTOM) && distanceV > 0)
+      }
     }
 
     if (isImmediate) {
