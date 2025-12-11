@@ -65,3 +65,16 @@
 ### Refactors
 
 * **drag-and-scale**: Normalize component css variable names.
+
+## [1.2.1] (2025-12-11)
+
+### Bug Fixes
+
+* **color-picker**: Adjust the input area style of HvColorPickerNormal. increase the width of the transparency input box. When the input box is cleared, the default value is 0..
+* **drag-and-drop**: Fix the issue where, when ​mouse events​ are infrequent or the ​Draggable​ is very close to the ​Droppable, after dragging the ​Draggable​ over the ​Droppable​ the ​Droppable​ fails to reset its “drag-in” state for the ​Draggable. As a result, the next drag does not trigger the ​enter​ event.
+* **drag-and-drop**: When the immediate prop is 'all', the drag is triggered after the mouse moves to avoid the failure to trigger the click.
+* **drag-and-scale**: Fix the issue where drag-and-scale does not properly uninstall mouse/touch events, leading to frequent triggering of mousemove or touchmove events, and use requestAnimationFrame to optimize the trigger frequency of move events.
+
+### Refactors
+
+* **right-click**: Refactor the implementation method of the custom right-click instruction

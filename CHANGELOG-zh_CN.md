@@ -65,3 +65,16 @@
 ### Refactors
 
 * **drag-and-scale**: 规范组件css变量名称。
+
+## [1.2.1] (2025-12-11)
+
+### Bug Fixes
+
+* **color-picker**: HvColorPickerNormal 输入区域样式调整，增加透明度输入框宽度，输入框清空时，默认值为0。
+* **drag-and-drop**: 修复在鼠标事件触发不频繁，或者Draggable与Droppable距离较近时，拖动过Draggable到Droppalbe后，Droppable未重置Draggalbe是否拖入的状态，导致下一次拖动，不会触发enter事件的问题。
+* **drag-and-drop**: 当immediate属性为'all'时，拖动在鼠标移动后触发，避免无法触发click。
+* **drag-and-scale**: 修复drag-and-scale未正确卸载鼠标/触控事件，导致频繁触发mousemove或touchmove的问题，以及使用requestAnimationFrame优化move事件触发频率
+
+### Refactors
+
+* **right-click**: 重构right-click自定义指令实现方式。
