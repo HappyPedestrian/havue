@@ -7,10 +7,18 @@
     <div class="item item5" v-right-click:down="onDown">
       <div class="child" v-right-click:down.stop="onRightClickStop"></div>
     </div>
+    <div class="item item6" v-right-click:down.capture="onDownCapture">
+      <div class="child" v-right-click:down="onDownCaptureChild"></div>
+    </div>
+    <div class="item item7" v-right-click:up.capture="onUpCapture">
+      <div class="child" v-right-click:up="onUpCaptureChild"></div>
+    </div>
+    <div></div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { HvRightClickDirective as vRightClick } from '@havue/directives'
 
 const emits = defineEmits<{
@@ -20,7 +28,14 @@ const emits = defineEmits<{
   (name: 'contextmenu-prevent'): void
   (name: 'right-click-prevent'): void
   (name: 'right-click-stop'): void
+  (name: 'right-click-down-capture'): void
+  (name: 'right-click-down-capture-child'): void
+  (name: 'right-click-up-capture'): void
+  (name: 'right-click-up-capture-child'): void
 }>()
+
+const downCaptureEmitQuery = ref<string[]>([])
+const upCaptureEmitQuery = ref<string[]>([])
 
 function onDown() {
   emits('right-click-down')
@@ -44,6 +59,22 @@ function onRightClickPrevent() {
 
 function onRightClickStop() {
   emits('right-click-stop')
+}
+
+function onDownCapture() {
+  downCaptureEmitQuery.value.push('right-click-down-capture')
+}
+
+function onDownCaptureChild() {
+  downCaptureEmitQuery.value.push('right-click-down-capture-child')
+}
+
+function onUpCapture() {
+  upCaptureEmitQuery.value.push('right-click-up-capture')
+}
+
+function onUpCaptureChild() {
+  upCaptureEmitQuery.value.push('right-click-up-capture-child')
 }
 </script>
 
