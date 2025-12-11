@@ -566,32 +566,38 @@ export function useDragAndScale(
       x: clientX,
       y: clientY
     })
-    document.body.addEventListener('touchcancel', onTouchEnd, { capture: true })
-    document.body.addEventListener('touchmove', onTouchMove, { capture: true })
-    document.body.addEventListener('touchend', onTouchEnd, { capture: true })
+    document.body.addEventListener('touchcancel', onTouchEnd)
+    document.body.addEventListener('touchmove', onTouchMove)
+    document.body.addEventListener('touchend', onTouchEnd)
   }
 
+  let touchmoveRafId: number | null = null
   function onTouchMove(e: TouchEvent) {
-    if (_disabled.value || isOperateStart !== true) {
-      isOperateStart = false
-      return
+    if (touchmoveRafId) {
+      cancelAnimationFrame(touchmoveRafId)
     }
-    e.preventDefault()
-    e.stopPropagation()
-    if (e.touches.length > 1) {
-      onEnd()
-      return
-    }
-    const { clientX, clientY } = e.touches[0]
+    touchmoveRafId = requestAnimationFrame(() => {
+      if (_disabled.value || isOperateStart !== true) {
+        isOperateStart = false
+        return
+      }
+      e.preventDefault()
+      e.stopPropagation()
+      if (e.touches.length > 1) {
+        onEnd()
+        return
+      }
+      const { clientX, clientY } = e.touches[0]
 
-    // 和起始点相同，不调用onMove | Same as the starting point, no onMove is called
-    if (clientX === startPoint.x && clientY === startPoint.y) {
-      return
-    }
+      // 和起始点相同，不调用onMove | Same as the starting point, no onMove is called
+      if (clientX === startPoint.x && clientY === startPoint.y) {
+        return
+      }
 
-    onMove({
-      x: clientX,
-      y: clientY
+      onMove({
+        x: clientX,
+        y: clientY
+      })
     })
   }
 
@@ -604,7 +610,7 @@ export function useDragAndScale(
       isMoved = false
       return
     }
-    onEnd()
+    requestAnimationFrame(() => onEnd())
   }
 
   function onMouseDown(e: MouseEvent) {
@@ -619,26 +625,32 @@ export function useDragAndScale(
       x: clientX,
       y: clientY
     })
-    document.body.addEventListener('mousemove', onMouseMove, { capture: true })
-    document.body.addEventListener('mouseup', onMouseUp, { capture: true })
+    document.body.addEventListener('mousemove', onMouseMove)
+    document.body.addEventListener('mouseup', onMouseUp)
   }
 
+  let mousemoveRafId: number | null = null
   function onMouseMove(e: MouseEvent) {
-    if (_disabled.value || isOperateStart !== true) {
-      isOperateStart = false
-      return
+    if (mousemoveRafId) {
+      cancelAnimationFrame(mousemoveRafId)
     }
-    e.preventDefault()
-    // 非左键按下 | Not left button press
-    if ((e.buttons & 1) === 0) {
-      onEnd()
-      return
-    }
-    const { clientX, clientY } = e
+    mousemoveRafId = requestAnimationFrame(() => {
+      if (_disabled.value || isOperateStart !== true) {
+        isOperateStart = false
+        return
+      }
+      e.preventDefault()
+      // 非左键按下 | Not left button press
+      if ((e.buttons & 1) === 0) {
+        onEnd()
+        return
+      }
+      const { clientX, clientY } = e
 
-    onMove({
-      x: clientX,
-      y: clientY
+      onMove({
+        x: clientX,
+        y: clientY
+      })
     })
   }
 
@@ -649,12 +661,12 @@ export function useDragAndScale(
       isOperateStart = false
       return
     }
-    onEnd()
+    requestAnimationFrame(() => onEnd())
   }
 
   function bindEvent() {
     removeEvent()
-    _operateEl.value.addEventListener('touchstart', onTouchStart, { capture: true })
+    _operateEl.value.addEventListener('touchstart', onTouchStart)
     _operateEl.value.addEventListener('mousedown', onMouseDown)
   }
 
