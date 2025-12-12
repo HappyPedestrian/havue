@@ -5,6 +5,12 @@ import { HvDragAndScale } from '@havue/drag-and-scale'
 import DragTest from './DragTest.vue'
 import { VueNode } from '@vue/test-utils/dist/types'
 
+async function sleepAnimation() {
+  return new Promise((res) => {
+    requestAnimationFrame(res)
+  })
+}
+
 describe.sequential('DragAndScale mouse', () => {
   it('create', () => {
     const containerRef = ref()
@@ -68,6 +74,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -107,6 +114,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -159,6 +167,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -210,6 +219,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -261,6 +271,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -312,6 +323,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -363,6 +375,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -414,6 +427,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -465,6 +479,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -516,6 +531,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -569,6 +585,7 @@ describe.sequential('DragAndScale mouse', () => {
 
       document.body.dispatchEvent(mouseup)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 

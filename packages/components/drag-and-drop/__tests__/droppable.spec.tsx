@@ -75,6 +75,11 @@ describe('HvDroppable mouse', () => {
     document.body.dispatchEvent(mousemove1_1)
     await nextTick()
 
+    // 绑定imediate属性，第二次mousemove才会触发Dorppable的move事件监听、
+    // Binding the `imediate` attribute ensures that the `move` event listener of Droppable is triggered only on the second `mousemove`.
+    document.body.dispatchEvent(mousemove1_1)
+    await nextTick()
+
     const draggable1 = wrapper.find('.drag1')
 
     const draggable1CloneItem = draggable1.find('.hv-draggable__clone-item')

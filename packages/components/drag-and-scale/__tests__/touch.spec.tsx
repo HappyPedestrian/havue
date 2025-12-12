@@ -4,6 +4,12 @@ import { mount } from '@vue/test-utils'
 import DragTest from './DragTest.vue'
 import { VueNode } from '@vue/test-utils/dist/types'
 
+async function sleepAnimation() {
+  return new Promise((res) => {
+    requestAnimationFrame(res)
+  })
+}
+
 describe.sequential('DragAndScale touch', () => {
   describe('drag', async () => {
     const wrapper = mount(DragTest, {
@@ -56,6 +62,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -104,6 +111,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -155,6 +163,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -215,6 +224,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -265,6 +275,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -325,6 +336,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -375,6 +387,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -425,6 +438,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -475,6 +489,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -535,6 +550,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 
@@ -597,6 +613,7 @@ describe.sequential('DragAndScale touch', () => {
 
       document.body.dispatchEvent(touchend)
       await nextTick()
+      await sleepAnimation()
 
       const computedStyle = window.getComputedStyle(dragAndScale.element)
 

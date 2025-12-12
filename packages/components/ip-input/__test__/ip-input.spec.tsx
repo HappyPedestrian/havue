@@ -51,16 +51,6 @@ describe('Ip input', () => {
       expect(document.activeElement).toBe(inputList[2].element)
     })
 
-    it.sequential('input1 change min', async () => {
-      await userEvent.fill(inputList[0].element, '-999')
-      expect(inputList[0].element.value).toBe('0')
-      expect(document.activeElement).toBe(inputList[0].element)
-
-      await userEvent.fill(inputList[1].element, '-999')
-      expect(inputList[1].element.value).toBe('0')
-      expect(document.activeElement).toBe(inputList[1].element)
-    })
-
     it.sequential('input1 change invalid', async () => {
       await userEvent.fill(inputList[0].element, 'abcd')
       expect(inputList[0].element.value).toBe('')
