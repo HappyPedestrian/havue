@@ -1,3 +1,9 @@
+/** 获取文本byte长度 */
+function getStrByteLength(str: string) {
+  const encoder = new TextEncoder()
+  const uint8Array = encoder.encode(str)
+  return uint8Array.length
+}
 /**
  * 截取不超过规定byte长度的字符串 | Truncate a string up to the specified byte length
  * @param str 原始字符串 | Raw string
@@ -6,20 +12,17 @@
  */
 export function subStrByByteLen(str: string, byteLen: number) {
   str = str || ''
-  const twoByteReg = /[\u0080-\uFFFF]/
   let len = 0
-  let maxLenIndex = str.length
-  const charList = str.split('')
 
-  for (let i = 0; i < charList.length; i++) {
-    const char = charList[i]
-    const charLen = twoByteReg.test(char) ? 2 : 1
+  let result = ''
+  for (const char of str) {
+    const charLen = getStrByteLength(char)
     if (len + charLen > byteLen) {
-      maxLenIndex = i
       break
     }
+    result += char
     len += charLen
   }
 
-  return str.substring(0, maxLenIndex)
+  return result
 }
