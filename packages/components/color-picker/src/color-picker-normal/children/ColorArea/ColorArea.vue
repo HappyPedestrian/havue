@@ -110,7 +110,7 @@ watch(
 )
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .hv-color-picker__color-area-outer {
   position: relative;
   width: 216px;

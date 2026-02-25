@@ -57,7 +57,7 @@ function handleClickColor(color: string) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .hv-color-picker__preset {
   .hv-color-picker__preset-title {
     margin-bottom: 4px;

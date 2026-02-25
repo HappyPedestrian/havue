@@ -155,7 +155,7 @@ function handleColorChange() {
   }
 }
 </style>
-<style lang="scss" scoped>
+<style lang="scss">
 .hv-color_picker__form {
   display: flex;
   gap: 6px;

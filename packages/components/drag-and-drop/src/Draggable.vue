@@ -182,7 +182,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .hv-draggable {
   width: fit-content;
   cursor: grab;

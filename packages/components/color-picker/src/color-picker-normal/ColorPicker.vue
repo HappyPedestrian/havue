@@ -187,7 +187,7 @@ function handleColorChange(hex: string) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .hv-color-picker-normal {
   box-sizing: border-box;
   width: 248px;
