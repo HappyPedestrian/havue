@@ -23,7 +23,8 @@
     "@havue/shared": "workspace:^",
     "@havue/color-picker": "workspace:^",
     "@havue/drag-and-drop": "workspace:^",
-    "@havue/drag-and-scale": "workspace:^"
+    "@havue/drag-and-scale": "workspace:^",
+    "@havue/ip-input": "workspace:^"
   },
   "devDependencies": {
     "vue": "^3.3.0"

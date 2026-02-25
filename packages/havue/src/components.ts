@@ -1,3 +1,3 @@
-import { HvColorPicker, HvDraggable, HvDroppable, HvDragAndScale } from '@havue/components'
+import { HvColorPicker, HvDraggable, HvDroppable, HvDragAndScale, HvIpInput } from '@havue/components'
 
-export default [HvColorPicker, HvDraggable, HvDroppable, HvDragAndScale]
+export default [HvColorPicker, HvDraggable, HvDroppable, HvDragAndScale, HvIpInput]

@@ -281,6 +281,9 @@ importers:
       '@havue/drag-and-scale':
         specifier: workspace:^
         version: link:drag-and-scale
+      '@havue/ip-input':
+        specifier: workspace:^
+        version: link:ip-input
       '@havue/shared':
         specifier: workspace:^
         version: link:../shared
@@ -5853,6 +5856,7 @@ packages:
   prebuild-install@7.1.3:
     resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
     engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
 
   prelude-ls@1.2.1:
