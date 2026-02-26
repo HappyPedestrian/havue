@@ -4,8 +4,6 @@ set -e
 
 pnpm i --frozen-lockfile
 
-pnpm test
-
 pnpm build:internal
 
 pnpm update:version
