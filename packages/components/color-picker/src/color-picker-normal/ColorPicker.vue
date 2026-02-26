@@ -127,13 +127,11 @@ watch(
     const color = Color(c)
     const { h, s } = color.hsv().object()
     saturationv.value = s
-    const equlValues = [0, 360]
     alpha.value = props.enableAlpha ? Math.round(color.alpha() * 100) : 100
-    const curColor = Color.hsv({ h: hue.value, s: saturationv.value, v: value.value, alpha: alpha.value }).hexa()
-    if (curColor !== color.hexa()) {
-      if (!(equlValues.includes(h) && equlValues.includes(hue.value))) {
-        hue.value = h
-      }
+    const curColor = Color.hsv({ h: hue.value, s: saturationv.value, v: value.value, alpha: alpha.value })
+    // 如果当前颜色和传入颜色不一致，则更新色相
+    if (curColor.hex() !== color.hex()) {
+      hue.value = h
     }
   },
   {
@@ -225,7 +223,7 @@ function handleColorChange(hex: string) {
     .hv-color-picker__sliders {
       flex: 1;
 
-      :deep(.el-slider) {
+      .el-slider {
         height: 24px;
 
         .el-slider__runway {
@@ -257,7 +255,7 @@ function handleColorChange(hex: string) {
         }
       }
 
-      :deep(.hv-color-picker__hue-slider) {
+      .hv-color-picker__hue-slider {
         .el-slider__runway {
           background: linear-gradient(
             90deg,
@@ -272,7 +270,7 @@ function handleColorChange(hex: string) {
         }
       }
 
-      :deep(.hv-color-picker__alpha-slider) {
+      .hv-color-picker__alpha-slider {
         .el-slider__runway {
           --el-slider-main-bg-color: var(--hv-cur-full-alpha-color);
           --el-slider-button-bg-color: var(--hv-cur-full-alpha-color);

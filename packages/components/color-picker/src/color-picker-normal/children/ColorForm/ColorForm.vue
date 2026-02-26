@@ -165,7 +165,7 @@ function handleColorChange() {
   --el-border-color: #3c4452;
 
   .hv-color-picker__form-type {
-    :deep(.el-select) {
+    .el-select {
       --el-select-width: 60px;
 
       .el-select__wrapper {
@@ -184,7 +184,7 @@ function handleColorChange() {
     display: flex;
     flex: 1;
 
-    :deep(.el-input-number) {
+    .el-input-number {
       --el-text-color-regular: #c2c6cc;
 
       flex: 23;
