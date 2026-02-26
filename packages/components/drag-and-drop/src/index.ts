@@ -2,8 +2,10 @@ import type { SFCWithInstall } from '@havue/utils'
 import { withInstall } from '@havue/utils'
 import Draggable from './Draggable.vue'
 import Droppable from './Droppable.vue'
+import { DnDManagerInstance } from './manager'
 
 export const HvDraggable: SFCWithInstall<typeof Draggable> = withInstall(Draggable)
 export const HvDroppable: SFCWithInstall<typeof Droppable> = withInstall(Droppable)
 
-export type { DragAndDropPoint, DragAndDropDragType, DnDManager } from './manager'
+export type { DragAndDropPoint, DragAndDropDragType, DnDManager, DnDManagerEvents } from './manager'
+export { DnDManagerInstance }

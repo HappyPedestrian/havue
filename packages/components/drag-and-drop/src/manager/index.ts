@@ -17,11 +17,11 @@ export type DnDManagerEvents = {
 
 export class DnDManager extends EventBus<DnDManagerEvents> {
   /** 是否开始拖动 | Whether to start dragging */
-  public isDragStart: boolean = false
+  private isDragStart: boolean = false
   /** 拖动元素类型 | Drag type */
-  public dragType: DragAndDropDragType | undefined = undefined
+  private dragType: DragAndDropDragType | undefined = undefined
   /** Draggable传递的数据，供Droppable使用 | Draggable passes data for use by Droppable */
-  public dragData: any
+  private dragData: any
 
   private isSendFirstMovePos = false
 
