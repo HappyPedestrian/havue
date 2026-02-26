@@ -10,7 +10,7 @@
 
 以下两个分类提供javascript类使用
 
-* [BoradcastChannle广播消息](/zh/solutions/broadcast-channel-connect)
+* [BroadcastChannel 广播消息](/zh/solutions/broadcast-channel-connect)
 * [WebSocket视频播放器](/zh/solutions/use-ws-video)
 
 ## 仅安装hooks

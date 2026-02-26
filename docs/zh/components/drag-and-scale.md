@@ -34,7 +34,7 @@ import { HvDragAndScale } from 'havue'
 // or 
 import { HvDragAndScale } from '@havue/components'
 // or
-import { HvDragAndScale } from '@havue/color-picker'
+import { HvDragAndScale } from '@havue/drag-and-scale'
 </script>
 ```
 
@@ -48,7 +48,7 @@ import { HvDragAndScale } from '@havue/color-picker'
 
 <script setup lang="ts">
 import Demo from '@/components/drag-and-scale/index.vue'
-import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
+import CustomStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 
 </script>
 
@@ -65,9 +65,9 @@ import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 
 :::
 
-自定义样式
+### 自定义样式示例
 
-<CustemStyleDemo></CustemStyleDemo>
+<CustomStyleDemo></CustomStyleDemo>
 
 ::: details 点我看代码
 ::: code-group
@@ -80,7 +80,9 @@ import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 
 :::
 
-如果想禁用缩放功能，只保留拖动功能，可添加样式实现
+### 常见用法
+
+**仅保留拖动、禁用缩放**：可添加以下样式。
 
 ```css
   .hv-drag-and-scale {
@@ -93,7 +95,7 @@ import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 如果您使用的版本低于1.2.0, '--hv-dns-response-width' 应该为 '--scale-area-width'
 :::
 
-反之，如果想只保留缩放功能，禁用拖动功能，可添加以下样式实现
+**仅保留缩放、禁用拖动**：可添加以下样式。
 
 ```scss
   .hv-drag-and-scale {

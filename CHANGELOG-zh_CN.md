@@ -78,3 +78,16 @@
 ### Refactors
 
 * **right-click**: 重构right-click自定义指令实现方式。
+
+## [1.2.2] (2026-2-26)
+
+### Feature
+
+* **drag-and-drop**: 增加导出DnDManagerInstance，可用于监听拖动相关事件。
+
+### Bug Fixes
+
+* **components**: 修复组件样式类名，移除单文件组件SFC的scoped属性。
+* **components**: 修复@havue/components未导出HvIpInput组件的问题。
+* **color-picker**: 解决ColorPickerNromal白色时，更改透明度，会将色相置为0的问题。
+* **tools**: 修复subStrByByteLen工具函数计算中文以及特殊符号（如Emoji表情😒）长度不正确的问题。

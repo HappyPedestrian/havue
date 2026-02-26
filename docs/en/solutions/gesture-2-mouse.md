@@ -56,18 +56,24 @@ import Demo from '@/solutions/gesture-2-mouse/index.vue'
 
 :::
 
-## useGestrue2Mouse Function Parameters
+## useGestrue2Mouse Parameters
 
-|       Parameter          |        Description         |      Type      |    default     |
-| :----------------------- | :------------------ | :-------------| :----------- |
-| target                   | Target element. If not provided, returns `operateBoxRef` element reference      | `MaybeRef<HTMLElement \| undefined>`        |   —   |
-| options                  | Settings      | `Partial<UseGestrue2MouseEventOptions>`        |   —   |
-| options?.targetRealSize  | Real-world dimensions of target area (not page element dimensions)      | `MaybeRef<UseGestrue2MouseTargetRealSizeType>`        |   —   |
-| options?.onMouseEvent    | Handle mouse click event      | `(e: UseGestrue2MouseTargetPositionType, button?: UseGestrue2MouseMouseButtonType) => void`        |   —   |
-| options?.onMouseWheel    | Handle mouse wheel event      | `(e: UseGestrue2MouseTargetPositionType, deltaY: number) => void`        |   —   |
-| options?.throttle        | throttle option      | -        |   —   |
+::: tip Function name
+The function is named `useGestrue2Mouse` (Gesture spelled as Gestrue), matching the package export.
+:::
 
-Type Definitions
+| Parameter | Description | Type | Default |
+| :-------- | :---------- | :--- | :------ |
+| target | Target element. If not provided, the function returns `operateBoxRef` for you to bind to the template | `MaybeRef<HTMLElement \| undefined>` | — |
+| options | Configuration | `Partial<UseGestrue2MouseEventOptions>` | — |
+| options?.TargetRealSize | Real-world dimensions of target area (not DOM size) | `MaybeRef<UseGestrue2MouseTargetRealSizeType>` | — |
+| options?.onMouseEvent | Mouse click handler | `(e, button?) => void` | — |
+| options?.onMouseWheel | Mouse wheel handler | `(e, deltaY) => void` | — |
+| options?.throttle | Throttle options (lodash throttle) | `{ wait: number; leading?: boolean; trailing?: boolean }` | — |
+
+**Returns**: `{ operateBoxRef: Ref<HTMLElement | undefined> }`. When `target` is omitted, bind `operateBoxRef` to your template element as the interaction zone.
+
+## Type Definitions
 
 ::: details Click to view code
 <<< ../../../packages/hooks/use-gesture-2-mouse/src/index.ts#typedefine{ts:line-numbers}

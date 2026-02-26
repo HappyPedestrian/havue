@@ -48,6 +48,12 @@ import { HvDraggable, HvDroppable } from '@havue/drag-and-drop'
 </script>
 ```
 
+To listen to global drag events, you can also import the singleton manager:
+
+```ts
+import { DnDManagerInstance } from '@havue/drag-and-drop'
+```
+
 ## Example
 
 * Left-side label blocks are Draggable elements, displaying their type and size.
@@ -59,6 +65,7 @@ import { HvDraggable, HvDroppable } from '@havue/drag-and-drop'
 
 <script setup lang="ts">
 import Demo from '@/components/drag-and-drop/index.vue'
+import ManagerEvents from '@/components/drag-and-drop/manager-events.vue'
 </script>
 
 <Demo></Demo>
@@ -80,7 +87,7 @@ import Demo from '@/components/drag-and-drop/index.vue'
 | type     | Drag element type         | `DragAndDropDragType`      | -            |
 | immediate? | Direction where the element responds to drag immediately (default requires long-press)   | `ImmediateType \| ImmediateType[]`      | -            |
 | disabled? | Whether the element is disabled             | `boolean`          | -            |
-| data?     | Data associated with the draggable element (passed to Droppable)  | `any`    | -      |
+| data?     | Data passed to Droppable events (third argument in drop/enter/move/leave) | `any`    | —      |
 
 ```ts
 type DragAndDropDragType: string | number | symbol
@@ -125,3 +132,69 @@ DragAndDropPoint: {
 |   Slot Name  |     Description     |
 | :----------- | :------------------ |
 |   default    | Default content     |
+
+## Global drag manager `DnDManagerInstance` <Badge type="tip" text="^1.2.2" />
+
+`DnDManagerInstance` is a global drag manager based on an internal event bus. It listens to mouse / touch events on `document.body`, and emits high‑level drag lifecycle events that you can subscribe to from anywhere.
+
+```ts
+import { onBeforeUnmount, onMounted } from 'vue'
+import type { DnDManagerEvents } from '@havue/drag-and-drop'
+import { DnDManagerInstance } from '@havue/drag-and-drop'
+
+const handleMove: DnDManagerEvents['move'] = ({ type, data, point }) => {
+  console.log('move', type, data, point)
+}
+
+onMounted(() => {
+  DnDManagerInstance.on('move', handleMove)
+})
+
+onBeforeUnmount(() => {
+  DnDManagerInstance.off('move', handleMove)
+})
+```
+
+### Event types
+
+```ts
+type DragAndDropPoint = {
+  x: number
+  y: number
+}
+
+type DragAndDropDragType = string | number | symbol
+
+type DnDManagerEvents = {
+  down: (p: DragAndDropPoint) => void
+  'first-move': (p: DragAndDropPoint, e: MouseEvent | TouchEvent) => void
+  start: (p: DragAndDropPoint) => void
+  move: (params: { type: DragAndDropDragType; data: any; point: DragAndDropPoint }) => void
+  end: (params: { type: DragAndDropDragType; data: any; point: DragAndDropPoint }) => void
+}
+```
+
+| Event       | Description                                                                 | Parameters                                                                                 |
+| :---------- | :-------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| `down`      | Triggered when pointer is pressed down, before drag is started              | `(point: DragAndDropPoint)`                                                                |
+| `first-move`| First pointer move after `down`, before drag is confirmed                   | `(point: DragAndDropPoint, e: MouseEvent \| TouchEvent)`                                   |
+| `start`     | Drag is confirmed (long‑press or threshold reached)                         | `(point: DragAndDropPoint)`                                                                |
+| `move`      | Fired on every drag move while dragging                                     | `({ type: DragAndDropDragType, data: any, point: DragAndDropPoint })`                      |
+| `end`       | Fired when drag ends (mouse / touch release, or cancelled)                 | `({ type: DragAndDropDragType, data: any, point: DragAndDropPoint })`                      |
+
+### DnDManagerInstance events demo
+
+The following demo shows how to subscribe to these events and display them in real time:
+
+<ManagerEvents></ManagerEvents>
+
+:::: details Click to view code (DnDManagerInstance demo)
+::: code-group
+
+<<< ../../../demos/components/drag-and-drop/manager-events.vue#template{vue:line-numbers} [template]
+
+<<< ../../../demos/components/drag-and-drop/manager-events.vue#script{ts:line-numbers} [script]
+
+<<< ../../../demos/components/drag-and-drop/manager-events.vue#style{scss:line-numbers} [style]
+:::
+::::

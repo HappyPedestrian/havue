@@ -38,7 +38,7 @@ Development mode:
 pnpm run docs:dev
 ```
 
-Build:​
+Build:
 
 ```bash
 pnpm run docs:build
@@ -69,3 +69,11 @@ pnpm run update:version
 ```bash
 pnpm run build:lib
 ```
+
+### Precautions
+
+If a new component is added under `packages\components`:
+
+1. Add the component to the dependencies in `packages\components\package.json`.
+2. Export the new component in `packages\components\src\index.ts`.
+3. Add the new component in `packages\havue\src\components.ts`.

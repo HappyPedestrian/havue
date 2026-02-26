@@ -71,10 +71,23 @@
 ### Bug Fixes
 
 * **color-picker**: Adjust the input area style of HvColorPickerNormal. increase the width of the transparency input box. When the input box is cleared, the default value is 0..
-* **drag-and-drop**: Fix the issue where, when ​mouse events​ are infrequent or the ​Draggable​ is very close to the ​Droppable, after dragging the ​Draggable​ over the ​Droppable​ the ​Droppable​ fails to reset its “drag-in” state for the ​Draggable. As a result, the next drag does not trigger the ​enter​ event.
+* **drag-and-drop**: Fix the issue where, when mouse events are infrequent or the Draggable is very close to the Droppable, after dragging the Draggable over the Droppable the Droppable fails to reset its “drag-in” state for the Draggable. As a result, the next drag does not trigger the enter event.
 * **drag-and-drop**: When the immediate prop is 'all', the drag is triggered after the mouse moves to avoid the failure to trigger the click.
 * **drag-and-scale**: Fix the issue where drag-and-scale does not properly uninstall mouse/touch events, leading to frequent triggering of mousemove or touchmove events, and use requestAnimationFrame to optimize the trigger frequency of move events.
 
 ### Refactors
 
 * **right-click**: Refactor the implementation method of the custom right-click instruction
+
+## [1.2.2] (2026-2-26)
+
+### Feature
+
+* **drag-and-drop**: Add the export of DnDManagerInstance, which can be used to listen to drag-and-drop related events.
+
+### Bug Fixes
+
+* **components**: Fix the class name of components, remove the scoped attribute of SFC style tag.
+* **components**: Fix the issue where @havue/components did not export HvIpInput component.
+* **color-picker**: Fix the issue where changing transparency in ColorPickerNormal with white color sets the hue to 0.
+* **tools**: Fix the issue where the subStrByByteLen utility function incorrectly calculates the length of Chinese characters and special symbols (such as emoji 😒).

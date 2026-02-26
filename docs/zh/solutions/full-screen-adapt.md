@@ -104,5 +104,22 @@ import { useFullScreenAdapt } from '@havue/use-full-screen-adapt'
 ### 在项目入口 main.ts 中使用
 
 ```ts
-  useFullScreenAdapt(Number(import.meta.env.VITE_UI_DESIGN_WIDTH), Number(import.meta.env.VITE_UI_DESIGN_HEIGHT), Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16)
+useFullScreenAdapt(
+  Number(import.meta.env.VITE_UI_DESIGN_WIDTH),
+  Number(import.meta.env.VITE_UI_DESIGN_HEIGHT),
+  Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16
+)
 ```
+
+## API
+
+**useFullScreenAdapt(uiWidth, uiHeight, pxtoremRootValue?, stopOnInput?)**
+
+| 参数名              | 说明                                      | 类型      | 默认值  |
+| :------------------ | :---------------------------------------- | :-------- | :------ |
+| uiWidth             | UI 设计宽度                               | `number`  | —       |
+| uiHeight            | UI 设计高度                               | `number`  | —       |
+| pxtoremRootValue    | postcss-pxtorem 的 rootValue              | `number`  | `16`    |
+| stopOnInput         | input 聚焦时是否暂停根字体自适应并固定尺寸 | `boolean` | `false` |
+
+**返回值**：`{ stop: () => void; resume: () => void }`。调用 `stop()` 暂停适配计算，`resume()` 恢复。

@@ -10,15 +10,14 @@ import GetPinyinInitialDemo from '@/tools/string/getPinyinInitial.vue'
 import SubStrByByteLenDemo from '@/tools/string/subStrByByteLen.vue'
 </script>
 
-## String Sorting
+## String sorting stringSortFn
 
 WeChat contact-like sorting rules:
 
 * Numbers have highest priority, sorted in ascending order
-* English and Chinese characters sorted alphabetically, with English having higher priority than Chinese when same initial exists
+* English and Chinese sorted by 26-letter order; English before Chinese for same initial
 * Special symbols have lowest priority
-*
-* Example: 1abc > 3abc > aabc > 阿abc > babc > 菜菜菜菜111 > !2abc
+* Example order: `1abc` > `3abc` > `aabc` > 阿abc > `babc` > 菜菜菜菜111 > `!2abc`
 
 ### Import
 
@@ -28,7 +27,19 @@ import { stringSortFn } from 'havue'
 import { stringSortFn } from '@havue/tools'
 ```
 
-Examples
+### Signature
+
+`stringSortFn(a: string, b: string, ignoreSpecialChar?: boolean): number`
+
+| Parameter            | Description                                                | Type      | Default  |
+| :------------------- | :--------------------------------------------------------- | :-------- | :------- |
+| a                    | First string                                               | `string`  | —        |
+| b                    | Second string                                              | `string`  | —        |
+| ignoreSpecialChar    | Ignore non-alphanumeric when comparing                    | `boolean` | `false`  |
+
+**Returns**: Same as `Array.sort` comparator (negative / zero / positive).
+
+### Examples
 
 <StringSortFnDemo></StringSortFnDemo>
 
@@ -39,42 +50,63 @@ Examples
 <<< ../../../demos/tools/string/stringSortFn.vue#style{vue:line-numbers} [style]
 :::
 
-## Get Chinese Character Pinyin Initial
+## Get Chinese pinyin initial getPinyinInitial
 
-Returns the pinyin initial of Chinese characters.
+Returns the pinyin initial (uppercase A–Z) for Chinese characters. Returns the original string for non-Chinese or empty input.
 
 ### Import
 
 ```ts
-import { getPinyinInitial  } from 'havue'
+import { getPinyinInitial } from 'havue'
 // or
-import { getPinyinInitial  } from '@havue/tools'
+import { getPinyinInitial } from '@havue/tools'
 ```
 
-Examples
+### Signature
+
+`getPinyinInitial(str: string): string`
+
+| Parameter | Description   | Type     | Default |
+| :-------- | :------------ | :------- | :------ |
+| str       | Chinese string | `string` | —       |
+
+**Returns**: Uppercase initial letter, or original string if not Chinese.
+
+### Examples
 
 <GetPinyinInitialDemo></GetPinyinInitialDemo>
 
-::: details Click to view code点我看代码
+::: details Click to view code
 ::: code-group
 <<< ../../../demos/tools/string/getPinyinInitial.vue#template{vue:line-numbers} [template]
 <<< ../../../demos/tools/string/getPinyinInitial.vue#script{3,7-9vue:line-numbers} [script]
 <<< ../../../demos/tools/string/getPinyinInitial.vue#style{vue:line-numbers} [style]
 :::
 
-## Substring by Byte Length
+## Substring by byte length subStrByByteLen
 
-Chinese characters occupy 2 bytes. This method provides byte-length based string truncation.
+Truncates a string to at most the given UTF-8 byte length. Useful for byte-limited input or display.
 
 ### Import
 
 ```ts
-import { subStrByByteLen  } from 'havue'
+import { subStrByByteLen } from 'havue'
 // or
-import { subStrByByteLen  } from '@havue/tools'
+import { subStrByByteLen } from '@havue/tools'
 ```
 
-Examples
+### Signature
+
+`subStrByByteLen(str: string, byteLen: number): string`
+
+| Parameter  | Description              | Type     | Default |
+| :--------- | :----------------------- | :------- | :------ |
+| str        | Original string          | `string` | —       |
+| byteLen    | Max byte length (UTF-8)  | `number` | —       |
+
+**Returns**: Substring not exceeding `byteLen` bytes.
+
+### Examples
 
 <SubStrByByteLenDemo></SubStrByByteLenDemo>
 

@@ -45,12 +45,26 @@ import Demo from '@/components/ip-input/index.vue'
 <Demo></Demo>
 
 ::: details 点我看代码
-<<< ../../../demos/components/ip-input/index.vue{ts:line-numbers}
+<<< ../../../demos/components/ip-input/index.vue{vue:line-numbers}
 :::
 
-## 配置
+## 属性
 
-| 属性名                | 说明     | 类型        | 默认值    |
-| :-------------------- | :------- | :---------- | :-------- |
-| model-value / v-model | 绑定值   | `string`  | `"..."` |
-| disabled              | 是否禁用 | `boolean` | -         |
+| 属性名                | 说明     | 类型        | 默认值   |
+| :-------------------- | :------- | :---------- | :------- |
+| model-value / v-model | 绑定值   | `string`   | `"..."`  |
+| disabled              | 是否禁用 | `boolean`  | `false`  |
+
+## 事件
+
+| 事件名                 | 说明           | 参数类型   |
+| :--------------------- | :------------- | :--------- |
+| update:model-value    | 绑定值变化时触发 | `(value: string)` |
+
+## CSS 变量
+
+| 变量名                 | 说明           | 默认值   |
+| :--------------------- | :------------- | :------- |
+| --hv-ip-input-width   | 单个段输入框宽度 | `30px`   |
+
+支持粘贴完整 IP、键盘方向键与点号在四段之间切换焦点。

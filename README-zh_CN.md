@@ -48,7 +48,7 @@ pnpm run docs:build
 
 #### 构建内部库
 
-构建`internal/`目录下的包，`scripts/`中的脚本的执行和`packages/`下的包的构建都依赖此包
+构建 `internal/`目录下的包，`scripts/`中的脚本的执行和 `packages/`下的包的构建都依赖此包
 
 ```bash
 pnpm run build:internal
@@ -69,3 +69,11 @@ pnpm run update:version
 ```bash
 pnpm run build:lib
 ```
+
+### 注意事项
+
+如果在packages\components下新增组件
+
+1. 需在 `packages\components\package.json`中将该组件添加到dependencies。
+2. 在 `packages\components\src\index.ts`中导出新增组件。
+3. 在 `packages\havue\src\components.ts`中添加新增组件。

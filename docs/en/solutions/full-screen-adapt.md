@@ -57,7 +57,7 @@ VITE_PXTOREM_ROOTVALUE = 100
 
 ### Configure postcss-pxtorem
 
-Edit  `.postcssrc.cjs
+Edit `.postcssrc.cjs`
 
 ```js
 // PostCSS plugins
@@ -87,7 +87,7 @@ module.exports = ({ env }) => {
 
 ::: code-group
 
-```ts  [insall]
+```ts [install]
 import { useFullScreenAdapt } from 'havue'
 // or
 import { useFullScreenAdapt } from '@havue/hooks'
@@ -104,5 +104,22 @@ Skip this step if already installed.
 ### Use in Entry File (main.ts)
 
 ```ts
-  useFullScreenAdapt(Number(import.meta.env.VITE_UI_DESIGN_WIDTH), Number(import.meta.env.VITE_UI_DESIGN_HEIGHT), Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16)
+useFullScreenAdapt(
+  Number(import.meta.env.VITE_UI_DESIGN_WIDTH),
+  Number(import.meta.env.VITE_UI_DESIGN_HEIGHT),
+  Number(import.meta.env.VITE_PXTOREM_ROOTVALUE) || 16
+)
 ```
+
+## API
+
+**useFullScreenAdapt(uiWidth, uiHeight, pxtoremRootValue?, stopOnInput?)**
+
+| Parameter           | Description                                              | Type      | Default  |
+| :------------------ | :------------------------------------------------------- | :-------- | :------- |
+| uiWidth             | UI design width                                          | `number`  | —        |
+| uiHeight            | UI design height                                         | `number`  | —        |
+| pxtoremRootValue    | postcss-pxtorem rootValue                                | `number`  | `16`     |
+| stopOnInput         | Pause adaptation and fix size when input is focused      | `boolean` | `false`  |
+
+**Returns**: `{ stop: () => void; resume: () => void }`. Call `stop()` to pause adaptation, `resume()` to resume.

@@ -9,7 +9,7 @@
 
 * `Draggable`可以配置其拖拽类型`type`。
 * `Droppable`可配置允许拖拽的类型`acceptDragType`。
-* `Droppalbe`只接受`type`在其`acceptDragType`中的`Draggalbe`。
+* `Droppable` 只接受 `type` 在其 `acceptDragType` 中的 `Draggable`。
 
 ## 安装
 
@@ -47,17 +47,22 @@ import { HvDraggable, HvDroppable } from '@havue/drag-and-drop'
 </script>
 ```
 
+如果你需要在任意地方全局监听拖拽过程中的事件，也可以直接引入全局拖拽管理器：
+
+```ts
+import { DnDManagerInstance } from '@havue/drag-and-drop'
+```
+
 ## 示例
 
-* 左侧标签块为Draggalbe元素，文本显示其类型和大小。
-* 灰色`Draggalbe`元素设置了`immediate="right"`,可向右立即拖动。
-* yellow标签块设置了drag-item自定义插槽展示。
-* 右侧有两个Droppable区域
-  * green标签块只能拖放到green区域
-  * yellow标签块只能拖放到yellow区域
+* 左侧标签块为 Draggable 元素，文本显示其类型和大小。
+* 灰色 Draggable 元素设置了 `immediate="right"`，可向右立即拖动。
+* yellow 标签块设置了 `drag-item` 自定义插槽展示。
+* 右侧有两个 Droppable 区域：green 标签块只能拖放到 green 区域，yellow 标签块只能拖放到 yellow 区域。
 
 <script setup lang="ts">
 import Demo from '@/components/drag-and-drop/index.vue'
+import ManagerEvents from '@/components/drag-and-drop/manager-events.vue'
 </script>
 
 <Demo></Demo>
@@ -79,7 +84,7 @@ import Demo from '@/components/drag-and-drop/index.vue'
 | type     | 拖拽元素类型         | `DragAndDropDragType`      | -            |
 | immediate? | 拖拽元素立即响应拖动的方向，默认需要长按拖动   | `ImmediateType \| ImmediateType[]`      | -            |
 | disabled? | 是否禁用             | `boolean`          | -            |
-| data?     | 拖拽元素相关数据，供Droppable使用  | `any`    | -      |
+| data?     | 拖拽时传给 Droppable 事件的数据，在 drop/enter/move/leave 的第三个参数中获取 | `any`    | —      |
 
 ```ts
 type DragAndDropDragType: string | number | symbol
@@ -124,3 +129,69 @@ DragAndDropPoint: {
 |   名称       |        说明          |
 | :----------- | :------------------ |
 | default      | 默认内容             |
+
+## 全局拖拽管理器 `DnDManagerInstance` <Badge type="tip" text="^1.2.2" />
+
+`DnDManagerInstance` 是基于内部事件总线实现的全局拖拽管理器，会在 `document.body` 上监听鼠标 / 触摸事件，并对外派发一组拖拽生命周期事件，方便你在任意地方统一监听。
+
+```ts
+import { onBeforeUnmount, onMounted } from 'vue'
+import type { DnDManagerEvents } from '@havue/drag-and-drop'
+import { DnDManagerInstance } from '@havue/drag-and-drop'
+
+const handleMove: DnDManagerEvents['move'] = ({ type, data, point }) => {
+  console.log('move', type, data, point)
+}
+
+onMounted(() => {
+  DnDManagerInstance.on('move', handleMove)
+})
+
+onBeforeUnmount(() => {
+  DnDManagerInstance.off('move', handleMove)
+})
+```
+
+### 事件类型
+
+```ts
+type DragAndDropPoint = {
+  x: number
+  y: number
+}
+
+type DragAndDropDragType = string | number | symbol
+
+type DnDManagerEvents = {
+  down: (p: DragAndDropPoint) => void
+  'first-move': (p: DragAndDropPoint, e: MouseEvent | TouchEvent) => void
+  start: (p: DragAndDropPoint) => void
+  move: (params: { type: DragAndDropDragType; data: any; point: DragAndDropPoint }) => void
+  end: (params: { type: DragAndDropDragType; data: any; point: DragAndDropPoint }) => void
+}
+```
+
+| 事件名        | 说明                                             | 参数                                                                                      |
+| :------------ | :----------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| `down`        | 指针按下时触发，此时还未真正开始拖拽             | `(point: DragAndDropPoint)`                                                               |
+| `first-move`  | `down` 之后第一次移动时触发，用于判断是否开始拖拽 | `(point: DragAndDropPoint, e: MouseEvent \| TouchEvent)`                                  |
+| `start`       | 确认进入拖拽状态时触发（长按或位移达到阈值）     | `(point: DragAndDropPoint)`                                                               |
+| `move`        | 拖拽过程中持续触发                               | `({ type: DragAndDropDragType, data: any, point: DragAndDropPoint })`                     |
+| `end`         | 拖拽结束（松开鼠标 / 触点，或被取消）时触发      | `({ type: DragAndDropDragType, data: any, point: DragAndDropPoint })`                     |
+
+### DnDManagerInstance 事件监听示例
+
+下面的示例展示了如何订阅这些事件并实时在页面上展示：
+
+<ManagerEvents></ManagerEvents>
+
+:::: details 点我看代码（DnDManagerInstance 示例）
+::: code-group
+
+<<< ../../../demos/components/drag-and-drop/manager-events.vue#template{vue:line-numbers} [template]
+
+<<< ../../../demos/components/drag-and-drop/manager-events.vue#script{ts:line-numbers} [script]
+
+<<< ../../../demos/components/drag-and-drop/manager-events.vue#style{scss:line-numbers} [style]
+:::
+::::

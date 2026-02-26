@@ -34,7 +34,7 @@ import { HvDragAndScale } from 'havue'
 // or 
 import { HvDragAndScale } from '@havue/components'
 // or
-import { HvDragAndScale } from '@havue/color-picker'
+import { HvDragAndScale } from '@havue/drag-and-scale'
 </script>
 ```
 
@@ -48,15 +48,15 @@ The second gray element limits minimum size to 128x128 and maximum size to 512x3
 
 <script setup lang="ts">
 import Demo from '@/components/drag-and-scale/index.vue'
-import CustemStyleDemo from '@/components/drag-and-scale/custom-style.vue'
+import CustomStyleDemo from '@/components/drag-and-scale/custom-style.vue'
 
 </script>
 
 <Demo></Demo>
 
-Custom style
+### Custom style example
 
-<CustemStyleDemo></CustemStyleDemo>
+<CustomStyleDemo></CustomStyleDemo>
 
 ::: details Click to view code
 ::: code-group
@@ -69,7 +69,9 @@ Custom style
 
 :::
 
-To disable scaling while keeping dragging, add these styles:
+### Common usage
+
+**Drag only (disable scaling)** — add these styles:
 
 ```css
   .hv-drag-and-scale {
@@ -82,7 +84,7 @@ To disable scaling while keeping dragging, add these styles:
 If you're using a version below 1.2.0, '--hv-dns-response-width' should be '--scale-area-width'
 :::
 
-To disable dragging while keeping scaling, add these styles:
+**Scale only (disable dragging)** — add these styles:
 
 ```scss
   .hv-drag-and-scale {
