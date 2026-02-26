@@ -1,6 +1,6 @@
 {
   "name": "@havue/color-picker",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Color picker for Vue3",
   "keywords": [
     "color picker",

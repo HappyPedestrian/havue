@@ -1,6 +1,6 @@
 {
   "name": "@havue/drag-and-scale",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Drag and zoom components for Vue3",
   "keywords": [
     "havue",
