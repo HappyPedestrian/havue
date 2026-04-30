@@ -108,6 +108,8 @@ useDragAndScale(targetRef, operateRef, useDragAndScaleOptions)
   .hv-drag-and-scale__zoom-mark {
     position: absolute;
     inset: var(--hv-dns-mark-inset);
+    touch-action: none;
+    user-select: none;
     background:
       linear-gradient(to right, #fff, #fff) left top no-repeat,
       linear-gradient(to right, #fff, #fff) right top no-repeat,

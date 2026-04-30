@@ -43,15 +43,16 @@ type TargetAreaType = {
   elHeight: number
 }
 
-export type DragAndScaleChangeResultType = TargetAreaType & {
-  type: 'move' | 'scale'
-  deltaX: number
-  deltaY: number
-  realX: number
-  realY: number
-  realWidth: number
-  realHeight: number
-}
+export type DragAndScaleChangeResultType = TargetAreaType &
+  EffectDirectionType & {
+    type: 'move' | 'scale'
+    deltaX: number
+    deltaY: number
+    realX: number
+    realY: number
+    realWidth: number
+    realHeight: number
+  }
 
 type EffectDirectionType = {
   leftSide: boolean
@@ -522,6 +523,7 @@ export function useDragAndScale(
 
     _options.value.onChange &&
       _options.value.onChange({
+        ...effectDirection,
         type: effectDirection.center ? 'move' : 'scale',
         deltaX: curOperatePoint.x - lastOperatePoint.x,
         deltaY: curOperatePoint.y - lastOperatePoint.y,
@@ -556,7 +558,7 @@ export function useDragAndScale(
   }
 
   function onTouchStart(e: TouchEvent) {
-    e.preventDefault()
+    // e.preventDefault()
     if (e.touches.length > 1) {
       return
     }
@@ -614,7 +616,7 @@ export function useDragAndScale(
   }
 
   function onMouseDown(e: MouseEvent) {
-    e.preventDefault()
+    // e.preventDefault()
     // 非左键按下 | Not left button press
     if ((e.buttons & 1) === 0) {
       return
