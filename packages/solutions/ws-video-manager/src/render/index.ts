@@ -65,7 +65,7 @@ export class Render extends EventBus<RenderEvents> {
   /** video元素 | videw element */
   private _videoEl: HTMLVideoElement | undefined = undefined
   /** mp4box file */
-  private _mp4box: MP4Box = MP4Box.createFile()
+  private _mp4box: MP4Box = MP4Box.createFile(true)
   /**
    * mp4box onFragment获取的视频数据buffer数组
    * mp4box onFragment gets a buffer array of audio and video data
@@ -106,6 +106,8 @@ export class Render extends EventBus<RenderEvents> {
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
     this._mp4box.onSegment = this._onSegment.bind(this)
     this._setupVideo()
+    // 调试代码
+    // this.updateDebugInfo()
   }
 
   get muted(): boolean {
@@ -135,6 +137,21 @@ export class Render extends EventBus<RenderEvents> {
     return this._videoEl
   }
 
+  // 调试代码
+  // updateDebugInfo() {
+  //   const div = document.getElementById(this.divID)
+  //   const sourceBuffer = this._videoSourceBuffer
+  //   let innerHTML = ''
+  //   if (sourceBuffer && sourceBuffer.buffered.length > 0) {
+  //     innerHTML += `len: ${sourceBuffer?.buffered.length}`
+  //     innerHTML += ` - start:${sourceBuffer.buffered.start(
+  //       sourceBuffer.buffered.length - 1
+  //     )} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
+  //   }
+  //   innerHTML += ` - currentTime: ${this._videoEl?.currentTime}`
+  //   requestAnimationFrame(this.updateDebugInfo.bind(this))
+  // }
+
   /** 更新实例配置 | Update configuration */
   public updateOptions(option: Partial<RenderConstructorOptionType> = {}) {
     Object.assign(this._options, {
@@ -152,8 +169,7 @@ export class Render extends EventBus<RenderEvents> {
     }
     bufs.forEach((b) => {
       b.fileStart = this._offset
-      this._offset += b.byteLength
-      this._mp4box.appendBuffer(b)
+      this._offset = this._mp4box.appendBuffer(b)
     })
     return
   }
@@ -395,9 +411,6 @@ export class Render extends EventBus<RenderEvents> {
         return
       }
       const currentTime = this._videoEl.currentTime
-      // 调试代码
-      // const div = document.getElementById(this.divID)
-      // let innerHTML = `len:${sourceBuffer.buffered.length}`
 
       if (sourceBuffer.buffered.length > 0) {
         let bufferedLen = sourceBuffer.buffered.length
@@ -429,13 +442,6 @@ export class Render extends EventBus<RenderEvents> {
             sourceBuffer?.remove(0, delBufEnd)
           }
         }
-
-        // 调试代码
-        // innerHTML += ` - start:${sourceBuffer.buffered.start(
-        //   sourceBuffer.buffered.length - 1
-        // )} - end:${sourceBuffer.buffered.end(sourceBuffer.buffered.length - 1)} <br/>`
-        // innerHTML += ` - currentTime: ${currentTime}`
-        // div && (div.innerHTML = innerHTML)
 
         bufferedLen = sourceBuffer.buffered.length
         const start = sourceBuffer.buffered.start(bufferedLen - 1)
@@ -496,7 +502,7 @@ export class Render extends EventBus<RenderEvents> {
       )
     }
     this._cacheAnimationID = undefined
-    let frame: Uint8Array
+    let frame: BufferSource
     if (queue.length > 1) {
       const freeBuffer = queue.splice(0, queue.length)
       const length = freeBuffer.map((e) => e.byteLength).reduce((a, b) => a + b, 0)
