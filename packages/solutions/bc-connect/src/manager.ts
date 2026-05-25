@@ -14,31 +14,31 @@ export type BcConnectSendMessageType = {
 /** 事件类型 | Event types */
 export enum BcConnectEventTypeEnum {
   /** 初始广播 | Initial broadcast */
-  Broadcast = '__BCM_INIT__',
+  BROADCAST = '__BCM_INIT__',
   /** 回复初始广播 | Reply to initial broadcast */
-  Broadcast_Reply = '__BCM_INIT_REPLY__',
+  BROADCAST_REPLY = '__BCM_INIT_REPLY__',
   /** 主节点心跳 | Master node heartbeat */
-  Main_Node_Hearbeat = '__BCM_MAIN_NODE_HEARBEAT__',
+  MAIN_NODE_HEARBEAT = '__BCM_MAIN_NODE_HEARBEAT__',
   /** 回复主节点心跳 | Reply to the master node heartbeat */
-  Res_Main_Node_Hearbeat = '__BCM_MAIN_NODE_HEARBEAT_REPLY__',
+  RES_MAIN_NODE_HEARBEAT = '__BCM_MAIN_NODE_HEARBEAT_REPLY__',
   /**
    * 长时间未收到主节点心跳，申请成为主节点
    * It has not received the heartbeat of the master node for a long time.
    *  Apply to become the master node
    */
-  Req_Be_Main_Node = '__BCM_REQ_BE_MAIN_NODE__',
+  REQ_BE_MAIN_NODE = '__BCM_REQ_BE_MAIN_NODE__',
   /** 拒绝其他节点成为主节点 | Reject other nodes as master nodes */
-  Res_Be_Main_Node = '__BCM_REQ_BE_MAIN_NODE_REJECT__',
+  RES_BE_MAIN_NODE = '__BCM_REQ_BE_MAIN_NODE_REJECT__',
   /** 当前节点类型更改 | The current node type has changed */
-  Node_Type_Change = '__BCM_NODE_TYPE_CHANGE__',
+  NODE_TYPE_CHANGE = '__BCM_NODE_TYPE_CHANGE__',
   /** 其他标签页BC节点id列表更新 | Other TAB node id list updated */
-  Friend_List_Update = '__BCM_FRIEND_LIST_UPDATE__'
+  FRIEND_LIST_UPDATE = '__BCM_FRIEND_LIST_UPDATE__'
 }
 
 /** BroadcastChannel节点类型 | BroadcastChannel node type */
 export enum BcConnectNodeTypeEnum {
-  Main = 'main',
-  Normal = 'normal'
+  MAIN = 'main',
+  NORMAL = 'normal'
 }
 // #endregion typedefine
 
@@ -125,8 +125,8 @@ export class BroadcastChannelManager {
       return
     }
     this._nodeType = type
-    this.emit(BcConnectEventTypeEnum.Node_Type_Change, {
-      type: BcConnectEventTypeEnum.Node_Type_Change,
+    this.emit(BcConnectEventTypeEnum.NODE_TYPE_CHANGE, {
+      type: BcConnectEventTypeEnum.NODE_TYPE_CHANGE,
       data: type,
       id: this.id
     })
@@ -135,15 +135,15 @@ export class BroadcastChannelManager {
   /** 更新广播id列表 | Update the list of broadcast ids */
   private _updateFriendList() {
     // 广播告知己方存在 | Broadcast your presence
-    this.send(BcConnectEventTypeEnum.Broadcast)
+    this.send(BcConnectEventTypeEnum.BROADCAST)
 
     this._updateFriendListTimer && clearTimeout(this._updateFriendListTimer)
 
     this._updateFriendListTimer = setTimeout(() => {
       this._oldFrendChannelIdList = this._getNewFriendList()
       this._debug && console.log('BC:connect:updateFriendChannelIdList:', this._oldFrendChannelIdList)
-      this.emit(BcConnectEventTypeEnum.Friend_List_Update, {
-        type: BcConnectEventTypeEnum.Friend_List_Update,
+      this.emit(BcConnectEventTypeEnum.FRIEND_LIST_UPDATE, {
+        type: BcConnectEventTypeEnum.FRIEND_LIST_UPDATE,
         data: [...this._oldFrendChannelIdList],
         id: this.id
       })
@@ -162,31 +162,31 @@ export class BroadcastChannelManager {
       })
 
     // 收到初始广播 | Receiving the initial broadcast
-    this.on(BcConnectEventTypeEnum.Broadcast, (data) => {
+    this.on(BcConnectEventTypeEnum.BROADCAST, (data) => {
       const { id } = data
       if (!this._friendChannelIdSet.has(id)) {
         this._friendChannelIdSet.add(id)
       }
 
-      this.sendToTarget(BcConnectEventTypeEnum.Broadcast_Reply, id)
+      this.sendToTarget(BcConnectEventTypeEnum.BROADCAST_REPLY, id)
     })
 
     // 收到初始广播回复 | The initial broadcast reply is received
-    this.on(BcConnectEventTypeEnum.Broadcast_Reply, (data) => {
+    this.on(BcConnectEventTypeEnum.BROADCAST_REPLY, (data) => {
       const { id } = data
       this._addFriend(id)
     })
 
     // 收到其他节点申请为主节点 | Others apply for the master node
-    this.on(BcConnectEventTypeEnum.Req_Be_Main_Node, (data) => {
+    this.on(BcConnectEventTypeEnum.REQ_BE_MAIN_NODE, (data) => {
       const { id } = data
       if (id > this.id) {
-        this.sendToTarget(BcConnectEventTypeEnum.Res_Be_Main_Node, id)
+        this.sendToTarget(BcConnectEventTypeEnum.RES_BE_MAIN_NODE, id)
       }
     })
 
     // 收到主节点心跳回复 | Received the master node heartbeat reply
-    this.on(BcConnectEventTypeEnum.Res_Main_Node_Hearbeat, (data) => {
+    this.on(BcConnectEventTypeEnum.RES_MAIN_NODE_HEARBEAT, (data) => {
       this._addFriend(data.id)
     })
 
@@ -199,24 +199,24 @@ export class BroadcastChannelManager {
       this._timeoutToBeMainNode()
       this._catchOldFriend()
       this._addFriend(data.id)
-      this.send(BcConnectEventTypeEnum.Res_Main_Node_Hearbeat)
+      this.send(BcConnectEventTypeEnum.RES_MAIN_NODE_HEARBEAT)
     }
 
-    this.on(BcConnectEventTypeEnum.Node_Type_Change, (info) => {
+    this.on(BcConnectEventTypeEnum.NODE_TYPE_CHANGE, (info) => {
       const { data } = info
       this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
       this._debug && console.log('BC:NODE_TYPE_CHANGE：', info.data)
-      if (data === BcConnectNodeTypeEnum.Main) {
+      if (data === BcConnectNodeTypeEnum.MAIN) {
         // 定时发送主节点心跳 | The heartbeat of the master node is sent periodically
         this._mainNodeMsgInterval = setInterval(() => {
           this._catchOldFriend()
-          this.send(BcConnectEventTypeEnum.Main_Node_Hearbeat)
+          this.send(BcConnectEventTypeEnum.MAIN_NODE_HEARBEAT)
         }, MessageTimeout)
-      } else if (data === BcConnectNodeTypeEnum.Normal) {
+      } else if (data === BcConnectNodeTypeEnum.NORMAL) {
         this._timeoutToBeMainNode()
       }
       // 收到主节点心跳, 重新更新友方列表 | Update the friend list after receiving the heartbeat of the master node
-      this.on(BcConnectEventTypeEnum.Main_Node_Hearbeat, onMainNodeHearbeat)
+      this.on(BcConnectEventTypeEnum.MAIN_NODE_HEARBEAT, onMainNodeHearbeat)
     })
   }
 
@@ -230,15 +230,15 @@ export class BroadcastChannelManager {
   private _updataNodeType() {
     this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
     if (this._oldFrendChannelIdList.length === 0 || Math.min(...this._oldFrendChannelIdList) > this.id) {
-      if (this._nodeType === BcConnectNodeTypeEnum.Main) {
+      if (this._nodeType === BcConnectNodeTypeEnum.MAIN) {
         return
       }
-      this._setNodeType(BcConnectNodeTypeEnum.Main)
+      this._setNodeType(BcConnectNodeTypeEnum.MAIN)
     } else {
-      if (this._nodeType === BcConnectNodeTypeEnum.Normal) {
+      if (this._nodeType === BcConnectNodeTypeEnum.NORMAL) {
         return
       }
-      this._setNodeType(BcConnectNodeTypeEnum.Normal)
+      this._setNodeType(BcConnectNodeTypeEnum.NORMAL)
     }
   }
 
@@ -247,7 +247,7 @@ export class BroadcastChannelManager {
     // 超时未收到心跳，认为主节点掉线，申请为主节点
     // If no heartbeat is received after the timeout, the master node is considered to be offline and the master node is applied
     this._mainNodeMsgTimeoutTimer = setTimeout(() => {
-      this._req_beMainNode()
+      this._reqBeMainNode()
     }, MessageTimeout * 3)
   }
 
@@ -259,17 +259,17 @@ export class BroadcastChannelManager {
     const newFriendList = this._getNewFriendList()
     if (this._oldFrendChannelIdList.join() !== newFriendList.join()) {
       this._debug && console.log('BC:updateFriendChannelIdList:', newFriendList)
-      this.emit(BcConnectEventTypeEnum.Friend_List_Update, {
-        type: BcConnectEventTypeEnum.Friend_List_Update,
+      this.emit(BcConnectEventTypeEnum.FRIEND_LIST_UPDATE, {
+        type: BcConnectEventTypeEnum.FRIEND_LIST_UPDATE,
         data: [...newFriendList],
         id: this.id
       })
       this._oldFrendChannelIdList = [...newFriendList]
     }
 
-    if (this._nodeType === BcConnectNodeTypeEnum.Main && Math.min(...this._oldFrendChannelIdList) < this.id) {
+    if (this._nodeType === BcConnectNodeTypeEnum.MAIN && Math.min(...this._oldFrendChannelIdList) < this.id) {
       // 有更小的id，不再为主节点 | Has a smaller id and is no longer a master node
-      this._setNodeType(BcConnectNodeTypeEnum.Normal)
+      this._setNodeType(BcConnectNodeTypeEnum.NORMAL)
     }
 
     this._friendChannelIdSet.clear()
@@ -278,26 +278,26 @@ export class BroadcastChannelManager {
   /**
    * 申请成为主节点 | Apply to be a master node
    */
-  private _req_beMainNode() {
-    this._debug && console.log('BC:req_beMainNode')
+  private _reqBeMainNode() {
+    this._debug && console.log('BC:reqBeMainNode')
 
     // 向所有节点申请成为主节点 | Apply to all nodes to become master nodes
-    this.send(BcConnectEventTypeEnum.Req_Be_Main_Node)
+    this.send(BcConnectEventTypeEnum.REQ_BE_MAIN_NODE)
 
     // 如果长时间未回复，认为自己可以当主节点
     // If there is no reply for a long time, it considers itself to be the master
     const timer = setTimeout(() => {
-      this._setNodeType(BcConnectNodeTypeEnum.Main)
+      this._setNodeType(BcConnectNodeTypeEnum.MAIN)
     }, MessageTimeout)
 
     // 收到拒绝回复，清空timeout
     // Clear the timeout when you receive a rejection reply
-    const handleRes_beMainNode = () => {
+    const handleResBeMainNode = () => {
       clearTimeout(timer)
-      this.off(BcConnectEventTypeEnum.Res_Be_Main_Node, handleRes_beMainNode)
+      this.off(BcConnectEventTypeEnum.RES_BE_MAIN_NODE, handleResBeMainNode)
     }
 
-    this.on(BcConnectEventTypeEnum.Res_Be_Main_Node, handleRes_beMainNode)
+    this.on(BcConnectEventTypeEnum.RES_BE_MAIN_NODE, handleResBeMainNode)
   }
 
   /**
@@ -406,7 +406,7 @@ export class BroadcastChannelManager {
 
     this._mainNodeMsgInterval && clearInterval(this._mainNodeMsgInterval)
     this._mainNodeMsgInterval = null
-    this._mainNodeMsgTimeoutTimer && clearInterval(this._mainNodeMsgTimeoutTimer)
+    this._mainNodeMsgTimeoutTimer && clearTimeout(this._mainNodeMsgTimeoutTimer)
     this._mainNodeMsgTimeoutTimer = null
     this._debug && console.log('BC:destroy')
   }
