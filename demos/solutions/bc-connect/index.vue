@@ -74,10 +74,10 @@ onMounted(() => {
   bcManager.on('test-message', (info) => {
     recieveMessageList.value.push(info)
   })
-  bcManager.on(BcConnectEventTypeEnum.Friend_List_Update, (info) => {
+  bcManager.on(BcConnectEventTypeEnum.FRIEND_LIST_UPDATE, (info) => {
     friendList.value = info.data || []
   })
-  bcManager.on(BcConnectEventTypeEnum.Node_Type_Change, (info) => {
+  bcManager.on(BcConnectEventTypeEnum.NODE_TYPE_CHANGE, (info) => {
     currentBcNodeType.value = info.data
   })
 })

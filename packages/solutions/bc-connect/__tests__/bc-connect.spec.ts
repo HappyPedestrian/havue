@@ -21,7 +21,7 @@ describe.sequential('BroadcastChannelManager', () => {
     manager.connect()
     expect(manager.nodeType).toBeUndefined()
     await sleep(400)
-    expect(manager.nodeType).toBe(BcConnectNodeTypeEnum.Main)
+    expect(manager.nodeType).toBe(BcConnectNodeTypeEnum.MAIN)
     manager.close()
     manager.destroy()
   })
@@ -56,8 +56,8 @@ describe.sequential('BroadcastChannelManager', () => {
 
     manager1.send(message1.type, message1.data)
     manager2.send(message2.type, message2.data)
-    expect(manager1.nodeType).toBe(BcConnectNodeTypeEnum.Main)
-    expect(manager2.nodeType).toBe(BcConnectNodeTypeEnum.Normal)
+    expect(manager1.nodeType).toBe(BcConnectNodeTypeEnum.MAIN)
+    expect(manager2.nodeType).toBe(BcConnectNodeTypeEnum.NORMAL)
 
     expect(manager1.friendList).toContain(manager2.id)
     expect(manager2.friendList).toContain(manager1.id)
