@@ -25,13 +25,13 @@ app.mount('#app')
 
 ```vue
 <template>
-  <pd-color-picker></pd-color-picker>
+  <hv-color-picker></hv-color-picker>
 </template>
 
 <script>
-import { PdColorPicker } from 'havue'
+import { HvColorPicker } from 'havue'
 export default {
-  components: { PdColorPicker },
+  components: { HvColorPicker },
 }
 </script>
 ```
