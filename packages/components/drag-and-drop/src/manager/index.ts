@@ -18,6 +18,8 @@ export type DnDManagerEvents = {
 export class DnDManager extends EventBus<DnDManagerEvents> {
   /** 是否开始拖动 | Whether to start dragging */
   private isDragStart: boolean = false
+  /** 是否结束拖动 | Whether to end dragging */
+  public isDragEnd: boolean = false
   /** 拖动元素类型 | Drag type */
   private dragType: DragAndDropDragType | undefined = undefined
   /** Draggable传递的数据，供Droppable使用 | Draggable passes data for use by Droppable */
@@ -109,6 +111,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
     this.emitTouchStartTimer && clearTimeout(this.emitTouchStartTimer)
     this.emitTouchStartTimer = undefined
     this.isSendFirstMovePos = false
+    this.isDragEnd = false
     if (!this.isDragStart || !this.dragType) {
       return
     }
@@ -225,6 +228,11 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
         y: clientY
       })
     } else {
+      // 在触发onStart之前，阻止默认行为，避免移动时触发滚动事件 | Prevent default behavior to avoid scrolling when moving
+      if (!this.isDragEnd) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
       if (!this.isSendFirstMovePos) {
         this.onFirstMove(
           {
@@ -238,6 +246,7 @@ export class DnDManager extends EventBus<DnDManagerEvents> {
       const { x, y } = this.touchStartPosition
       const timeInLimit = Date.now() - this.touchStartTime < this.touchStartPressTime
       if (timeInLimit && (Math.abs(x - clientX) > 30 || Math.abs(y - clientY) > 30)) {
+        this.isDragEnd = true
         clearTimeout(this.emitTouchStartTimer)
       }
     }
