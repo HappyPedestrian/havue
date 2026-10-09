@@ -54,7 +54,7 @@ export class Render extends EventBus<RenderEvents> {
   /** pixi.js 实例 */
   // private _pixiApp: Application | null = null
   /** mp4box 实例 */
-  private _mp4box: MP4Box = MP4Box.createFile()
+  private _mp4box: MP4Box = MP4Box.createFile(false)
   /** 接收到的socket消息 视频数据buffer数组 */
   private _bufsQueue: ArrayBuffer[] = []
   /** MediaSource 实例 */
@@ -420,7 +420,7 @@ export class Render extends EventBus<RenderEvents> {
     if (this._videoEl) {
       this._videoEl.src = ''
     }
-    this._mp4box = MP4Box.createFile()
+    this._mp4box = MP4Box.createFile(false)
     this._mp4box.onReady = this._onMp4boxReady.bind(this)
     this._bufsQueue.length = 0
   }
